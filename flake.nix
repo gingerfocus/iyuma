@@ -2,21 +2,20 @@
   description = "nixos config";
 
   inputs = rec {
-    # nixpkgs.url = github:nixos/nixpkgs/nixpkgs-unstable;
-    nixpkgs.url = github:nixos/nixpkgs/b69de56fac8c2b6f8fd27f2eca01dcda8e0a4221;
+    # nixpkgs.url = github:nixos/nixpkgs/b69de56fac8c2b6f8fd27f2eca01dcda8e0a4221;
+    nixpkgs.url = github:nixos/nixpkgs/24.11;
+    nixpkgs-unstable.url = github:nixos/nixpkgs/nixpkgs-unstable;
 
     hardware.url = "github:NixOS/nixos-hardware/master";
-
-    nixpkgs-emacs-pin.url = github:NixOs/nixpkgs/f3dab3509afca932f3f4fd0908957709bb1c1f57;
-    nix-doom-emacs = {
-      # TODO: uses flake utils, have rest of installed packages then follow this
-      url = github:nix-community/nix-doom-emacs;
-      inputs.nixpkgs.follows = "nixpkgs-emacs-pin";
-    };
 
     neomacs = {
       url = github:gingerfocus/neomacs/1cb111757d7eb3921ee2b4b8f15bf7dd45bdfff8;
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    scripts = {
+      url = github:gingerfocus/scripts;
+      flake = false;
     };
 
     # zen-browser = {
@@ -31,7 +30,7 @@
   # @ inputs to add it as an arg i think
   # The imports a map which is assined to this value each key is a thing that
   # can be build as config when no name is passed then `default` is built.
-  outputs = { self, nixpkgs, ... }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-unstable, neomacs, scripts, ... }@inputs:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -39,11 +38,14 @@
         config.allowUnfree = true;
         # overlays = [ (final: prev: { }) ];
       };
+      pkgs-unstable = import nixpkgs-unstable {
+        inherit system;
+      };
 
       # Shared functions
       iyuma = {
         mkSystem = modules: nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs system; };
+          specialArgs = { inherit inputs system pkgs-unstable scripts; };
           inherit system;
           modules = modules;
         };

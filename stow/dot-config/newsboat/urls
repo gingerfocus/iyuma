@@ -53,8 +53,6 @@ https://notrelated.xyz/rss
 # https://www.smashingsecurity.com/rss "~smashing security" "podcasts"
 
 videos
-## Louis Rossman
-https://www.youtube.com/feeds/videos.xml?channel_id=UCl2mFZoRqjw_ELax4Yisf6w "videos"
 ## Dunkey
 https://www.youtube.com/feeds/videos.xml?channel_id=UCsvn_Po0SmunchJYOWpOxMg "youtube"
 ## Acerola (@Acerola_t)
@@ -63,8 +61,6 @@ https://www.youtube.com/feeds/videos.xml?channel_id=UCQG40havu4kNpB4pxUDQhYQ "vi
 https://www.youtube.com/feeds/videos.xml?channel_id=UCD1lODYlzMJ3YlZ30x2CwUg "videos"
 ## Junferno (@Junferno)
 https://www.youtube.com/feeds/videos.xml?channel_id=UCRb6Mw3fJ6OFzp-cB9X29aA "videos"
-## Channel 5 (@Channel5YouTube)
-https://www.youtube.com/feeds/videos.xml?channel_id=UC-AQKm7HUNMmxjdS371MSwg "videos"
 ## Anna Maria Luisa (@AnnaMariaLuisa.)
 https://www.youtube.com/feeds/videos.xml?channel_id=UC7c-OOdWcTse66xbRFbOIBQ "videos"
 ## Good Work (@GoodWorkMB)
@@ -76,6 +72,10 @@ https://www.youtube.com/feeds/videos.xml?channel_id=UCyNtlmLB73-7gtlBz00XOQQ "vi
 ## exurb1a (@Exurb1a)
 https://www.youtube.com/feeds/videos.xml?channel_id=UCimiUgDLbi6P17BdaCZpVbg "videos"
 
+## Louis Rossman
+# https://www.youtube.com/feeds/videos.xml?channel_id=UCl2mFZoRqjw_ELax4Yisf6w "videos"
+## Channel 5 (@Channel5YouTube)
+# https://www.youtube.com/feeds/videos.xml?channel_id=UC-AQKm7HUNMmxjdS371MSwg "videos"
 
 ## Luke Smith
 # https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA "vidoes"
@@ -188,9 +188,9 @@ https://based.cooking/index.xml "fun"
 #https://readframes.com/feed/
 #http://www.peterdrastrup.com/personal?format=rss
 
-### Art
-#https://saulsteinbergfoundation.org/feed/
-# https://lindypress.net/rss
+art
+https://saulsteinbergfoundation.org/feed/
+https://lindypress.net/rss
 
 ## Infosec
 #https://www.schneier.com/feed/

@@ -1,10 +1,5 @@
-{ config, pkgs, inputs, system, ... }: {
+{ config, pkgs, inputs, system, pkgs-unstable, ... }: {
   imports = [ ];
-
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-
-  # programs.wireshark.enable = true;
 
   xdg.portal = {
     enable = true;
@@ -20,11 +15,11 @@
   };
 
   # ------------- Input --------------- #
-  i18n.inputMethod = {
-    type = "fcitx5";
-    enable = true;
-    fcitx5.addons = [ pkgs.fcitx5-mozc ];
-  };
+  # i18n.inputMethod = {
+  #   type = "fcitx5";
+  #   enable = true;
+  #   fcitx5.addons = [ pkgs.fcitx5-mozc ];
+  # };
   # ----------------------------------- #
 
   programs.gnupg.agent = {
@@ -34,17 +29,12 @@
     enableSSHSupport = true;
   };
 
-  # services.syncthing.enable = true;
-  # services.syncthing.user = "focus";
-  # services.syncthing.dataDir = "/home/focus/dox";
-
   ## Bluetooth
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   # services.blueman.enable = true;
 
   security.pam.services.swaylock = {};
-
   programs.river = {
     enable = true;
     extraPackages = with pkgs; [
@@ -73,16 +63,13 @@
   environment.systemPackages = with pkgs; [
     firefox
     fish
-
-    direnv
-
     eza
     bat
     fzf
     # starship
     # sent
 
-    cava
+    # cava
     foot
     # git
     # river
@@ -94,9 +81,9 @@
     # (pkgs.callPackage ./pkgs/jerry.nix {})
 
     # cargo rustc rust-analyzer # alternaticly: rustup
-    zig zls
+    pkgs-unstable.zig zls
     gdb clang
-    clang-tools
+    # clang-tools
     # ghidra
 
     tmux
@@ -119,6 +106,7 @@
     # jupyter
     # python3
     # pip3
+    # pyright
 
     ### Tools
     # clang gcc
@@ -174,7 +162,6 @@
     # rsync # provided by system
     jq
     # hyperfine
-    # libreoffice-fresh
     # obs-studio
     killall
     tty-clock
@@ -196,7 +183,7 @@
     # neo-cowsay
     # browserpass
     # inotify-tools
-    cool-retro-term
+    # cool-retro-term
     fd
 
     # Security
@@ -306,7 +293,7 @@
     # scdoc
     # snapshot
     # stb
-    neovide
+    # neovide
     # wasmtime
 
     # rclone
@@ -317,8 +304,11 @@
     grim slurp
 
     ### Games
-    heroic
-    (lutris.override { steamSupport = true; })
+    # heroic
+    # (lutris.override { steamSupport = true; })
+
+    ## Do this one
+    # lutris
 
     ### Japanese
     # memento
@@ -326,15 +316,30 @@
     # ani-cli
 
     obsidian
-    qutebrowser
+    # qutebrowser
 
     # godot_4
 
     imagemagick
-    nautilus
+    # nautilus
 
     lynx
+
+    rustup
+
+    libreoffice-fresh
+    ghostscript
+
+    pandoc
+    nodejs
+
+    # brave
+
+    # code-cursor
+    # zed-editor
+    # vscode
   ];
+  # programs.kdeconnect.enable = true;
 
   programs.steam = {
     enable = true;

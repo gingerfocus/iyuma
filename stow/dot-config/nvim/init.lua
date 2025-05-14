@@ -177,22 +177,6 @@ require("lazy").setup({
                 },
                 lualine_x = {
                     { "diff" },
-                    -- {
-                    --     function()
-                    --         local icon = require("icons").misc.Robot
-                    --         local status = require("copilot.api").status.data
-                    --         return icon .. (status.message or "")
-                    --     end,
-                    --     cond = function()
-                    --         local ok, clients = pcall(vim.lsp.get_active_clients, { name = "copilot", bufnr = 0 })
-                    --         return ok and #clients > 0
-                    --     end,
-                    --     color = function()
-                    --         if not package.loaded["copilot"] then return end
-                    --         local status = require("copilot.api").status.data
-                    --         return colors[status.status] or colors[""]
-                    --     end,
-                    -- }
                 },
                 lualine_y = {
                     { "progress", separator = " ", padding = { left = 1, right = 0 } },
@@ -403,8 +387,13 @@ require("lazy").setup({
     -- { 'LionC/nest.nvim' }
 
     -- {
-    --     "github/copilot.vim",
+    --     "zbirenbaum/copilot.lua",
+    --     cmd = "Copilot",
     --     lazy = false,
+    --     event = "InsertEnter",
+    --     config = function()
+    --       require("copilot").setup({})
+    --     end,
     -- },
 
     -- Flash enhances the built-in search functionality by showing labels
@@ -759,10 +748,6 @@ require("lazy").setup({
         -- init = function() require("core.keys").load_module("telescope") end,
         dependencies = {
             "nvim-lua/plenary.nvim",
-            -- {
-            --     "nvim-telescope/telescope-fzf-native.nvim",
-            --     build = "make",
-            -- },
         },
         opts = {
             defaults = {
@@ -822,18 +807,19 @@ require("lazy").setup({
             -- loading indicator for lsps
             { "j-hui/fidget.nvim", tag = "legacy", event = "LspAttach", opts = {} },
             -- show crate versions in Cargo.toml
-            { "Saecki/crates.nvim", event = { "BufRead Cargo.toml" }, opts = {} },
+            -- { "Saecki/crates.nvim", event = { "BufRead Cargo.toml" }, opts = {} },
             -- show implied types
             { "simrat39/rust-tools.nvim", ft = "rust", opts = {} },
             -- { "tamago324/nlsp-settings.nvim", cmd = "LspSettings", opts = {} },
-            { "pmizio/typescript-tools.nvim", ft = {"js", "ts"}, opts = {} }
+            -- { "pmizio/typescript-tools.nvim", ft = {"js", "ts"}, opts = {} }
         },
         opts = {
             servers = {
                 -- rust_analyzer = {},
                 taplo = {},
                 zls = {},
-                gleam = {},
+                pyright = {},
+                -- gleam = {},
                 -- clangd = {
                 --     capabilities = { offsetEncoding = { "utf-16" } },
                 --     -- keys = { { "<leader>cR", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" }, },
@@ -998,80 +984,81 @@ require("lazy").setup({
         end,
     },
 
-    {
-        "epwalsh/obsidian.nvim",
-        ft = "markdown",
-        -- vim.keymap.set("n", "gl", "<cmd>ObsidianFollowLink<CR>", { desc = "Obsidian: Follow [L]ink" })
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "hrsh7th/nvim-cmp",
-            "nvim-telescope/telescope.nvim",
-        },
-        opts = {
-            workspaces = { {
-                name = "main",
-                path = "~/dox",
-            } },
-            -- dir = vim.fn.expand("$XDG_DOCUMENTS_DIR"),
+    -- {
+    --     "epwalsh/obsidian.nvim",
+    --     ft = "markdown",
+    --     -- vim.keymap.set("n", "gl", "<cmd>ObsidianFollowLink<CR>", { desc = "Obsidian: Follow [L]ink" })
+    --     dependencies = {
+    --         "nvim-lua/plenary.nvim",
+    --         "hrsh7th/nvim-cmp",
+    --         "nvim-telescope/telescope.nvim",
+    --     },
+    --     opts = {
+    --         workspaces = { {
+    --             name = "main",
+    --             path = "~/dox",
+    --         } },
+    --         -- dir = vim.fn.expand("$XDG_DOCUMENTS_DIR"),
+    --
+    --         -- Optional, if you keep notes in a specific subdirectory of your vault.
+    --         notes_subdir = "notes",
+    --
+    --         completion = { min_chars = 0 },
+    --
+    --         -- Optional, configure key mappings. These are the defaults. If you don't want to set any keymappings this
+    --         -- way then set 'mappings = {}'.
+    --         mappings = {
+    --             -- Overrides the 'gf' mapping to work on markdown/wiki links within your vault.
+    --             ["gf"] = {
+    --                 action = function()
+    --                     return require("obsidian").util.gf_passthrough()
+    --                 end,
+    --                 opts = { noremap = false, expr = true, buffer = true },
+    --             },
+    --             -- Toggle check-boxes.
+    --             ["<leader>ch"] = {
+    --                 action = function()
+    --                     return require("obsidian").util.toggle_checkbox()
+    --                 end,
+    --                 opts = { buffer = true },
+    --             },
+    --         },
+    --
+    --         -- Where to put new notes.
+    --         -- "current_dir" OR "notes_subdir"
+    --         new_notes_location = "current_dir",
+    --
+    --         -- Optional, customize how wiki links are formatted. You can set this to one of:
+    --         --  * "use_alias_only", e.g. '[[Foo Bar]]'
+    --         --  * "prepend_note_id", e.g. '[[foo-bar|Foo Bar]]'
+    --         --  * "prepend_note_path", e.g. '[[foo-bar.md|Foo Bar]]'
+    --         --  * "use_path_only", e.g. '[[foo-bar.md]]'
+    --         wiki_link_func = "prepend_note_id",
+    --
+    --         -- Either 'wiki' or 'markdown'.
+    --         preferred_link_style = "wiki",
+    --
+    --         -- Optional, boolean or a function that takes a filename and returns a boolean.
+    --         -- `true` indicates that you don't want obsidian.nvim to manage frontmatter.
+    --         disable_frontmatter = false,
+    --
+    --         -- Optional, by default when you use `:ObsidianFollowLink` on a link to an external
+    --         -- URL it will be ignored but you can customize this behavior here.
+    --         ---@param url string
+    --         follow_url_func = function(url)
+    --             vim.fn.jobstart({ "handlr", "open", url })
+    --         end,
+    --
+    --         picker = { name = "telescope.nvim" },
+    --     },
+    -- },
 
-            -- Optional, if you keep notes in a specific subdirectory of your vault.
-            notes_subdir = "notes",
-
-            completion = { min_chars = 0 },
-
-            -- Optional, configure key mappings. These are the defaults. If you don't want to set any keymappings this
-            -- way then set 'mappings = {}'.
-            mappings = {
-                -- Overrides the 'gf' mapping to work on markdown/wiki links within your vault.
-                ["gf"] = {
-                    action = function()
-                        return require("obsidian").util.gf_passthrough()
-                    end,
-                    opts = { noremap = false, expr = true, buffer = true },
-                },
-                -- Toggle check-boxes.
-                ["<leader>ch"] = {
-                    action = function()
-                        return require("obsidian").util.toggle_checkbox()
-                    end,
-                    opts = { buffer = true },
-                },
-            },
-
-            -- Where to put new notes.
-            -- "current_dir" OR "notes_subdir"
-            new_notes_location = "current_dir",
-
-            -- Optional, customize how wiki links are formatted. You can set this to one of:
-            --  * "use_alias_only", e.g. '[[Foo Bar]]'
-            --  * "prepend_note_id", e.g. '[[foo-bar|Foo Bar]]'
-            --  * "prepend_note_path", e.g. '[[foo-bar.md|Foo Bar]]'
-            --  * "use_path_only", e.g. '[[foo-bar.md]]'
-            wiki_link_func = "prepend_note_id",
-
-            -- Either 'wiki' or 'markdown'.
-            preferred_link_style = "wiki",
-
-            -- Optional, boolean or a function that takes a filename and returns a boolean.
-            -- `true` indicates that you don't want obsidian.nvim to manage frontmatter.
-            disable_frontmatter = false,
-
-            -- Optional, by default when you use `:ObsidianFollowLink` on a link to an external
-            -- URL it will be ignored but you can customize this behavior here.
-            ---@param url string
-            follow_url_func = function(url)
-                vim.fn.jobstart({ "handlr", "open", url })
-            end,
-
-            picker = { name = "telescope.nvim" },
-        },
-    },
-    {
-        'michaelb/sniprun', 
-        build = "sh install.sh",
-        cmd = { "SnipRun", "SnipInfo" },
-        opts = {},
-    }
+    -- {
+    --     'michaelb/sniprun', 
+    --     build = "sh install.sh",
+    --     cmd = { "SnipRun", "SnipInfo" },
+    --     opts = {},
+    -- }
 }, { defaults = { lazy = true } })
 
 -- see `:help mark`

@@ -1,4 +1,7 @@
-{ config, pkgs, ... }: {
+{ config, pkgs, scripts, ... }: 
+let 
+  mkScript = name: pkgs.writeScriptBin (builtins.baseNameOf name) (builtins.readFile name);
+in {
   programs.neovim = {
     enable = true;
     # plugins = with pkgs.vimPlugins; [
@@ -11,7 +14,14 @@
     withRuby = false;
   };
 
+  environment.systemPackages = map mkScript (pkgs.lib.filesystem.listFilesRecursive "${scripts}/bin");
+
   environment.variables = rec {
+    PATH = [
+        "$HOME/dev/scripts"
+        "$PATH"
+    ];
+
     XDG_CONFIG_HOME = "$HOME/.config";
     XDG_DATA_HOME = "$HOME/.local/share";
     XDG_CACHE_HOME = "$HOME/.cache";

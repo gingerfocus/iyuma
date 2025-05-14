@@ -11,7 +11,7 @@
     # device = "/dev/disk/by-uuid/D442-50BC";
     devices = [ "nodev" ];
     efiSupport = true;
-    configurationLimit = 20;
+    configurationLimit = 5;
     # useOSProber = true;
     # font = path
     # fontSize = uint
