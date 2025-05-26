@@ -61,7 +61,7 @@ alias ttc 'tty-clock -c -C 7 -r -f "%A, %B %d"'
 
 alias free='free -m'
 alias lynx='lynx -vikeys'
-alias ncmpcpp='ncmpcpp ncmpcpp_directory=$HOME/.config/ncmpcpp/'
+# alias ncmpcpp='ncmpcpp ncmpcpp_directory=$HOME/.config/ncmpcpp/'
 
 # ps
 alias psa="ps auxf"

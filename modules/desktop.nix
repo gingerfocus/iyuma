@@ -1,17 +1,29 @@
-{ config, pkgs, inputs, system, pkgs-unstable, ... }: {
-  imports = [ ];
+{
+  config,
+  pkgs,
+  inputs,
+  system,
+  pkgs-unstable,
+  ...
+}:
+let
+  mkScript = name: pkgs.writeScriptBin (builtins.baseNameOf name) (builtins.readFile name);
+in {
+  imports = [ ./pkgs/neomacs.nix ];
+
+  # xdg.icons.enable = false;
 
   xdg.portal = {
     enable = true;
-    extraPortals = [
-      # for screen sharing
-      pkgs.xdg-desktop-portal-wlr
-      # for file picking
-      pkgs.xdg-desktop-portal-gtk
-    ];
-
-    xdgOpenUsePortal = true;
-    config.common.default = "*";
+    wlr.enable = true;
+    # extraPortals = [
+    #   # for screen sharing
+    #   pkgs.xdg-desktop-portal-wlr
+    #   # for file picking
+    #   pkgs.xdg-desktop-portal-gtk
+    # ];
+    # xdgOpenUsePortal = true;
+    # config.common.default = "*";
   };
 
   # ------------- Input --------------- #
@@ -24,7 +36,6 @@
 
   programs.gnupg.agent = {
     enable = true;
-    # pinentryPackage = pkgs.pinentry-gnome3;
     pinentryPackage = pkgs.pinentry-bemenu;
     enableSSHSupport = true;
   };
@@ -38,58 +49,52 @@
   programs.river = {
     enable = true;
     extraPackages = with pkgs; [
-      swaylock foot bemenu
-      sandbar swww wl-clipboard
-      imv wlr-randr
+      swaylock
+      foot
+      bemenu
+      sandbar
+      swww
+      wl-clipboard
+      imv
+      wlr-randr
     ];
   };
 
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
 
-  # PATH="$PATH:$HOME/.local/bin:$CARGO_HOME/bin:$HOME/dev/scripts"
-  # PATH="$PATH:$HOME/.local/share/go/bin/"
-  # export PATH="$PATH:$HOME/.local/bin:$CARGO_HOME/bin:$HOME/.config/scripts"
-
-  programs.bash.interactiveShellInit = ''
-    PS1="\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h \[$(tput setaf 5)\]\W\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$ \[$(tput sgr0)\]"
-    export HISTFILE="$USER/.local/share/bash/history"
-  '';
-
-  # programs.starship.enable = true;
-  # programs.starship.enableFishIntegration = true;
-  # programs.starship.enableBashIntegration = false;
-
   environment.systemPackages = with pkgs; [
     firefox
     fish
+
     eza
     bat
     fzf
     # starship
     # sent
+    tmux
 
     # cava
-    foot
     # git
-    # river
     bottom
     newsboat
     broot
 
     alsa-utils
-    # (pkgs.callPackage ./pkgs/jerry.nix {})
 
-    # cargo rustc rust-analyzer # alternaticly: rustup
-    pkgs-unstable.zig zls
-    gdb clang
+    rustup
+    # cargo rustc rust-analyzer
+    pkgs-unstable.zig
+    zls
+    gdb
+    clang
     # clang-tools
     # ghidra
 
-    tmux
-
-    # nixfmt-classic
     pcalc
+
+    groff
+    pandoc
 
     ## Langs
     # go
@@ -135,8 +140,10 @@
     # mpc-cli
     # mpdevil # clerk ncmpcpp
 
-    spotify
+    # spotify
+    ncspot
     discord
+    discordo
 
     newsboat
     mpv
@@ -145,6 +152,7 @@
     # fdupes
     # pdftk
     # imagemagick
+    # obs-studio
 
     zathura
     mako
@@ -161,8 +169,6 @@
     # mediainfo
     # rsync # provided by system
     jq
-    # hyperfine
-    # obs-studio
     killall
     tty-clock
     file
@@ -171,7 +177,6 @@
     pfetch
     # drive
     # pavucontrol
-    # networkmanagerapplet
     porsmo
     # playerctl
     bluetuith
@@ -179,14 +184,34 @@
     du-dust
     # wiki-tui
     xdg-utils
-    # handlr-regex
-    # neo-cowsay
-    # browserpass
     # inotify-tools
     # cool-retro-term
     fd
 
-    # Security
+    grim
+    slurp
+
+    obsidian
+    # qutebrowser
+
+    # godot_4
+
+    imagemagick
+    nautilus
+
+    lynx
+
+    libreoffice-fresh
+    ghostscript
+
+    nodejs
+
+    # brave
+
+    # code-cursor
+    # zed-editor
+
+    ## Security
     # nmap
 
     # vorbis-tools
@@ -202,17 +227,11 @@
     # alsa-utils-openrc
     # cronie-openrc
     # dhcpcd-openrc
-    # lsb-release
-    # vscodium
-    # lvm2-openrc
-    # mdadm-openrc
     # memtest86+
     # mkinitcpio-openswap
     # nfs-utils-openrc
     # ntp-openrc
     # openssh-openrc
-    # vkd3d
-    # wpa_supplicant-openrc
     # gtk3
     # acpid-openrc
     # cups
@@ -220,19 +239,11 @@
     # gwenview
     # haveged-openrc
     # inxi
-    # libva-vdpau-driver
-    # libvdpau-va-gl
     # markdownpart
-    # nbd
     # openrc-settingsd
     # partitionmanager
-    # powertop
     # raw-thumbnailer
-    # scrot
     # spectacle
-    # svgpart
-    # sweeper
-    # texinfo
     # tumbler
     # imgclr
     # xdotool
@@ -242,8 +253,14 @@
     # ndctl
     # xfsprogs
     # archey
+    # dmraid
+    # libva-vdpau-driver
+    # libvdpau-va-gl
+    # lsb-release
+    # lvm2-openrc
+    # man-pages
+    # mdadm-openrc
     # gpatch
-    # loc
     # micro
     # opam
     # open-mpi
@@ -263,15 +280,6 @@
     # nginx
     # deluge
     # inxi
-
-    # dmraid
-    # libva-vdpau-driver
-    # libvdpau-va-gl
-    # lsb-release
-    # lvm2-openrc
-    # man-pages
-    # markdownpart
-    # mdadm-openrc
     # nbd
     # nfs-utils-openrc
     # openrc-settingsd
@@ -283,62 +291,37 @@
     # syslog-ng-openrc
     # texinfo
     # vkd3d
-    # wpa_supplicant-openrc
     # re2
     # btrfs-progs
     # catch2
-    # gitoxide
-    # gptfdisk
     # loupe
     # scdoc
     # snapshot
     # stb
-    # neovide
-    # wasmtime
-
-    # rclone
-    # rclone-browser
-    ## OR
-    # insync
-
-    grim slurp
 
     ### Games
-    # heroic
-    # (lutris.override { steamSupport = true; })
-
-    ## Do this one
     # lutris
+    # (lutris.override { steamSupport = true; })
 
     ### Japanese
     # memento
     # komikku
     # ani-cli
 
-    obsidian
-    # qutebrowser
+    gcc
+    # clang-manpages
+    man-pages
+    man-pages-posix
 
-    # godot_4
+    (pkgs.callPackage ./pkgs/zen.nix {})
 
-    imagemagick
-    # nautilus
-
-    lynx
-
-    rustup
-
-    libreoffice-fresh
-    ghostscript
-
-    pandoc
-    nodejs
-
-    # brave
-
-    # code-cursor
-    # zed-editor
-    # vscode
+    neovim
   ];
+
+  documentation.enable = true;
+  documentation.man.enable = true;
+  documentation.dev.enable = true;
+
   # programs.kdeconnect.enable = true;
 
   programs.steam = {
@@ -347,4 +330,56 @@
     # dedicatedServer.openFirewall = true;
   };
 
+  # gtk = {
+  #   enable = true;
+  #   theme = {
+  #     name = "Catppuccin-Mocha-Compact-Mauve-Dark";
+  #     package = pkgs.catppuccin-gtk.override {
+  #       accents = ["mauve"];
+  #       size = "compact";
+  #       variant = "mocha";
+  #     };
+  #   };
+  #   # iconTheme = {
+  #   #   name = "Papirus-Dark";
+  #   #   package = pkgs.papirus-icon-theme;
+  #   # };
+  #   font = {
+  #     name = "Hack Nerd Font Medium";
+  #     # package = pkgs.nerdfont.override { fonts = [ "Hack", "Mononoki" ] }
+  #   };
+  # };
+
+  environment.systemPackages = map mkScript (pkgs.lib.filesystem.listFilesRecursive "${inputs.scripts}/bin");
+
+  environment.variables = rec {
+    XDG_CONFIG_HOME = "$HOME/.config";
+    XDG_DATA_HOME = "$HOME/.local/share";
+    XDG_CACHE_HOME = "$HOME/.cache";
+    # export XDG_DESKTOP_DIR="$HOME/cur"; # this moves the location of where `.desktop` files go
+    XDG_DOCUMENTS_DIR = "$HOME/dox";
+    XDG_DOWNLOAD_DIR = "$HOME/dl";
+    XDG_MUSIC_DIR = "$HOME/aud";
+    XDG_PICTURES_DIR = "$HOME/pix";
+    XDG_PUBLICSHARE_DIR = "$HOME";
+
+    RUSTUP_HOME = "${XDG_DATA_HOME}/rustup";
+    CARGO_HOME = "${XDG_DATA_HOME}/cargo";
+    GNUPGHOME = "${XDG_DATA_HOME}/gnupg";
+    PASSWORD_STORE_DIR = "${XDG_DATA_HOME}/pass";
+
+    VISUAL = "nvim"; # emacs
+    EDITOR = "nvim";
+    READER = "zathura";
+    TERMINAL = "foot";
+    BROWSER = "firefox";
+    VIDEO = "mpv";
+    IMAGE = "imv";
+    OPENER = "xdg-open";
+    PAGER = "less"; # TODO: use zss
+    MANPAGER = "less";
+
+    HISTORY_IGNORE = "(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..|clear)";
+    LESSHISTFILE = "-";
+  };
 }

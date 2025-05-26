@@ -1,5 +1,11 @@
-{ config, pkgs, lib, inputs, ... }: {
-  imports = [ ];
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}: {
+  imports = [];
 
   # Pinning the registry on NixOS makes it so `nix shell nixpkgs#ITEM` does not
   # download a tarball for only a lookup. Also enables being able to use
@@ -10,7 +16,7 @@
   nix.registry.nixpkgs.flake = inputs.nixpkgs;
 
   nixpkgs.config = {
-    permittedInsecurePackages = [ "electron-25.9.0" ];
+    permittedInsecurePackages = ["electron-25.9.0"];
     allowUnfree = true;
   };
 
@@ -64,10 +70,10 @@
   # };
 
   environment = {
-    shellAliases = { };
-    variables = { };
-    defaultPackages = [ ];
-    systemPackages = with pkgs; [ vim git coreutils rsync ]; # busybox
+    shellAliases = {};
+    variables = {};
+    defaultPackages = [];
+    systemPackages = with pkgs; [vim git coreutils rsync]; # busybox
   };
 
   hardware.pulseaudio.enable = false;
@@ -84,7 +90,7 @@
   # ------------- Fonts --------------- #
   fonts = {
     packages = with pkgs; [
-      (nerdfonts.override { fonts = [ "Hack" "Mononoki" ]; })
+      (nerdfonts.override {fonts = ["Hack" "Mononoki"];})
       noto-fonts-emoji
       dejavu_fonts
       ipafont
@@ -109,9 +115,9 @@
     isNormalUser = true;
     description = "Evan Stokdyk";
     shell = pkgs.bash;
-    extraGroups = [ "wheel" "networkmanager" "audio" "video" "libvirtd" ]; # "wireshark"
+    extraGroups = ["wheel" "networkmanager" "audio" "video" "libvirtd"]; # "wireshark"
   };
   # ----------------------------------- #
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = ["nix-command" "flakes"];
 }

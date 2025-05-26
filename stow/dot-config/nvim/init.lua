@@ -386,15 +386,102 @@ require("lazy").setup({
     -- { "mg979/vim-visual-multi" },
     -- { 'LionC/nest.nvim' }
 
-    -- {
-    --     "zbirenbaum/copilot.lua",
-    --     cmd = "Copilot",
-    --     lazy = false,
-    --     event = "InsertEnter",
-    --     config = function()
-    --       require("copilot").setup({})
-    --     end,
-    -- },
+    {
+      "zbirenbaum/copilot.lua",
+      cmd = "Copilot",
+      build = ":Copilot auth",
+      event = "BufReadPost",
+      opts = {
+        suggestion = {
+          enabled = true,
+          auto_trigger = true,
+          hide_during_completion = false,
+          keymap = {
+            accept = "<C-l>",
+                        -- false, -- handled by nvim-cmp / blink.cmp
+            next = "<M-]>",
+            prev = "<M-[>",
+          },
+        },
+        panel = { enabled = false },
+        filetypes = {
+          markdown = true,
+          help = true,
+        },
+      },
+    },
+{
+  "CopilotC-Nvim/CopilotChat.nvim",
+  branch = "main",
+  cmd = "CopilotChat",
+  opts = function()
+    local user = vim.env.USER or "User"
+    user = user:sub(1, 1):upper() .. user:sub(2)
+    return {
+      auto_insert_mode = true,
+      question_header = "  " .. user .. " ",
+      answer_header = "  Copilot ",
+      window = {
+        width = 0.4,
+      },
+    }
+  end,
+  keys = {
+    { "<c-s>", "<CR>", ft = "copilot-chat", desc = "Submit Prompt", remap = true },
+    { "<leader>a", "", desc = "+ai", mode = { "n", "v" } },
+    {
+      "<leader>aa",
+      function()
+        return require("CopilotChat").toggle()
+      end,
+      desc = "Toggle (CopilotChat)",
+      mode = { "n", "v" },
+    },
+    {
+      "<leader>ax",
+      function()
+        return require("CopilotChat").reset()
+      end,
+      desc = "Clear (CopilotChat)",
+      mode = { "n", "v" },
+    },
+    {
+      "<leader>aq",
+      function()
+        vim.ui.input({
+          prompt = "Quick Chat: ",
+        }, function(input)
+          if input ~= "" then
+            require("CopilotChat").ask(input)
+          end
+        end)
+      end,
+      desc = "Quick Chat (CopilotChat)",
+      mode = { "n", "v" },
+    },
+    {
+      "<leader>ap",
+      function()
+        require("CopilotChat").select_prompt()
+      end,
+      desc = "Prompt Actions (CopilotChat)",
+      mode = { "n", "v" },
+    },
+  },
+  config = function(_, opts)
+    local chat = require("CopilotChat")
+
+    vim.api.nvim_create_autocmd("BufEnter", {
+      pattern = "copilot-chat",
+      callback = function()
+        vim.opt_local.relativenumber = false
+        vim.opt_local.number = false
+      end,
+    })
+
+    chat.setup(opts)
+  end,
+},
 
     -- Flash enhances the built-in search functionality by showing labels
     -- at the end of each match, letting you quickly jump to a specific
@@ -609,6 +696,7 @@ require("lazy").setup({
         dependencies = {
             -- "nvim-treesitter/nvim-treesitter-textobjects",
             "nvim-treesitter/nvim-treesitter-context",
+            -- { "OXY2DEV/markview.nvim", lazy = false },
         },
         keys = {
             { "<c-space>", desc = "Increment selection" },
@@ -1254,6 +1342,37 @@ vim.keymap.set("n", "<leader>p", "<cmd> Telescope registers <CR>", { desc = "[P]
 --         previewer = false,
 --     })
 -- end, { desc = '[/] Search in current buffer' })
+
+vim.api.nvim_create_user_command('PandocStart', function()
+    -- vim.cmd.silent("Markview toggle")
+    vim.cmd("silent ! setsig -f zathura")
+end, {
+    desc = 'Start Pandoc autocommand',
+})
+
+local group = vim.api.nvim_create_augroup("AutoPandoc", { clear = true })
+vim.api.nvim_create_user_command('PandocToggle', function()
+  if vim.g.pandoc_autocmd_active then
+    vim.api.nvim_clear_autocmds({ group = group })
+    vim.g.pandoc_autocmd_active = false
+    print("Pandoc autocommand disabled")
+  else
+    local newfile = vim.fn.expand("%:r") .. ".pdf"
+    vim.api.nvim_create_autocmd("BufWritePost", {
+      group = group,
+      pattern = "*.md",
+      -- command = "echo 'Text file saved!'",
+      command = "silent ! pandoc <afile> -o " .. newfile .. " -t ms",
+      -- callback = function()
+      --   vim.cmd.silent("!echo 'File saved'")
+      -- end,
+    })
+    vim.g.pandoc_autocmd_active = true
+    print("Pandoc autocommand enabled")
+  end
+end, {
+  desc = 'Toggle Pandoc BufWritePost autocommand',
+})
 
 -- See `:help modeline`
 -- vim: ts=4 sts=4 sw=4 et

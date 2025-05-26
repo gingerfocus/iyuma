@@ -23,17 +23,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1728950024,
-        "narHash": "sha256-+bOdTzLUrQqb7z3k6R0aqlDncAatket1J3eXr2VoNx0=",
+        "lastModified": 1747027947,
+        "narHash": "sha256-LFBeE7P5MRnvBh6AotfFiw8nmuX8KRL2vSjT6MSkTKc=",
         "owner": "gingerfocus",
         "repo": "neomacs",
-        "rev": "1cb111757d7eb3921ee2b4b8f15bf7dd45bdfff8",
+        "rev": "2bb17459f2a5693cb5dfee5707e2c8250f6edc62",
         "type": "github"
       },
       "original": {
         "owner": "gingerfocus",
         "repo": "neomacs",
-        "rev": "1cb111757d7eb3921ee2b4b8f15bf7dd45bdfff8",
         "type": "github"
       }
     },

@@ -1,5 +1,9 @@
-{ config, pkgs, ... }: {
-  imports = [ ./hardware-configuration.nix ../../modules/host/common.nix ];
+{
+  config,
+  pkgs,
+  ...
+}: {
+  imports = [./hardware-configuration.nix ../../modules/host/common.nix];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -36,7 +40,7 @@
     isNormalUser = true;
     # description = "";
     shell = pkgs.bash;
-    extraGroups = [ "wheel" "audio" "video" "libvirtd" ];
+    extraGroups = ["wheel" "audio" "video" "libvirtd"];
   };
   # ----------------------------------- #
 

@@ -1,4 +1,8 @@
-{ config, pkgs, ... }: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   boot.loader.timeout = 3;
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -9,7 +13,7 @@
     enable = true;
     memtest86.enable = true;
     # device = "/dev/disk/by-uuid/D442-50BC";
-    devices = [ "nodev" ];
+    devices = ["nodev"];
     efiSupport = true;
     configurationLimit = 5;
     # useOSProber = true;
