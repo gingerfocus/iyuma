@@ -78,11 +78,16 @@
       pipewire
     ]
     ++ (with xorg; [
-      libxcb libX11
-      libXcursor libXrandr
-      libXi libXext
-      libXcomposite libXdamage
-      libXfixes libXScrnSaver
+      libxcb
+      libX11
+      libXcursor
+      libXrandr
+      libXi
+      libXext
+      libXcomposite
+      libXdamage
+      libXfixes
+      libXScrnSaver
     ]);
   system = "x86_64-linux";
   version = "1.12.8b";
@@ -100,10 +105,10 @@ in
 
     nativeBuildInputs = [makeWrapper copyDesktopItems wrapGAppsHook];
 
-    # desktopSrc = ./.;
+    desktopSrc = ./.;
     installPhase = ''
       mkdir -p $out/bin && cp -r $src/* $out/bin
-      # install -D $desktopSrc/zen.desktop $out/share/applications/zen.desktop
+      install -D $desktopSrc/zen.desktop $out/share/applications/zen.desktop
       install -D $src/browser/chrome/icons/default/default128.png $out/share/icons/hicolor/128x128/apps/zen.png
     '';
 

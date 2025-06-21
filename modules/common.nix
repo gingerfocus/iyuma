@@ -14,14 +14,13 @@
   # This similarly makes it so unlocked flakes that use "nixpkgs" as an input
   # can similarly draw from the registry.
   nix.registry.nixpkgs.flake = inputs.nixpkgs;
+  nix.registry.nixpkgs-unstable.flake = inputs.nixpkgs-unstable;
 
   nixpkgs.config = {
     permittedInsecurePackages = ["electron-25.9.0"];
     allowUnfree = true;
+    trustedUsers = "@wheel";
   };
-
-  # services.pgadmin.enable = true;
-  # services.pgadmin.initialEmail = "evan.stokdyk@gmail.com";
 
   ## Enable the OpenSSH daemon.
   # services.openssh.enable = true;

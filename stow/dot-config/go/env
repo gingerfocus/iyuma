@@ -1,4 +1,4 @@
-GOCACHE=~/.cache/go/build
-GOENV=~/.config/go/env
-GOMODCACHE=~/.cache/go/pkg/mod
-GOPATH=~/.local/share/go
+GOCACHE=/home/focus/.cache/go/build
+GOENV=/home/focus/.config/go/env
+GOMODCACHE=/home/focus/.cache/go/pkg/mod
+GOPATH=/home/focus/.local/share/go

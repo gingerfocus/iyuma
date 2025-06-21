@@ -207,3 +207,6 @@ riverctl spawn swww-daemon
 # switch-0-5-Lid_Switch
 # keyboard-0-1-Power_Button
 
+systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river
+systemctl --user restart xdg-desktop-portal

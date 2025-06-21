@@ -2,7 +2,11 @@ https://github.com/tpwrules/nixos-apple-silicon
 https://github.com/the-argus/nixsys
 https://github.com/samiulbasirfahim/Flakes
 https://github.com/jakehamilton/config
+
+
 https://github.com/m4xshen/dotfiles
+- nvim
+
 https://github.com/AlexvZyl/.dotfiles
 https://github.com/anantnrg/hypr_eww
 https://github.com/Amitabha37377/Awesome_Dotfiles

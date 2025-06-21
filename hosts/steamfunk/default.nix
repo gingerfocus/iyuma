@@ -8,5 +8,8 @@
 
   networking.hostName = "steamfunk";
 
+  # firmware updates
+  services.fwupd.enable = true;
+
   system.stateVersion = "23.11";
 }

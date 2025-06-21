@@ -6,7 +6,6 @@
 
     nixpkgs.url = github:nixos/nixpkgs/24.11;
     nixpkgs-unstable.url = github:nixos/nixpkgs/nixpkgs-unstable;
-
     hardware.url = github:NixOS/nixos-hardware/master;
 
     neomacs = {
@@ -41,9 +40,22 @@
     pkgs = import nixpkgs {
       inherit system;
       config.allowUnfree = true;
-      # overlays = [ (final: prev: { }) ];
+      overlays = [ 
+          # (final: prev: {
+          #   wlroots_0_18 = prev.wlroots_0_18.overrideAttrs (old: { # you may need to use 0_18
+          #     patches = (old.patches or [ ]) ++ [
+          #       (prev.fetchpatch {
+          #         url = "https://gitlab.freedesktop.org/wlroots/wlroots/uploads/bd115aa120d20f2c99084951589abf9c/DisplayLink_v2.patch";
+          #         hash = "sha256-vWQc2e8a5/YZaaHe+BxfAR/Ni8HOs2sPJ8Nt9pfxqiE=";
+          #       })
+          #     ];
+          #   });
+          # }) 
+      ];
     };
+
     pkgs-unstable = import nixpkgs-unstable {
+      config.allowUnfree = true;
       inherit system;
     };
 
@@ -74,6 +86,8 @@
 
       ./modules/common.nix
       ./modules/desktop.nix
+      # only for some times
+      ./modules/work.nix
 
       ./modules/grub.nix
       inputs.hardware.nixosModules.framework-13th-gen-intel
