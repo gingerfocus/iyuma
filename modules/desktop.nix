@@ -1,12 +1,16 @@
 {
   config,
-  pkgs,
   inputs,
-  system,
+  pkgs,
   pkgs-unstable,
+  system,
   ...
 }: {
-  imports = [./pkgs/neomacs.nix ./games.nix];
+  imports = [
+    ./pkgs/neomacs.nix 
+    ./pkgs/saka.nix 
+    ./games.nix
+    ];
 
   # xdg.icons.enable = false;
 
@@ -30,6 +34,7 @@
       };
     };
   };
+  # gsettings set org.gnome.desktop.input-sources xkb-options "['caps:swapescape']"
 
   environment.etc."xdg/xdg-desktop-portal-gtk/config".text = ''
     [OpenURI]
@@ -251,9 +256,7 @@
       # komikku
       # ani-cli
 
-
-
-      (pkgs.callPackage ./pkgs/zen.nix {})
+      inputs.zen-browser.packages."${system}".default
 
       # qutebrowser
 
@@ -263,8 +266,6 @@
       # code-cursor
       zed-editor
       ghostty
-
-      neovim
 
       zig zls
     ])

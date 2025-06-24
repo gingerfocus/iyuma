@@ -1,2 +1,4 @@
 # should not be in repo on any machine but ignored just in case
 /stow/dot-config/git/credentials
+/stow/dot-config/go/telemetry
+/.direnv

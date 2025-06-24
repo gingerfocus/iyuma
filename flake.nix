@@ -2,10 +2,9 @@
   description = "nixos config";
 
   inputs = {
-    # nixpkgs.url = github:nixos/nixpkgs/b69de56fac8c2b6f8fd27f2eca01dcda8e0a4221;
-
     nixpkgs.url = github:nixos/nixpkgs/24.11;
     nixpkgs-unstable.url = github:nixos/nixpkgs/nixpkgs-unstable;
+
     hardware.url = github:NixOS/nixos-hardware/master;
 
     neomacs = {
@@ -13,15 +12,21 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    saka = {
+      url = github:gingerfocus/saka;
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
     scripts = {
       url = github:gingerfocus/scripts;
       flake = false;
     };
 
-    # zen-browser = {
-    #   url = github:MarceColl/zen-browser-flake;
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    zen-browser = {
+      url = github:0xc000022070/zen-browser-flake;
+      inputs.nixpkgs.follows = "nixpkgs";
+      # inputs.home-manager.follows = null;
+    };
   };
 
   # This request each of the arguments from the flake registry. It is how you
@@ -88,8 +93,8 @@
       ./modules/desktop.nix
       # only for some times
       ./modules/work.nix
+      ./modules/boot
 
-      ./modules/grub.nix
       inputs.hardware.nixosModules.framework-13th-gen-intel
     ];
 
@@ -99,5 +104,13 @@
       ./modules/common.nix
       inputs.hardware.nixosModules.apple-macbook-pro-12-1
     ];
+
+    devShells."${system}".default = pkgs.mkShell {
+      buildInputs = with pkgs; [
+        lua-language-server
+        stylua
+        alejandra
+      ];
+    };
   };
 }

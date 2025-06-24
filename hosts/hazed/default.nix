@@ -23,7 +23,6 @@
   # programs.steam.enable = true;
 
   programs.river.enable = true;
-  programs.neovim.enable = true;
 
   hardware.bluetooth = {
     enable = false;

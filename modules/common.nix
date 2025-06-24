@@ -1,11 +1,14 @@
 {
   config,
   pkgs,
+  pkgs-unstable,
   lib,
   inputs,
   ...
 }: {
   imports = [];
+  boot.loader.timeout = 3;
+  boot.loader.efi.canTouchEfiVariables = true;
 
   # Pinning the registry on NixOS makes it so `nix shell nixpkgs#ITEM` does not
   # download a tarball for only a lookup. Also enables being able to use
@@ -72,7 +75,9 @@
     shellAliases = {};
     variables = {};
     defaultPackages = [];
-    systemPackages = with pkgs; [vim git coreutils rsync]; # busybox
+    systemPackages = 
+        (with pkgs; [vim git coreutils rsync]) # busybox
+        ++ (with pkgs-unstable; [ neovim ]);
   };
 
   hardware.pulseaudio.enable = false;

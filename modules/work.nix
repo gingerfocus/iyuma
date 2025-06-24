@@ -5,9 +5,6 @@
   system,
   ...
 }: {
-  boot.extraModulePackages = with config.boot.kernelPackages; [
-    evdi
-  ];
 
   environment.variables = {
     WLR_EVDI_RENDER_DEVICE = "/dev/dri/card1";
@@ -19,6 +16,10 @@
 
   hardware.logitech.wireless.enable = true;
   hardware.logitech.wireless.enableGraphical = true;
+
+  boot.extraModulePackages = with config.boot.kernelPackages; [
+    evdi
+  ];
 
   services.xserver.videoDrivers = ["displaylink" "modesetting"];
   systemd.services.dlm.wantedBy = ["multi-user.target"];

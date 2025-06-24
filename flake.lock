@@ -16,6 +16,27 @@
         "type": "github"
       }
     },
+    "home-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "zen-browser",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1743604125,
+        "narHash": "sha256-ZD61DNbsBt1mQbinAaaEqKaJk2RFo9R/j+eYWeGMx7A=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "180fd43eea296e62ae68e079fcf56aba268b9a1a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
     "neomacs": {
       "inputs": {
         "nixpkgs": [
@@ -74,7 +95,29 @@
         "neomacs": "neomacs",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "scripts": "scripts"
+        "saka": "saka",
+        "scripts": "scripts",
+        "zen-browser": "zen-browser"
+      }
+    },
+    "saka": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1750594025,
+        "narHash": "sha256-rXuBKMlqhW9y28jKhJwgF6W1NpQrB1oq4oWcwLAIY1E=",
+        "owner": "gingerfocus",
+        "repo": "saka",
+        "rev": "f364fccf4cdd2683b38714926b499f31f5cd1be9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "gingerfocus",
+        "repo": "saka",
+        "type": "github"
       }
     },
     "scripts": {
@@ -90,6 +133,27 @@
       "original": {
         "owner": "gingerfocus",
         "repo": "scripts",
+        "type": "github"
+      }
+    },
+    "zen-browser": {
+      "inputs": {
+        "home-manager": "home-manager",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1750557004,
+        "narHash": "sha256-P3H0y4eYALvie8iFcT1LqmR+cB5UgT/qFoUWY/CX5O4=",
+        "owner": "0xc000022070",
+        "repo": "zen-browser-flake",
+        "rev": "5bebd80f8684a7298013fcf9bf846369d3a6542a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "0xc000022070",
+        "repo": "zen-browser-flake",
         "type": "github"
       }
     }
