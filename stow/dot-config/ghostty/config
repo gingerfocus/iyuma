@@ -1,0 +1,12 @@
+# ghostty +show-config --default --docs
+
+# command = fish
+background-opacity = 0.9
+# gtk-titlebar = false
+
+font-family=Hack Nerd Font
+font-size=15
+font-family-italic=Mononoki Nerd Font
+
+# initial-window-mode=maximized
+# pad=5x5

@@ -71,14 +71,6 @@
   #   useXkbConfig = false;
   # };
 
-  environment = {
-    shellAliases = {};
-    variables = {};
-    defaultPackages = [];
-    systemPackages = 
-        (with pkgs; [vim git coreutils rsync]) # busybox
-        ++ (with pkgs-unstable; [ neovim ]);
-  };
 
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -112,8 +104,6 @@
   #   serif = ["DejaVu Serif" "IPAPMincho"];
   # };
 
-  users.defaultUserShell = pkgs.bash;
-
   # ----------------------------------- #
   users.users.focus = {
     isNormalUser = true;
@@ -124,4 +114,61 @@
   # ----------------------------------- #
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
+
+  users.defaultUserShell = pkgs.bash;
+
+  environment = {
+    shellAliases = {};
+    defaultPackages = [];
+    systemPackages =
+        (with pkgs; [vim git coreutils rsync]) # busybox
+        ++ (with pkgs-unstable; [ neovim ]);
+  };
+
+  programs.bash = {
+    promptInit = ''
+      PS1="\e[1m\e[31m\d \e[33m\u\e[32m@\e[34m\H \e[35m\w \e[31m\e[0m\$\e[0m "
+    '';
+    shellAliases = {
+      vim = "nvim";
+      vimdiff = "nvim -d";
+      nixbld = "sudo nixos-rebuild switch --flake $HOME/dev/iyuma";
+      # nixbld = "sudo nixos-rebuild switch --flake ${../.}";
+    };
+
+    # loginShellInit = '''';
+    interactiveShellInit = pkgs.lib.readFile ./init.sh;
+    # logout = '''';
+  };
+
+  environment.variables = rec {
+    XDG_CONFIG_HOME = "$HOME/.config";
+    XDG_DATA_HOME = "$HOME/.local/share";
+    XDG_CACHE_HOME = "$HOME/.cache";
+    # export XDG_DESKTOP_DIR="$HOME/cur"; # this moves the location of where `.desktop` files go
+    XDG_DOCUMENTS_DIR = "$HOME/dox";
+    XDG_DOWNLOAD_DIR = "$HOME/dl";
+    XDG_MUSIC_DIR = "$HOME/aud";
+    XDG_PICTURES_DIR = "$HOME/pix";
+    XDG_PUBLICSHARE_DIR = "$HOME";
+
+    RUSTUP_HOME = "${XDG_DATA_HOME}/rustup";
+    CARGO_HOME = "${XDG_DATA_HOME}/cargo";
+    GNUPGHOME = "${XDG_DATA_HOME}/gnupg";
+    PASSWORD_STORE_DIR = "${XDG_DATA_HOME}/pass";
+
+    VISUAL = "nvim";
+    EDITOR = "nvim";
+    READER = "zathura";
+    TERMINAL = "foot";
+    BROWSER = "firefox";
+    VIDEO = "mpv";
+    IMAGE = "imv";
+    OPENER = "xdg-open";
+    PAGER = "less";
+    MANPAGER = "less";
+
+    HISTORY_IGNORE = "(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..|clear)";
+    LESSHISTFILE = "-";
+  };
 }

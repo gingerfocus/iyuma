@@ -79,8 +79,15 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 
 -- [[ load plugins ]] --
 require("lazy").setup({
-    { "folke/lazy.nvim",          tag = "stable" },
-    { "actionshrimp/direnv.nvim", opts = {},     lazy = false },
+    { "folke/lazy.nvim",           tag = "stable" },
+    { "actionshrimp/direnv.nvim",  opts = {},             lazy = false },
+    { "stevearc/oil.nvim",         opts = {},             lazy = false },
+    { "mbbill/undotree",           cmd = "UndotreeToggle" },
+    { "folke/flash.nvim",          opts = {} }, -- a mouse alternative
+    { "echasnovski/mini.pairs",    event = "BufRead",     opts = {} },
+    { "echasnovski/mini.ai",       event = "BufRead",     opts = { n_lines = 500 } },
+    { "echasnovski/mini.surround", event = "BufRead",     opts = {} },
+
 
     -- tokyonight
     {
@@ -95,14 +102,10 @@ require("lazy").setup({
                     comments = { italic = false }, -- nice but doesnt work in tmux
                 },
             })
-
             vim.cmd.colorscheme("tokyonight-moon")
         end,
     },
-    -- require('mini.ai').setup { n_lines = 500 }
-    --       require('mini.surround').setup()
 
-    { "stevearc/oil.nvim",      opts = {},         lazy = false },
 
     {
         "lukas-reineke/indent-blankline.nvim",
@@ -112,15 +115,8 @@ require("lazy").setup({
     },
 
     -- better vim.ui
-    {
-        "stevearc/dressing.nvim",
-        lazy = false, -- needs to change vim.ui.select and vim.ui.input
-        enabled = false,
-        opts = {},
-    },
+    -- { "stevearc/dressing.nvim", opts = {}, lazy = false },
 
-    -- auto pairs
-    { "echasnovski/mini.pairs", event = "BufRead", opts = {} },
 
     {
         "echasnovski/mini.icons",
@@ -133,16 +129,6 @@ require("lazy").setup({
         end,
     },
 
-    { "mbbill/undotree",  cmd = "UndotreeToggle" },
-
-    {
-        "theprimeagen/harpoon",
-        opts = {},
-
-    },
-
-    -- a mouse alternative
-    { "folke/flash.nvim", opts = {} },
 
     -- Treesitter
     {
@@ -200,53 +186,15 @@ require("lazy").setup({
                 lua = { "stylua" },
                 fish = { "fish_indent" },
                 sh = { "shfmt" },
+                zig = { "zig" },
             },
             formatters = {
                 stylua = { prepend_args = { "--indent-type", "Spaces" } },
+                zig = { prepend_args = { "fmt" } },
             },
         },
     },
 
-    -- {
-    --     "epwalsh/obsidian.nvim",
-    --     enables = false, -- todo: blink compat
-    --     ft = "markdown",
-    --     dependencies = {
-    --         "nvim-lua/plenary.nvim",
-    --         "nvim-telescope/telescope.nvim",
-    --     },
-    --     opts = {
-    --         workspaces = { { name = "main", path = "~/dox" } },
-    --         notes_subdir = "notes",
-    --         completion = { min_chars = 0 },
-    --         mappings = {
-    --             ["gf"] = {
-    --                 action = function()
-    --                     return require("obsidian").util.gf_passthrough()
-    --                 end,
-    --                 opts = { noremap = false, expr = true, buffer = true },
-    --             },
-    --             -- vim.keymap.set("n", "gl", "<cmd>ObsidianFollowLink<CR>", { desc = "Obsidian: Follow [L]ink" })
-    --         },
-    --         preferred_link_style = "wiki",
-    --         disable_frontmatter = false,
-    --         follow_url_func = function(url)
-    --             vim.fn.jobstart({ "xdg-open", url })
-    --         end,
-    --         picker = { name = "telescope.nvim" },
-    --     },
-    -- },
-
-    {
-        "OXY2DEV/markview.nvim",
-        ft = { "markdown", "codecompanion" },
-        opts = {
-            preview = {
-                filetypes = { "markdown", "codecompanion" },
-                ignore_buftypes = {},
-            },
-        },
-    },
 
     {
         "olimorris/codecompanion.nvim",
@@ -254,7 +202,16 @@ require("lazy").setup({
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-treesitter/nvim-treesitter",
-            "OXY2DEV/markview.nvim",
+            {
+                "OXY2DEV/markview.nvim",
+                ft = { "markdown", "codecompanion" },
+                opts = {
+                    preview = {
+                        filetypes = { "markdown", "codecompanion" },
+                        ignore_buftypes = {},
+                    },
+                },
+            },
         },
         opts = {},
     },
@@ -297,6 +254,7 @@ require("lazy").setup({
                 sources = {
                     { name = "supermaven" },
                     { name = "nvim_lsp" },
+                    { name = "nvim_lua" },
                     { name = "buffer" },
                     { name = "path" },
                 },
@@ -375,6 +333,79 @@ require("lazy").setup({
         end,
     },
 
+    {
+        "epwalsh/obsidian.nvim",
+        enabled = false,
+        ft = "markdown",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-telescope/telescope.nvim",
+            "hrsh7th/nvim-cmp",
+        },
+        opts = {
+            workspaces = { { name = "main", path = "~/dox" } },
+            notes_subdir = "notes",
+            completion = { min_chars = 0 },
+            mappings = {
+                ["gf"] = {
+                    action = function()
+                        return require("obsidian").util.gf_passthrough()
+                    end,
+                    opts = { noremap = false, expr = true, buffer = true },
+                },
+                -- vim.keymap.set("n", "gl", "<cmd>ObsidianFollowLink<CR>", { desc = "Obsidian: Follow [L]ink" })
+            },
+            preferred_link_style = "wiki",
+            disable_frontmatter = false,
+            follow_url_func = function(url)
+                vim.fn.jobstart({ "xdg-open", url })
+            end,
+            picker = { name = "telescope.nvim" },
+        },
+    },
+
+    {
+        "ThePrimeagen/harpoon",
+        branch = "harpoon2",
+        opts = {
+            menu = {
+                width = vim.api.nvim_win_get_width(0) - 4,
+            },
+            settings = {
+                save_on_toggle = true,
+            },
+        },
+        keys = function()
+            local keys = {
+                {
+                    "<leader>a",
+                    function()
+                        require("harpoon"):list():add()
+                    end,
+                    desc = "Harpoon File",
+                },
+                {
+                    "<c-e>", -- "<leader>h",
+                    function()
+                        local harpoon = require("harpoon")
+                        harpoon.ui:toggle_quick_menu(harpoon:list())
+                    end,
+                    desc = "Harpoon Quick Menu",
+                },
+            }
+
+            for i = 1, 5 do
+                table.insert(keys, {
+                    "<leader>" .. i,
+                    function()
+                        require("harpoon"):list():select(i)
+                    end,
+                    desc = "Harpoon to File " .. i,
+                })
+            end
+            return keys
+        end,
+    },
 }, {
     defaults = { lazy = true },
     rocks = { enabled = false },
@@ -411,14 +442,6 @@ end, { desc = "Flash [S]earch" })
 vim.keymap.set({ "n", "x", "o" }, "S", function()
     require("flash").treesitter()
 end, { desc = "Flash Treesitter [S]earch", })
-
-vim.keymap.set("n", "<leader>a", function()
-    require("harpoon.mark").add_file()
-end, { desc = "[A]dd to harpoon" })
-
-vim.keymap.set("n", "<C-e>", function()
-    require("harpoon.ui").toggle_quick_menu()
-end, { desc = "Open harpoon switcher" })
 
 vim.keymap.set("n", "<leader>cf", function()
     local bufnr = vim.api.nvim_get_current_buf()

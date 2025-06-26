@@ -1,0 +1,90 @@
+alias h='history'
+alias gu='gitui'
+alias search='find . | fzf | xargs'
+alias searchf='find . -type f | fzf | xargs'
+alias searchd='find . -type d | fzf | xargs'
+
+alias c='clear'
+alias ..='cd ..'
+alias o='xdg-open'
+alias m='mpv'
+alias i='imv'
+alias n='newsboat'
+alias ka='killall'
+
+alias br='broot'
+alias lr='broot -sdr'
+
+# alias ls='eza'alias la='eza -a'alias ll='eza -l'alias lla='eza
+# -la'alias lt='eza --tree --level=4'alias lss='eza --group-directories-first
+# --icons'alias l.='eza -a | command grep -E "^\."alias cp='cp -ivr'alias mv='mv
+# -iv'
+
+alias rm='rm -vI'
+alias mkd='mkdir -pv'
+alias cat='bat --plain'
+
+alias yt='yt-dlp --embed-metadata -i'
+alias yta='yt-dlp --embed-metadata -i -x -f bestaudio/best --audio-format vorbis'
+alias ytt='yt-dlp --embed-metadata -i --skip-download --write-thumbnail'
+alias wget='wget --hsts-file /dev/null'
+alias psg='ps aux | grep -v grep | grep -i -e VSZ -e'alias vdiff='nvim -d'
+alias sdn='shutdown -h now'
+alias grep='grep --color=auto'
+alias diff='diff --color=auto'
+alias ip='ip -color=auto'
+alias nmutt='neomutt'
+alias ttc='tty-clock -c -C 7 -r -f "%A, %B %d"'
+alias free='free -m'
+alias lynx='lynx -vikeys'
+alias psa='ps auxf'
+alias psgrep='ps aux | grep -v grep | grep -i -e VSZ -e'
+alias psmem='ps auxf | sort -nr -k 4'
+alias pscpu='ps auxf | sort -nr -k 3'
+alias doom1='chocolate-doom -iwad $HOME/dox/games/DOOM1.wad'
+alias doom2='chocolate-doom -iwad $HOME/dox/games/DOOM2.wad'
+
+## Functions
+backup() {
+    cp "$1" "$1.bak"
+}
+
+mcd() {
+    mkdir -p "$1"
+    cd "$1"
+}
+
+lfcd() {
+    tmp=$(mktemp -u)
+    if lf -last-dir-path="$tmp" "$@"; then
+        if [ -f "$tmp" ]; then
+            dir=$(cat "$tmp")
+            [ -d "$dir" ] && [ "$dir" != "$(pwd)" ] && cd "$dir"
+        fi
+    fi
+}
+
+# cd and ls after
+cd() {
+    builtin cd "$@"
+    ls --color=always
+}
+
+## Iterator ##
+col() {
+    while read -r input; do
+        echo "$input" | awk -v index="$1" '{print $index}'
+    done
+}
+
+rown() {
+    sed -n "$1 p"
+}
+
+skip() {
+    tail -n +"$(($1 + 1))"
+}
+
+take() {
+    head -n "$1"
+}
