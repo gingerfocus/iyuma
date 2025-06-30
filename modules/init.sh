@@ -1,8 +1,10 @@
 alias h='history'
 alias gu='gitui'
+
 alias search='find . | fzf | xargs'
-alias searchf='find . -type f | fzf | xargs'
-alias searchd='find . -type d | fzf | xargs'
+# alias searchf='find . -type f | fzf | xargs'
+alias searchdir='find . -type d | fzf | xargs'
+alias lr='br -sdp'
 
 alias c='clear'
 alias ..='cd ..'
@@ -10,10 +12,10 @@ alias o='xdg-open'
 alias m='mpv'
 alias i='imv'
 alias n='newsboat'
+alias e='nvim'
+
 alias ka='killall'
 
-alias br='broot'
-alias lr='broot -sdr'
 
 # alias ls='eza'alias la='eza -a'alias ll='eza -l'alias lla='eza
 # -la'alias lt='eza --tree --level=4'alias lss='eza --group-directories-first
@@ -22,27 +24,27 @@ alias lr='broot -sdr'
 
 alias rm='rm -vI'
 alias mkd='mkdir -pv'
-alias cat='bat --plain'
+alias bat='bat --plain'
 
 alias yt='yt-dlp --embed-metadata -i'
 alias yta='yt-dlp --embed-metadata -i -x -f bestaudio/best --audio-format vorbis'
 alias ytt='yt-dlp --embed-metadata -i --skip-download --write-thumbnail'
+
 alias wget='wget --hsts-file /dev/null'
-alias psg='ps aux | grep -v grep | grep -i -e VSZ -e'alias vdiff='nvim -d'
+alias psg='ps aux | grep -v grep | grep -i -e VSZ -e'
+alias vdiff='nvim -d'
 alias sdn='shutdown -h now'
 alias grep='grep --color=auto'
 alias diff='diff --color=auto'
 alias ip='ip -color=auto'
 alias nmutt='neomutt'
 alias ttc='tty-clock -c -C 7 -r -f "%A, %B %d"'
+
 alias free='free -m'
 alias lynx='lynx -vikeys'
-alias psa='ps auxf'
-alias psgrep='ps aux | grep -v grep | grep -i -e VSZ -e'
-alias psmem='ps auxf | sort -nr -k 4'
-alias pscpu='ps auxf | sort -nr -k 3'
-alias doom1='chocolate-doom -iwad $HOME/dox/games/DOOM1.wad'
-alias doom2='chocolate-doom -iwad $HOME/dox/games/DOOM2.wad'
+
+# alias doom1='chocolate-doom -iwad $HOME/dox/games/DOOM1.wad'
+# alias doom2='chocolate-doom -iwad $HOME/dox/games/DOOM2.wad'
 
 ## Functions
 backup() {
@@ -88,3 +90,18 @@ skip() {
 take() {
     head -n "$1"
 }
+
+function br {
+    local cmd cmd_file code
+    cmd_file=$(mktemp)
+    if broot --outcmd "$cmd_file" "$@"; then
+        cmd=$(<"$cmd_file")
+        command rm -f "$cmd_file"
+        eval "$cmd"
+    else
+        code=$?
+        command rm -f "$cmd_file"
+        return "$code"
+    fi
+}
+ 

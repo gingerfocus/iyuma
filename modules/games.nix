@@ -5,6 +5,11 @@
   system,
   ...
 }: {
+  nixpkgs.config = {
+    # permittedInsecurePackages = ["electron-25.9.0"];
+    allowUnfree = true;
+  };
+
   programs.steam = {
     enable = true;
     # remotePlay.openFirewall = true;

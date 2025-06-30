@@ -1,12 +1,7 @@
 # Iyuma
 A no-good, very bad, horrid system configuration. It works on my machine.
 
-Made with [freight](https://github.com/gingerfocus/freight).
-
-```bash
-git clone https://github.com/Focus172/iyuma.git
-cargo run
-```
+Also see [freight](https://github.com/gingerfocus/freight).
 
 ## Nix
 Change nix registry dir
@@ -14,7 +9,32 @@ Change nix registry dir
 nix registry add nixpkgs ~/my-nixpkgs
 ```
 
-```
+```bash
 sudo nixos-rebuild switch --flake .
 nix run .#stow
-`
+```
+
+# References
+https://github.com/tpwrules/nixos-apple-silicon
+https://github.com/the-argus/nixsys
+https://github.com/samiulbasirfahim/Flakes
+https://github.com/jakehamilton/config
+
+
+https://github.com/m4xshen/dotfiles
+- nvim
+
+https://github.com/AlexvZyl/.dotfiles
+https://github.com/anantnrg/hypr_eww
+https://github.com/Amitabha37377/Awesome_Dotfiles
+https://github.com/Vallen217
+https://github.com/end-4/dots-hyprland
+https://github.com/JaKooLit/Ja_HyprLanD-dots
+https://github.com/cseickel/dotfiles
+https://github.com/FlafyDev/nixos-config
+https://github.com/MatthiasBenaets/nixos-config
+https://github.com/rxyhn/yuki
+https://nx2.site/grub-ascii-theme
+https://nx2.site/my-ascii-art
+https://github.com/sephid86/archas
+

@@ -8,65 +8,61 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
--- [[ initialization ]] --
-local o = vim.opt
-local g = vim.g
-
 --------------------------------- globals -------------------------------------
-g.markdown_recommended_style = 0 -- Fix markdown indentation settings
-g.transparency = true
-g.mapleader = " "
+vim.g.markdown_recommended_style = 0 -- Fix markdown indentation settings
+vim.g.transparency = true
+vim.g.mapleader = " "
 
-g.netrw_liststyle = 3 -- Set netrw in tree view
-g.netrw_altv = true   -- Open new pane in netrw on the right
+vim.g.netrw_liststyle = 3 -- Set netrw in tree view
+vim.g.netrw_altv = true   -- Open new pane in netrw on the right
 
-if g.neovide then
+if vim.g.neovide then
     -- g:neovide_transparency should be 0 if you want to unify transparency of content and title bar.
-    g.neovide_transparency = 0.9
-    g.transparency = 0.9
-    g.neovide_background_color = "#0f1117" .. string.format("%x", math.floor(255 * g.transparency))
+    vim.g.neovide_transparency = 0.9
+    vim.g.transparency = 0.9
+    vim.g.neovide_background_color = "#0f1117" .. string.format("%x", math.floor(255 * vim.g.transparency))
 end
 
 -- disable some default providers
-g["loaded_node_provider"] = 0
-g["loaded_perl_provider"] = 0
-g["loaded_python3_provider"] = 0
-g["loaded_ruby_provider"] = 0
+vim.g["loaded_node_provider"] = 0
+vim.g["loaded_perl_provider"] = 0
+vim.g["loaded_python3_provider"] = 0
+vim.g["loaded_ruby_provider"] = 0
 
 --------------------------------- options -------------------------------------
 -- o.clipboard = "unnamedplus" -- for what ever reason this breaks everything
 -- See `:help 'clipboard'`
-o.scrolloff = 8      -- Lines of context
-o.showmode = false   -- Dont show mode since we have a statusline
-o.spelllang = { "en" }
-o.colorcolumn = "80" -- show a black bar in the 80 collum. this thing -------->
-o.confirm = true     -- Confirm to save changes before exiting modified buffer
-o.conceallevel = 2   -- Hide * markup for bold and italic
-o.completeopt = "menu,menuone,noselect"
-o.cursorline = true  -- Enable highlighting of the current line
-o.expandtab = true   -- Use spaces instead of tabs
-o.number = true      -- show line numbers
+vim.opt.scrolloff = 8      -- Lines of context
+vim.opt.showmode = false   -- Dont show mode since we have a statusline
+vim.opt.spelllang = { "en" }
+vim.opt.colorcolumn = "80" -- show a black bar in the 80 collum. this thing -------->
+vim.opt.confirm = true     -- Confirm to save changes before exiting modified buffer
+vim.opt.conceallevel = 2   -- Hide * markup for bold and italic
+vim.opt.completeopt = "menu,menuone,noselect"
+vim.opt.cursorline = true  -- Enable highlighting of the current line
+vim.opt.expandtab = true   -- Use spaces instead of tabs
+vim.opt.number = true      -- show line numbers
 
 -- [[ Search ]] --
-o.ignorecase = true              -- Ignore case
-o.smartcase = true               -- Don't ignore case with capitals
+vim.opt.ignorecase = true              -- Ignore case
+vim.opt.smartcase = true               -- Don't ignore case with capitals
 
-o.list = true                    -- Show some invisible characters (tabs...
-o.mouse = "a"                    -- Enable mouse mode
-o.shiftwidth = 4                 -- Size of an indent
-o.tabstop = 4                    -- Number of spaces tabs count for
+vim.opt.list = true                    -- Show some invisible characters (tabs...
+vim.opt.mouse = "a"                    -- Enable mouse mode
+vim.opt.shiftwidth = 4                 -- Size of an indent
+vim.opt.tabstop = 4                    -- Number of spaces tabs count for
 
-o.termguicolors = true           -- True color support
-o.undofile = true                -- Save undo history
-o.undolevels = 10000
-o.updatetime = 200               -- Save swap file and trigger CursorHold
-o.wildmode = "longest:full,full" -- Command-line completion mode
-o.winminwidth = 5                -- Minimum window width
-o.wrap = false                   -- Disable line wrap
+vim.opt.termguicolors = true           -- True color support
+vim.opt.undofile = true                -- Save undo history
+vim.opt.undolevels = 10000
+vim.opt.updatetime = 200               -- Save swap file and trigger CursorHold
+vim.opt.wildmode = "longest:full,full" -- Command-line completion mode
+vim.opt.winminwidth = 5                -- Minimum window width
+vim.opt.wrap = false                   -- Disable line wrap
 
 -- go to previous/next line with h,l,left arrow and right arrow
 -- when cursor reaches end/beginning of line
-o.whichwrap:append("<>[]hl")
+vim.opt.whichwrap:append("<>[]hl")
 
 --------------------------------- commands ------------------------------------
 
@@ -83,11 +79,11 @@ require("lazy").setup({
     { "actionshrimp/direnv.nvim",  opts = {},             lazy = false },
     { "stevearc/oil.nvim",         opts = {},             lazy = false },
     { "mbbill/undotree",           cmd = "UndotreeToggle" },
-    { "folke/flash.nvim",          opts = {} }, -- a mouse alternative
     { "echasnovski/mini.pairs",    event = "BufRead",     opts = {} },
     { "echasnovski/mini.ai",       event = "BufRead",     opts = { n_lines = 500 } },
     { "echasnovski/mini.surround", event = "BufRead",     opts = {} },
-
+    { "folke/flash.nvim",          opts = {} }, -- a mouse alternative
+    { "folke/which-key.nvim",      event = "VeryLazy",    opts = {} },
 
     -- tokyonight
     {
@@ -195,6 +191,24 @@ require("lazy").setup({
         },
     },
 
+    {
+        "OXY2DEV/markview.nvim",
+        ft = { "markdown", "codecompanion" },
+        cmd = "Markview",
+        opts = {
+            preview = {
+                enable = false,
+                filetypes = { "md", "markdown", "codecompanion" },
+                ignore_buftypes = {},
+            },
+            typst = {
+                enable = true,
+            },
+            experimental = {
+                file_open_command = "e", -- tabnew
+            }
+        },
+    },
 
     {
         "olimorris/codecompanion.nvim",
@@ -202,16 +216,7 @@ require("lazy").setup({
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-treesitter/nvim-treesitter",
-            {
-                "OXY2DEV/markview.nvim",
-                ft = { "markdown", "codecompanion" },
-                opts = {
-                    preview = {
-                        filetypes = { "markdown", "codecompanion" },
-                        ignore_buftypes = {},
-                    },
-                },
-            },
+            "OXY2DEV/markview.nvim",
         },
         opts = {},
     },
@@ -275,7 +280,11 @@ require("lazy").setup({
             -- local capabilities = require("blink.cmp").get_lsp_capabilities()
             local capabilities = vim.lsp.protocol.make_client_capabilities()
 
-            local servers = { "zls", "pyright", "clangd", "hls", "ocamllsp", "lua_ls", "gopls" }
+            local servers = {
+                "zls", "pyright", "clangd", "hls",
+                "ocamllsp", "lua_ls", "gopls",
+                "ts_ls",
+            }
             for _, server in pairs(servers) do
                 lspconfig[server].setup({ capabilities = capabilities })
             end
@@ -335,7 +344,7 @@ require("lazy").setup({
 
     {
         "epwalsh/obsidian.nvim",
-        enabled = false,
+        enabled = true,
         ft = "markdown",
         dependencies = {
             "nvim-lua/plenary.nvim",
@@ -343,6 +352,7 @@ require("lazy").setup({
             "hrsh7th/nvim-cmp",
         },
         opts = {
+            ui = { enable = false },
             workspaces = { { name = "main", path = "~/dox" } },
             notes_subdir = "notes",
             completion = { min_chars = 0 },
@@ -364,48 +374,49 @@ require("lazy").setup({
         },
     },
 
-    {
-        "ThePrimeagen/harpoon",
-        branch = "harpoon2",
-        opts = {
-            menu = {
-                width = vim.api.nvim_win_get_width(0) - 4,
-            },
-            settings = {
-                save_on_toggle = true,
-            },
-        },
-        keys = function()
-            local keys = {
-                {
-                    "<leader>a",
-                    function()
-                        require("harpoon"):list():add()
-                    end,
-                    desc = "Harpoon File",
-                },
-                {
-                    "<c-e>", -- "<leader>h",
-                    function()
-                        local harpoon = require("harpoon")
-                        harpoon.ui:toggle_quick_menu(harpoon:list())
-                    end,
-                    desc = "Harpoon Quick Menu",
-                },
-            }
-
-            for i = 1, 5 do
-                table.insert(keys, {
-                    "<leader>" .. i,
-                    function()
-                        require("harpoon"):list():select(i)
-                    end,
-                    desc = "Harpoon to File " .. i,
-                })
-            end
-            return keys
-        end,
-    },
+    -- {
+    --     "ThePrimeagen/harpoon",
+    --     branch = "harpoon2",
+    --     opts = {
+    --         menu = {
+    --             width = vim.api.nvim_win_get_width(0) - 4,
+    --         },
+    --         settings = {
+    --             save_on_toggle = true,
+    --         },
+    --     },
+    --     keys = function()
+    --         local keys = {
+    --             {
+    --                 "<leader>a",
+    --                 function()
+    --                     require("harpoon"):list():add()
+    --                 end,
+    --                 desc = "Add To Harpoon",
+    --             },
+    --             {
+    --                 "<leader>h",
+    --                 function()
+    --                     local harpoon = require("harpoon")
+    --                     harpoon.ui:toggle_quick_menu(harpoon:list())
+    --                 end,
+    --                 desc = "Harpoon Quick Menu",
+    --             },
+    --         }
+    --
+    --         for i = 1, 5 do
+    --             table.insert(keys, {
+    --                 "<leader>" .. i,
+    --                 function()
+    --                     require("harpoon"):list():select(i)
+    --                 end,
+    --                 desc = "Harpoon to File " .. i,
+    --             })
+    --         end
+    --         return keys
+    --     end,
+    -- },
+    --
 }, {
     defaults = { lazy = true },
     rocks = { enabled = false },
@@ -418,35 +429,36 @@ require("lazy").setup({
 vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 
 -- ## buffers
-vim.keymap.set("n", "<leader>bd", "<cmd> bd <CR> <cmd> bnext <CR>", { desc = "[B]uffer [D]elete" })
-vim.keymap.set("n", "<leader>bc", "<cmd> enew <CR> ", { desc = "[B]uffer [C]reate" })
-vim.keymap.set("n", "<leader>bp", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
-vim.keymap.set("n", "<leader>bn", "<cmd>bnext<CR>", { desc = "[B]uffer [N]ext" })
+vim.keymap.set("n", "<leader>bd", "<cmd> bd <CR> <cmd> bnext <CR>", { desc = "Buffer Delete" })
+vim.keymap.set("n", "<leader>bc", "<cmd> enew <CR> ", { desc = "Buffer Create" })
+vim.keymap.set("n", "<leader>bp", "<cmd>bprevious<cr>", { desc = "Buffer Prev" })
+vim.keymap.set("n", "<leader>bn", "<cmd>bnext<CR>", { desc = "Buffer Next" })
 
 -- ## windows
 vim.keymap.set("n", "<leader>ww", "<C-w>p", { desc = "Other window", remap = true })
 vim.keymap.set("n", "<leader>wd", "<C-w>c", { desc = "Delete window", remap = true })
-vim.keymap.set("n", "<leader>ws", "<C-w>s", { desc = "Split window below", remap = true })
-vim.keymap.set("n", "<leader>wv", "<C-w>v", { desc = "Split window right", remap = true })
-vim.keymap.set("n", "<leader>wv", "<C-w>v<C-w>l", { desc = "[S]plit [V]ertical pane" })
+vim.keymap.set("n", "<leader>ws", "<C-w>s<C-w>j", { desc = "Split window below", remap = true })
+vim.keymap.set("n", "<leader>wv", "<C-w>v<C-w>l", { desc = "Window Vertical" })
+
 
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear Highlight" })
 vim.keymap.set("n", ";", ":")
 
-vim.keymap.set("n", "<leader>u", ":UndotreeToggle", { desc = "Toggle [U]ndotree" })
+vim.keymap.set("n", "<leader>u", ":UndotreeToggle", { desc = "Undotree" })
+vim.keymap.set("n", "<leader>m", "<cmd> Markview splitToggle <CR>", { desc = "Markview Toggle" })
 
 vim.keymap.set({ "n", "x", "o" }, "s", function()
     require("flash").jump()
-end, { desc = "Flash [S]earch" })
+end, { desc = "Flash Search" })
 
 vim.keymap.set({ "n", "x", "o" }, "S", function()
     require("flash").treesitter()
-end, { desc = "Flash Treesitter [S]earch", })
+end, { desc = "Flash Treesitter Search", })
 
 vim.keymap.set("n", "<leader>cf", function()
     local bufnr = vim.api.nvim_get_current_buf()
     require("conform").format({ bufnr = bufnr })
-end, { desc = "[C]ode [F]ormat" })
+end, { desc = "Code Format" })
 
 -- vim.keymap.set("n", "<leader>n", "<cmd> cnext <CR> zz", { desc = "See the next error" })
 -- ]q
@@ -456,6 +468,7 @@ vim.keymap.set("v", "Y", '"+y', { desc = "[Y]ank to clipboard" })
 vim.keymap.set("n", "n", "nzz") -- searching for terms keeps cursor/highlight in the middle
 vim.keymap.set("n", "N", "Nzz")
 
+-- insert undo markers
 vim.keymap.set("i", ",", ",<c-g>u")
 vim.keymap.set("i", ".", ".<c-g>u")
 vim.keymap.set("i", ";", ";<c-g>u")
@@ -463,12 +476,6 @@ vim.keymap.set("i", ";", ";<c-g>u")
 -- better indenting
 vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("v", ">", ">gv")
-
--- Resize window using <ctrl> arrow keys
--- map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase window height" })
--- map("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease window height" })
--- map("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease window width" })
--- map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })
 
 vim.keymap.set({ "n", "x" }, "gw", "*N", { desc = "Search word under cursor" })
 
@@ -487,7 +494,7 @@ end, { desc = "Find [ ] Files" })
 
 vim.keymap.set("n", "<leader>fb", function()
     require("telescope.builtin").buffers()
-end, { desc = "[F]ind [B]uffers" })
+end, { desc = "Find Buffers" })
 
 vim.keymap.set("n", "<leader>fw", function()
     require("telescope.builtin").live_grep()
@@ -501,9 +508,13 @@ vim.keymap.set("n", "<leader>fd", function()
     require("telescope.builtin").diagnostics()
 end, { desc = "[F]ind [D]iagnostics" })
 
+vim.keymap.set("n", "<leader>fh", function()
+    require("telescope.builtin").help_tags()
+end, { desc = "[F]ind [H]elp" })
+
 vim.keymap.set("n", "<leader>p", function()
     require("telescope.builtin").registers()
-end, { desc = "[P]aste Register" })
+end, { desc = "Paste Register" })
 
 vim.keymap.set("n", "<leader>/", function()
     local simpletheme = require("telescope.themes").get_dropdown({
@@ -511,7 +522,8 @@ vim.keymap.set("n", "<leader>/", function()
         winblend = 10,
     })
     require("telescope.builtin").current_buffer_fuzzy_find(simpletheme)
-end, { desc = "[/] Search in current buffer" })
+end, { desc = "Search Buffer" })
+
 
 -- vim.keymap.set('n', '<leader>fh', tele.help_tags, { desc = '[S]earch [H]elp' })
 -- ["<leader>fa"] = { "<cmd> Telescope find_files follow=true no_ignore=true hidden=true <CR>", "[F]ind [A]ll" },
@@ -536,11 +548,12 @@ vim.api.nvim_create_user_command("PdfOpen", function(opts)
     vim.cmd("silent ! setsid -f zathura " .. opts.args)
 end, { desc = "Open PDF" })
 
+local commandactive = false
 local group = vim.api.nvim_create_augroup("PdfMode", { clear = true })
 vim.api.nvim_create_user_command("PdfMode", function()
-    if vim.g.pandoc_autocmd_active then
+    if commandactive then
         vim.api.nvim_clear_autocmds({ group = group })
-        vim.g.pandoc_autocmd_active = false
+        commandactive = false
     else
         local newfile = vim.fn.expand("%:r") .. ".pdf"
         vim.api.nvim_create_autocmd("BufWritePost", {
@@ -548,9 +561,20 @@ vim.api.nvim_create_user_command("PdfMode", function()
             pattern = "*.md",
             command = "silent ! pandoc <afile> -o " .. newfile,
         })
-        vim.g.pandoc_autocmd_active = true
+        commandactive = true
     end
 end, { desc = "Toggle Making Pdfs with Pandoc" })
+
+-- vim.api.nvim_create_autocmd("BufRead typst", {
+--     group = vim.api.nvim_create_augroup("BufRead typst", {}),
+--     callback = function()
+
+vim.api.nvim_create_autocmd("TermOpen", {
+    group = vim.api.nvim_create_augroup("TermOpen", {}),
+    callback = function()
+        vim.cmd.startinsert()
+    end
+})
 
 -- ⣇⣿⠘⣿⣿⣿⡿⡿⣟⣟⢟⢟⢝⠵⡝⣿⡿⢂⣼⣿⣷⣌⠩⡫⡻⣝⠹⢿⣿⣷
 -- ⡆⣿⣆⠱⣝⡵⣝⢅⠙⣿⢕⢕⢕⢕⢝⣥⢒⠅⣿⣿⣿⡿⣳⣌⠪⡪⣡⢑⢝⣇
@@ -566,6 +590,64 @@ end, { desc = "Toggle Making Pdfs with Pandoc" })
 -- ⡕⡑⣑⣈⣻⢗⢟⢞⢝⣻⣿⣿⣿⣿⣿⣿⣿⠸⣿⠿⠃⣿⣿⣿⣿⣿⣿⡿⠁⣠
 -- ⡝⡵⡈⢟⢕⢕⢕⢕⣵⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣿⣿⣿⣿⣿⠿⠋⣀⣈⠙
 -- ⡝⡵⡕⡀⠑⠳⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⢉⡠⡲⡫⡪⡪⡣
+
+-- local M = {}
+--
+-- local markdown_code_block = [[
+--   (
+--   fenced_code_block
+--   (info_string (language) @language) (#eq? @language "python")
+--   (code_fence_content) @content
+--   (fenced_code_block_delimiter) @delimiter
+--   )
+-- ]]
+--
+-- local markdown_query = vim.treesitter.parse_query("markdown", markdown_code_block)
+--
+-- local run_code_block = function(text)
+--   local split = vim.split(text, "\n")
+--   local code_block = table.concat(vim.list_slice(split, 1, #split), "\n")
+--   local job = require("plenary.job"):new({
+--     command = "python",
+--     args = { "-c", code_block },
+--   })
+--   return job:sync()
+-- end
+--
+-- M.config = {}
+--
+-- M.setup = function(args)
+--   M.config = vim.tbl_deep_extend("force", M.config, args or {})
+-- end
+--
+-- local get_root = function(bufnr)
+--   local parser = vim.treesitter.get_parser(bufnr, "markdown", {})
+--   local tree = parser:parse()[1]
+--   return tree:root()
+-- end
+--
+-- M.run = function(bufnr)
+--   bufnr = bufnr or vim.api.nvim_get_current_buf()
+--   if vim.bo[bufnr].filetype ~= "markdown" then
+--     vim.notify("Only Markdown is supported")
+--     return
+--   end
+--   local root = get_root(bufnr)
+--   for id, node in markdown_query:iter_captures(root, bufnr, 0, -1) do
+--     local name = markdown_query.captures[id]
+--     if name == "content" then
+--       local range = { node:range() }
+--       local code_block = vim.treesitter.get_node_text(node, bufnr)
+--       local result = run_code_block(code_block)
+--       table.insert(result, 1, "```text")
+--       table.insert(result, 1, "")
+--       table.insert(result, #result + 1, "```")
+--       vim.api.nvim_buf_set_lines(bufnr, range[3] + 1, range[3] + 1, false, result)
+--     end
+--   end
+-- end
+--
+-- return M
 
 -- See `:help modeline`
 -- vim: ts=4 sts=4 sw=4 et

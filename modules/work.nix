@@ -5,9 +5,13 @@
   system,
   ...
 }: {
-
   environment.variables = {
     WLR_EVDI_RENDER_DEVICE = "/dev/dri/card1";
+  };
+
+  nixpkgs.config = {
+    # permittedInsecurePackages = ["electron-25.9.0"];
+    allowUnfree = true;
   };
 
   services.xserver.enable = true;

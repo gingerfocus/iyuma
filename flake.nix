@@ -9,7 +9,7 @@
 
     neomacs = {
       url = github:gingerfocus/neomacs;
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
     saka = {
@@ -45,17 +45,17 @@
     pkgs = import nixpkgs {
       inherit system;
       config.allowUnfree = true;
-      overlays = [ 
-          # (final: prev: {
-          #   wlroots_0_18 = prev.wlroots_0_18.overrideAttrs (old: { # you may need to use 0_18
-          #     patches = (old.patches or [ ]) ++ [
-          #       (prev.fetchpatch {
-          #         url = "https://gitlab.freedesktop.org/wlroots/wlroots/uploads/bd115aa120d20f2c99084951589abf9c/DisplayLink_v2.patch";
-          #         hash = "sha256-vWQc2e8a5/YZaaHe+BxfAR/Ni8HOs2sPJ8Nt9pfxqiE=";
-          #       })
-          #     ];
-          #   });
-          # }) 
+      overlays = [
+        # (final: prev: {
+        #   wlroots_0_18 = prev.wlroots_0_18.overrideAttrs (old: { # you may need to use 0_18
+        #     patches = (old.patches or [ ]) ++ [
+        #       (prev.fetchpatch {
+        #         url = "https://gitlab.freedesktop.org/wlroots/wlroots/uploads/bd115aa120d20f2c99084951589abf9c/DisplayLink_v2.patch";
+        #         hash = "sha256-vWQc2e8a5/YZaaHe+BxfAR/Ni8HOs2sPJ8Nt9pfxqiE=";
+        #       })
+        #     ];
+        #   });
+        # })
       ];
     };
 
@@ -88,12 +88,13 @@
     # run with `sudo nixos-rebuild switch --flake .#steamfunk`
     nixosConfigurations.steamfunk = iyuma.mkSystem [
       ./hosts/steamfunk
-
       ./modules/common.nix
       ./modules/desktop.nix
+      ./modules/boot
+
       # only for some times
       ./modules/work.nix
-      ./modules/boot
+      ./modules/games.nix
 
       inputs.hardware.nixosModules.framework-13th-gen-intel
     ];

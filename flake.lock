@@ -40,15 +40,15 @@
     "neomacs": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "nixpkgs-unstable"
         ]
       },
       "locked": {
-        "lastModified": 1747027947,
-        "narHash": "sha256-LFBeE7P5MRnvBh6AotfFiw8nmuX8KRL2vSjT6MSkTKc=",
+        "lastModified": 1751066395,
+        "narHash": "sha256-USHpSKJ44GEvs1zKDv6jDKTUkzxCrklmARugMB6y148=",
         "owner": "gingerfocus",
         "repo": "neomacs",
-        "rev": "2bb17459f2a5693cb5dfee5707e2c8250f6edc62",
+        "rev": "43fb7d1e7f8a10f1f8fd90c80b9ab1b0333491d7",
         "type": "github"
       },
       "original": {
@@ -107,11 +107,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1750594025,
-        "narHash": "sha256-rXuBKMlqhW9y28jKhJwgF6W1NpQrB1oq4oWcwLAIY1E=",
+        "lastModified": 1751307010,
+        "narHash": "sha256-P0WHHHNjuX27msieQeYR0VNVBpHgq+gvzEJUdYwxzj8=",
         "owner": "gingerfocus",
         "repo": "saka",
-        "rev": "f364fccf4cdd2683b38714926b499f31f5cd1be9",
+        "rev": "c2540923844baf69556c97d28a86f24b49a8630b",
         "type": "github"
       },
       "original": {

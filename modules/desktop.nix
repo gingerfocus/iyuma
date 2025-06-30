@@ -1,24 +1,17 @@
 {
-  config,
-  inputs,
   pkgs,
   pkgs-unstable,
+  inputs,
   system,
   ...
 }: {
   imports = [
-    ./pkgs/neomacs.nix 
-    ./pkgs/saka.nix 
-    ./games.nix
-    ];
-
-  # xdg.icons.enable = false;
-
-  # desktops.wayland.enable = true;
+    # ./pkgs/neomacs.nix
+    ./pkgs/saka.nix
+  ];
 
   xdg.portal = {
     enable = true;
-    # wlr.enable = true;
 
     extraPortals = [
       pkgs.xdg-desktop-portal-wlr
@@ -28,9 +21,9 @@
 
     config = {
       gnome = {
-        default = [ "gnome" "wlr" "gtk" ]; 
-        "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
-        "org.freedesktop.impl.portal.OpenURI" = [ "xdg-open" ];
+        default = ["gnome" "wlr" "gtk"];
+        "org.freedesktop.impl.portal.Secret" = ["gnome-keyring"];
+        "org.freedesktop.impl.portal.OpenURI" = ["xdg-open"];
       };
     };
   };
@@ -59,15 +52,15 @@
   ## Bluetooth
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
-  # services.blueman.enable = true;
 
-  security.pam.services.swaylock = {};
   programs.river.enable = true;
+  security.pam.services.swaylock = {};
 
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
 
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = with pkgs;
+    [
       swaylock
       foot
       bemenu
@@ -99,10 +92,13 @@
       # cargo rustc rust-analyzer
 
       ### Tools
-      gdb gnumake
-      clang gcc
+      gdb
+      gnumake
+      clang
+      gcc
 
-      man-pages man-pages-posix
+      man-pages
+      man-pages-posix
       # just
       # clang-tools
       # ghidra
@@ -118,7 +114,7 @@
       # spotify
       ncspot
 
-      discord
+      # discord
       # discordo
       weechat
 
@@ -166,7 +162,7 @@
       grim
       slurp
 
-      obsidian
+      #obsidian
 
       # godot_4
 
@@ -258,29 +254,33 @@
 
       inputs.zen-browser.packages."${system}".default
 
+      # ion
       # qutebrowser
 
-      # pkgs.texlive.combined.scheme-medium
+      typst
+      parallel
+      tealdeer
     ]
     ++ (with pkgs-unstable; [
-      # code-cursor
-      # zed-editor
       ghostty
-
-      zig zls
-      # nodePackages.gemini-cli
+      zig
+      zls
+      wikiman
     ])
     ++ (map
-        (name: pkgs.writeScriptBin (builtins.baseNameOf name) (builtins.readFile name))
-        (pkgs.lib.filesystem.listFilesRecursive
-          "${inputs.scripts}/bin"));
+      (name:
+        pkgs.writeScriptBin
+        (builtins.baseNameOf name)
+        (builtins.readFile name))
+      (pkgs.lib.filesystem.listFilesRecursive
+        "${inputs.scripts}/bin"));
 
-  # environment.systemPackages = map mkScript (pkgs.lib.filesystem.listFilesRecursive "${inputs.scripts}/bin");
+  # allow ptrace debugging
+  boot.kernel.sysctl."kernel.yama.ptrace_scope" = pkgs.lib.mkOverride 10 0;
+
+  # programs.kdeconnect.enable = true;
 
   documentation.enable = true;
   documentation.man.enable = true;
   documentation.dev.enable = true;
-
-  # programs.kdeconnect.enable = true;
-
 }

@@ -16,28 +16,19 @@
   #
   # This similarly makes it so unlocked flakes that use "nixpkgs" as an input
   # can similarly draw from the registry.
-  nix.registry.nixpkgs.flake = inputs.nixpkgs;
-  nix.registry.nixpkgs-unstable.flake = inputs.nixpkgs-unstable;
+  nix.registry = {
+    nixpkgs.flake = inputs.nixpkgs;
+    nixpkgs-unstable.flake = inputs.nixpkgs-unstable;
+  };
 
   nixpkgs.config = {
-    permittedInsecurePackages = ["electron-25.9.0"];
-    allowUnfree = true;
+    # permittedInsecurePackages = ["electron-25.9.0"];
+    # allowUnfree = true;
     trustedUsers = "@wheel";
   };
 
   ## Enable the OpenSSH daemon.
   # services.openssh.enable = true;
-
-  # services.tlp = {
-  #   enable = true;
-  #   settings = {
-  #     CPU_BOOST_ON_BAT = 0;
-  #     CPU_SCALING_GOVERNOR_ON_BATTERY = "powersave";
-  #     START_CHARGE_THRESH_BAT0 = 90;
-  #     STOP_CHARGE_THRESH_BAT0 = 97;
-  #     RUNTIME_PM_ON_BAT = "auto";
-  #   };
-  # };
 
   i18n.defaultLocale = "en_US.UTF-8";
 
@@ -54,9 +45,9 @@
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  # Network Manager
+  ## Network Manager
   networking.networkmanager.enable = true;
-  # Wpa Supplicant
+  ## Wpa Supplicant
   # networking.wireless.enable = true;
 
   # Set your time zone.
@@ -64,13 +55,12 @@
 
   # # Select internationalisation properties.
   # i18n.defaultLocale = "en_US.UTF-8";
-  #
+
   # console = {
   #   font = "Lat2-Terminus16";
   #   keyMap = "us";
   #   useXkbConfig = false;
   # };
-
 
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -78,7 +68,7 @@
   services.pipewire = {
     enable = true;
     alsa.enable = true;
-    pulse.enable = true;
+    # pulse.enable = true;
     # alsa.support32Bit = true;
     # jack.enable = true;
   };
@@ -92,7 +82,7 @@
       ipafont
       kochi-substitute
       # rounded-mgenplus
-      # Too Fancy
+      ## Too Fancy
       # hanazono
     ];
     enableDefaultPackages = false;
@@ -109,7 +99,7 @@
     isNormalUser = true;
     description = "Evan Stokdyk";
     shell = pkgs.bash;
-    extraGroups = ["wheel" "networkmanager" "audio" "video" "libvirtd"]; # "wireshark"
+    extraGroups = ["wheel" "networkmanager" "audio" "video" "libvirtd"];
   };
   # ----------------------------------- #
 
@@ -118,26 +108,23 @@
   users.defaultUserShell = pkgs.bash;
 
   environment = {
-    shellAliases = {};
+    shellAliases = {
+      vim = "nvim";
+      nixbld = "sudo nixos-rebuild switch --flake $HOME/dev/iyuma";
+    };
     defaultPackages = [];
     systemPackages =
-        (with pkgs; [vim git coreutils rsync]) # busybox
-        ++ (with pkgs-unstable; [ neovim ]);
+      (with pkgs; [vim git busybox rsync])
+      ++ (with pkgs-unstable; [neovim]);
   };
 
   programs.bash = {
     promptInit = ''
-      PS1="\e[1m\e[31m\d \e[33m\u\e[32m@\e[34m\H \e[35m\w \e[31m\e[0m\$\e[0m "
+      PS1="$(tput setaf 1)\u$(tput setaf 2)@$(tput setaf 4)\H $(tput setaf 5)\w $(tput sgr0)\$ "
     '';
-    shellAliases = {
-      vim = "nvim";
-      vimdiff = "nvim -d";
-      nixbld = "sudo nixos-rebuild switch --flake $HOME/dev/iyuma";
-      # nixbld = "sudo nixos-rebuild switch --flake ${../.}";
-    };
 
-    # loginShellInit = '''';
     interactiveShellInit = pkgs.lib.readFile ./init.sh;
+    # loginShellInit = '''';
     # logout = '''';
   };
 
@@ -145,7 +132,6 @@
     XDG_CONFIG_HOME = "$HOME/.config";
     XDG_DATA_HOME = "$HOME/.local/share";
     XDG_CACHE_HOME = "$HOME/.cache";
-    # export XDG_DESKTOP_DIR="$HOME/cur"; # this moves the location of where `.desktop` files go
     XDG_DOCUMENTS_DIR = "$HOME/dox";
     XDG_DOWNLOAD_DIR = "$HOME/dl";
     XDG_MUSIC_DIR = "$HOME/aud";
@@ -171,4 +157,6 @@
     HISTORY_IGNORE = "(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..|clear)";
     LESSHISTFILE = "-";
   };
+
+  nixpkgs.flake.setNixPath = true;
 }
