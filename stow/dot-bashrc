@@ -1,3 +1,8 @@
+#!/bin/sh
+export PS1="$(tput setaf 1)\u$(tput setaf 2)@$(tput setaf 4)\H $(tput setaf 5)\w $(tput sgr0)\n\$ "
+
+export PATH="$HOME/.local/bin:$PATH"
+
 alias h='history'
 alias gu='gitui'
 
@@ -19,10 +24,12 @@ alias ka='killall'
 
 # alias ls='eza'alias la='eza -a'alias ll='eza -l'alias lla='eza
 # -la'alias lt='eza --tree --level=4'alias lss='eza --group-directories-first
-# --icons'alias l.='eza -a | command grep -E "^\."alias cp='cp -ivr'alias mv='mv
-# -iv'
+# --icons'alias l.='eza -a | command grep -E "^\." 
 
+alias cp='cp -ivr'
+alias mv='mv -iv'
 alias rm='rm -vI'
+
 alias mkd='mkdir -pv'
 alias bat='bat --plain'
 

@@ -54,6 +54,8 @@
   hardware.bluetooth.powerOnBoot = true;
 
   programs.river.enable = true;
+  programs.river.package = pkgs-unstable.river;
+
   security.pam.services.swaylock = {};
 
   programs.direnv.enable = true;
