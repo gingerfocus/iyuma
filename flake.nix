@@ -105,7 +105,7 @@
       ./modules/boot
 
       # only for some times
-      ./modules/work.nix
+      # ./modules/work.nix
       ./modules/games.nix
 
       inputs.hardware.nixosModules.framework-13th-gen-intel

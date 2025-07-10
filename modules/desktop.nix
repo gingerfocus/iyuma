@@ -56,6 +56,8 @@
   programs.river.enable = true;
   programs.river.package = pkgs-unstable.river;
 
+  programs.hyprland.enable = true;
+
   security.pam.services.swaylock = {};
 
   programs.direnv.enable = true;

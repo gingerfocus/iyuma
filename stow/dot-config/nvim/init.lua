@@ -9,14 +9,19 @@ end
 vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
 --------------------------------- globals -------------------------------------
-vim.g.markdown_recommended_style = 0 -- Fix markdown indentation settings
-vim.g.transparency = true
+-- vim.g.markdown_recommended_style = 0 -- Fix markdown indentation settings
+-- vim.g.transparency = true
 vim.g.mapleader = " "
 
-vim.g.netrw_liststyle = 3 -- Set netrw in tree view
-vim.g.netrw_altv = true   -- Open new pane in netrw on the right
+-- <c-]> jump to definition
+-- <c-t> jump back
+-- :help tags
+
+-- vim.g.netrw_liststyle = 3 -- Set netrw in tree view
+-- vim.g.netrw_altv = true   -- Open new pane in netrw on the right
 
 -- disable some default providers
+-- already done by nixos
 vim.g["loaded_node_provider"] = 0
 vim.g["loaded_perl_provider"] = 0
 vim.g["loaded_python3_provider"] = 0
@@ -25,33 +30,34 @@ vim.g["loaded_ruby_provider"] = 0
 --------------------------------- options -------------------------------------
 -- o.clipboard = "unnamedplus" -- for what ever reason this breaks everything
 -- See `:help 'clipboard'`
-vim.opt.scrolloff = 8      -- Lines of context
-vim.opt.showmode = false   -- Dont show mode since we have a statusline
+vim.opt.scrolloff = 8 -- Lines of context
+vim.opt.showmode = true -- Dont show mode since we have a statusline
 vim.opt.spelllang = { "en" }
 vim.opt.colorcolumn = "80" -- show a black bar in the 80 collum. this thing -------->
-vim.opt.confirm = true     -- Confirm to save changes before exiting modified buffer
-vim.opt.conceallevel = 2   -- Hide * markup for bold and italic
+vim.opt.confirm = true -- Confirm to save changes before exiting modified buffer
+vim.opt.conceallevel = 2 -- Hide * markup for bold and italic
+vim.opt.cursorline = true -- Enable highlighting of the current line
+vim.opt.expandtab = true -- Use spaces instead of tabs
+vim.opt.number = true -- show line numbers
+
 vim.opt.completeopt = "menu,menuone,noselect"
-vim.opt.cursorline = true  -- Enable highlighting of the current line
-vim.opt.expandtab = true   -- Use spaces instead of tabs
-vim.opt.number = true      -- show line numbers
 
 -- [[ Search ]] --
-vim.opt.ignorecase = true              -- Ignore case
-vim.opt.smartcase = true               -- Don't ignore case with capitals
+vim.opt.ignorecase = true -- Ignore case
+vim.opt.smartcase = true -- Don't ignore case with capitals
 
-vim.opt.list = true                    -- Show some invisible characters (tabs...
-vim.opt.mouse = "a"                    -- Enable mouse mode
-vim.opt.shiftwidth = 4                 -- Size of an indent
-vim.opt.tabstop = 4                    -- Number of spaces tabs count for
+vim.opt.list = true -- Show some invisible characters (tabs...
+vim.opt.mouse = "a" -- Enable mouse mode
+vim.opt.shiftwidth = 4 -- Size of an indent
+vim.opt.tabstop = 4 -- Number of spaces tabs count for
 
-vim.opt.termguicolors = true           -- True color support
-vim.opt.undofile = true                -- Save undo history
+vim.opt.termguicolors = true -- True color support
+vim.opt.undofile = true -- Save undo history
 vim.opt.undolevels = 10000
-vim.opt.updatetime = 800               -- Save swap file and trigger CursorHold
+vim.opt.updatetime = 800 -- Save swap file and trigger CursorHold
 vim.opt.wildmode = "longest:full,full" -- Command-line completion mode
-vim.opt.winminwidth = 5                -- Minimum window width
-vim.opt.wrap = false                   -- Disable line wrap
+vim.opt.winminwidth = 5 -- Minimum window width
+vim.opt.wrap = false -- Disable line wrap
 
 -- go to previous/next line with h,l,left arrow and right arrow
 -- when cursor reaches end/beginning of line
@@ -61,19 +67,19 @@ vim.opt.whichwrap:append("<>[]hl")
 
 -- [[ load plugins ]] --
 require("lazy").setup({
-    { "folke/lazy.nvim",           tag = "stable" },
-    { "actionshrimp/direnv.nvim",  opts = {},             lazy = false },
-    { "mbbill/undotree",           cmd = "UndotreeToggle" },
-    { "echasnovski/mini.pairs",    event = "BufRead",     opts = {} },
+    { "folke/lazy.nvim", tag = "stable" },
+    { "actionshrimp/direnv.nvim", opts = {}, lazy = false },
+    { "mbbill/undotree", cmd = "UndotreeToggle" },
+    { "echasnovski/mini.pairs", event = "BufRead", opts = {} },
     -- { "echasnovski/mini.ai",       event = "BufRead",     opts = { n_lines = 500 } },
-    { "echasnovski/mini.surround", event = "BufRead",     opts = {} },
-    { "folke/flash.nvim",          opts = {} }, -- a mouse alternative
-    { "folke/which-key.nvim",      event = "VeryLazy",    opts = {} },
-    { "j-hui/fidget.nvim",         event = "LspAttach",   opts = {} },
+    { "echasnovski/mini.surround", event = "BufRead", opts = {} },
+    { "folke/flash.nvim", opts = {} }, -- a mouse alternative
+    { "folke/which-key.nvim", event = "VeryLazy", opts = {} },
+    { "j-hui/fidget.nvim", event = "LspAttach", opts = {} },
 
     -- use gx to open with system opener
     -- see :help Oil
-    { "stevearc/oil.nvim",         opts = {},             lazy = false },
+    { "stevearc/oil.nvim", opts = {}, lazy = false },
 
     -- better vim.ui
     -- { "stevearc/dressing.nvim", opts = {}, lazy = false },
@@ -192,7 +198,6 @@ require("lazy").setup({
         },
     },
 
-
     {
         "neovim/nvim-lspconfig",
         event = { "BufReadPre", "BufNewFile" },
@@ -201,8 +206,13 @@ require("lazy").setup({
         },
         config = function()
             local servers = {
-                "zls", "pyright", "clangd", "hls",
-                "ocamllsp", "lua_ls", "gopls",
+                "zls",
+                "pyright",
+                "clangd",
+                "hls",
+                "ocamllsp",
+                "lua_ls",
+                "gopls",
                 "ts_ls",
             }
 
@@ -222,7 +232,7 @@ require("lazy").setup({
                     local map = function(mode, key, action, desc)
                         vim.keymap.set(mode, key, action, {
                             buffer = ev.buf,
-                            desc = desc
+                            desc = desc,
                         })
                     end
 
@@ -247,9 +257,6 @@ require("lazy").setup({
 
                     map("n", "<leader>cn", vim.lsp.buf.rename, "[C]ode Re[N]ame")
                     map("n", "<leader>ca", vim.lsp.buf.code_action, "LSP code action")
-
-                    -- vim.lsp.buf.format({ async = true })
-                    map("n", "<leader>cf", vim.lsp.buf.format, "[C]ode [F]ormat")
 
                     -- map("n", "<leader>ws", vim.lsp.buf.workspace_symbol, "[W]orkspace [S]ymbol")
                     -- map("n", "<leader>ls", vim.lsp.buf.signature_help, "LSP signature help")
@@ -366,12 +373,114 @@ require("lazy").setup({
                 sources = {
                     -- { name = "supermaven" },
                     { name = "nvim_lsp" },
-                    { name = "nvim_lua" },
+                    -- { name = "nvim_lua" },
                     { name = "buffer" },
                     { name = "path" },
                 },
             }
             cmp.setup(opts)
+        end,
+    },
+
+    {
+        "folke/trouble.nvim",
+        opts = {}, -- for default options, refer to the configuration section for custom setup.
+        cmd = "Trouble",
+        keys = {
+            {
+                "<leader>cx",
+                "<cmd>Trouble diagnostics toggle<cr>",
+                desc = "Diagnostics (Trouble)",
+            },
+            {
+                "<leader>cX",
+                "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+                desc = "Buffer Diagnostics (Trouble)",
+            },
+            {
+                "<leader>cs",
+                "<cmd>Trouble symbols toggle focus=false<cr>",
+                desc = "Symbols (Trouble)",
+            },
+            {
+                "<leader>cl",
+                "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+                desc = "LSP Definitions / references / ... (Trouble)",
+            },
+            {
+                "<leader>cL",
+                "<cmd>Trouble loclist toggle<cr>",
+                desc = "Location List (Trouble)",
+            },
+            {
+                "<leader>cQ",
+                "<cmd>Trouble qflist toggle<cr>",
+                desc = "Quickfix List (Trouble)",
+            },
+        },
+    },
+
+    -- -i | sed -e 's/0x//g' | sed -e 's/\([0-9a-f]\{2\}\)/\\x\1/g' | tr -d '\n' | pbcopy
+
+    -- help :TOhtml
+    -- :%!xxd
+    -- :%!xxd -r
+
+    -- :put w
+    -- :reg
+
+    {
+        "mfussenegger/nvim-dap",
+        dependencies = {
+            -- "mfussenegger/nvim-dap-python",
+            "rcarriga/nvim-dap-ui",
+            "nvim-neotest/nvim-nio",
+        },
+        -- event = "BufRead",
+        lazy = false,
+        config = function()
+            local dap = require("dap")
+            local dapui = require("dapui")
+
+            dapui.setup({})
+
+            dap.listeners.before.attach.dapui_config = dapui.open
+            dap.listeners.before.launch.dapui_config = dapui.open
+            dap.listeners.before.event_terminated.dapui_config = dapui.close
+            dap.listeners.before.event_exited.dapui_config = dapui.close
+
+            vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "Debug Breakpoint" })
+            vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "Debug Continue" })
+            vim.keymap.set("n", "<leader>ds", dap.step_into, { desc = "Debug Step Into" })
+            vim.keymap.set("n", "<leader>dn", dap.step_over, { desc = "Debug Next" })
+
+            dap.adapters.gdb = {
+                type = "executable",
+                command = "gdb",
+                args = { "--interpreter=dap", "--eval-command", "set print pretty on" },
+            }
+
+            -- print(("You entered: %s"):format(value))
+
+            dap.configurations.c = {
+                {
+                    name = "Launch",
+                    type = "gdb",
+                    request = "launch",
+                    program = function()
+                        return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+                    end,
+                    cwd = "${workspaceFolder}",
+                    stopAtBeginningOfMainSubprogram = false,
+                },
+            }
+            dap.configurations.cpp = dap.configurations.c
+
+            dap.configurations.rust = dap.configurations.c
+            dap.configurations.rust[1].program = "${workspaceFolder}/target/debug/${workspaceFolderBasename}"
+
+            dap.configurations.zig = dap.configurations.c
+            dap.configurations.zig[1].program = "${workspaceFolder}/zig-out/bin/${workspaceFolderBasename}"
         end,
     },
 }, {
@@ -391,13 +500,16 @@ vim.keymap.set("n", "<leader>bc", "<cmd> enew <CR> ", { desc = "Buffer Create" }
 vim.keymap.set("n", "<leader>bp", "<cmd>bprevious<cr>", { desc = "Buffer Prev" })
 vim.keymap.set("n", "<leader>bn", "<cmd>bnext<CR>", { desc = "Buffer Next" })
 
-
 -- ## windows
 vim.keymap.set("n", "<leader>ww", "<C-w>p", { desc = "Other window", remap = true })
 vim.keymap.set("n", "<leader>wd", "<C-w>c", { desc = "Delete window", remap = true })
 vim.keymap.set("n", "<leader>ws", "<C-w>s<C-w>j", { desc = "Split window below", remap = true })
 vim.keymap.set("n", "<leader>wv", "<C-w>v<C-w>l", { desc = "Window Vertical" })
 
+vim.keymap.set("n", "<leader>wh", "<C-w>h", { desc = "Window Move Left" })
+vim.keymap.set("n", "<leader>wj", "<C-w>j", { desc = "Window Move Down" })
+vim.keymap.set("n", "<leader>wk", "<C-w>k", { desc = "Window Move Up" })
+vim.keymap.set("n", "<leader>wl", "<C-w>l", { desc = "Window Move Right" })
 
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear Highlight" })
 vim.keymap.set("n", ";", ":")
@@ -411,8 +523,10 @@ end, { desc = "Flash Search" })
 
 vim.keymap.set({ "n", "x", "o" }, "S", function()
     require("flash").treesitter()
-end, { desc = "Flash Treesitter Search", })
+end, { desc = "Flash Treesitter Search" })
 
+-- vim.lsp.buf.format({ async = true })
+-- map("n", "<leader>cf", vim.lsp.buf.format, "[C]ode [F]ormat")
 vim.keymap.set("n", "<leader>cf", function()
     local bufnr = vim.api.nvim_get_current_buf()
     require("conform").format({ bufnr = bufnr })
@@ -493,51 +607,88 @@ end, { desc = "Search Buffer" })
 -- ## ------------------------------------------------------------------- ## --
 
 vim.keymap.set("n", "<leader>o", function()
-    local pickers = require "telescope.pickers"
-    local finders = require "telescope.finders"
-    local actions = require "telescope.actions"
+    local pickers = require("telescope.pickers")
+    local finders = require("telescope.finders")
+    local actions = require("telescope.actions")
     local conf = require("telescope.config").values
-    local action_state = require "telescope.actions.state"
+    local action_state = require("telescope.actions.state")
 
-    pickers.new({}, {
-        prompt_title = "Select PDF to Open",
-        finder = finders.new_oneshot_job({ "find", ".", "-name", "*.pdf" }),
-        attach_mappings = function(prompt_bufnr, _)
-            -- modifying what happens on selection with <CR>
-            actions.select_default:replace(function()
-                -- closing picker
-                actions.close(prompt_bufnr)
-                local selection = action_state.get_selected_entry()
-                if selection == nil then
-                    print("No PDF selected")
-                    return
-                end
-                vim.cmd("silent ! zathura '" .. selection[1] .. "' &")
-            end)
-            -- keep default keybindings
-            return true
-        end,
-        sorter = conf.generic_sorter({}),
-    }):find()
+    pickers
+        .new({}, {
+            prompt_title = "Select PDF to Open",
+            finder = finders.new_oneshot_job({ "find", ".", "-name", "*.pdf" }),
+            attach_mappings = function(prompt_bufnr, _)
+                -- modifying what happens on selection with <CR>
+                actions.select_default:replace(function()
+                    -- closing picker
+                    actions.close(prompt_bufnr)
+                    local selection = action_state.get_selected_entry()
+                    if selection == nil then
+                        print("No PDF selected")
+                        return
+                    end
+                    vim.cmd("silent ! zathura '" .. selection[1] .. "' &")
+                end)
+                -- keep default keybindings
+                return true
+            end,
+            sorter = conf.generic_sorter({}),
+        })
+        :find()
 end, { desc = "Open PDF" })
 
+-- TODO: job server for nvim
+-- run commands and allow switching
 
-local commandactive = false
-local group = vim.api.nvim_create_augroup("PdfMode", { clear = true })
-vim.api.nvim_create_user_command("PdfMode", function()
-    if commandactive then
-        vim.api.nvim_clear_autocmds({ group = group })
-        commandactive = false
-    else
-        local newfile = vim.fn.expand("%:r") .. ".pdf"
-        vim.api.nvim_create_autocmd("BufWritePost", {
-            group = group,
-            buffer = vim.api.nvim_get_current_buf(),
-            command = "silent ! pandoc <afile> -o " .. newfile,
-        })
-        commandactive = true
-    end
-end, { desc = "Toggle Making Pdfs with Pandoc" })
+vim.keymap.set("n", "<leader>js", function()
+    local cmd = vim.fn.input("Command: ", "", "shellcmdline")
+
+    -- stylua: ignore
+    if cmd == "" then return end
+
+    local cmd = vim.split(cmd, " ", { plain = true, trimempty = true })
+    local obj = vim.system(cmd, { text = true }):wait()
+
+    vim.cmd("split")
+    local win = vim.api.nvim_get_current_win()
+    local buf = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_buf_set_name(buf, "[cmd (" .. cmd[1] .. ")]")
+
+    local lines = vim.split(obj.stdout, "\n")
+    -- write to buffer
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+
+    vim.api.nvim_win_set_buf(win, buf)
+
+    -- see :help uv.spawn
+    -- for async command output
+end, { desc = "Jobs Start" })
+
+vim.keymap.set("n", "<leader>jm", function()
+    vim.cmd("term ncspot")
+end, { desc = "Open NCSpot" })
+
+vim.keymap.set("n", "<leader>t", function()
+    vim.cmd("term")
+    --  TODO: save buffer number and allow backgrounding it and opening it again
+end, { desc = "Open Terminal" })
+
+-- local commandactive = false
+-- local group = vim.api.nvim_create_augroup("PdfMode", { clear = true })
+-- vim.api.nvim_create_user_command("PdfMode", function()
+--     if commandactive then
+--         vim.api.nvim_clear_autocmds({ group = group })
+--         commandactive = false
+--     else
+--         local newfile = vim.fn.expand("%:r") .. ".pdf"
+--         vim.api.nvim_create_autocmd("BufWritePost", {
+--             group = group,
+--             buffer = vim.api.nvim_get_current_buf(),
+--             command = "silent ! pandoc <afile> -o " .. newfile,
+--         })
+--         commandactive = true
+--     end
+-- end, { desc = "Toggle Making Pdfs with Pandoc" })
 
 -- vim.keymap.set("n", "<leader>tn", ":tabnext<cr>", {}) -- gt
 -- vim.keymap.set("n", "<leader>tp", ":tabprev<cr>", {}) -- gT
@@ -547,15 +698,8 @@ vim.api.nvim_create_autocmd("TermOpen", {
     group = vim.api.nvim_create_augroup("TermOpen", {}),
     callback = function()
         vim.cmd.startinsert()
-    end
+    end,
 })
-
--- vim.api.nvim_create_autocmd("CursorHold", {
---     group = vim.api.nvim_create_augroup("asfaafs", {}),
---     callback = function()
---         vim.notify("asdfasdf")
---     end
--- })
 
 -- ⣇⣿⠘⣿⣿⣿⡿⡿⣟⣟⢟⢟⢝⠵⡝⣿⡿⢂⣼⣿⣷⣌⠩⡫⡻⣝⠹⢿⣿⣷
 -- ⡆⣿⣆⠱⣝⡵⣝⢅⠙⣿⢕⢕⢕⢕⢝⣥⢒⠅⣿⣿⣿⡿⣳⣌⠪⡪⣡⢑⢝⣇
@@ -571,81 +715,79 @@ vim.api.nvim_create_autocmd("TermOpen", {
 -- ⡕⡑⣑⣈⣻⢗⢟⢞⢝⣻⣿⣿⣿⣿⣿⣿⣿⠸⣿⠿⠃⣿⣿⣿⣿⣿⣿⡿⠁⣠
 -- ⡝⡵⡈⢟⢕⢕⢕⢕⣵⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣿⣿⣿⣿⣿⠿⠋⣀⣈⠙
 -- ⡝⡵⡕⡀⠑⠳⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⢉⡠⡲⡫⡪⡪⡣
---
--- :'<,'>w !bash
--- local M = {}
---
--- local markdown_code_block = [[
---   (
---   fenced_code_block
---   (info_string (language) @language) (#eq? @language "python")
---   (code_fence_content) @content
---   (fenced_code_block_delimiter) @delimiter
---   )
--- ]]
---
--- local markdown_query = vim.treesitter.parse_query("markdown", markdown_code_block)
---
--- local run_code_block = function(text)
---   local split = vim.split(text, "\n")
---   local code_block = table.concat(vim.list_slice(split, 1, #split), "\n")
---   local job = require("plenary.job"):new({
---     command = "python",
---     args = { "-c", code_block },
---   })
---   return job:sync()
--- end
---
--- M.config = {}
---
--- M.setup = function(args)
---   M.config = vim.tbl_deep_extend("force", M.config, args or {})
--- end
---
--- local get_root = function(bufnr)
---   local parser = vim.treesitter.get_parser(bufnr, "markdown", {})
---   local tree = parser:parse()[1]
---   return tree:root()
--- end
---
--- M.run = function(bufnr)
---   bufnr = bufnr or vim.api.nvim_get_current_buf()
---   if vim.bo[bufnr].filetype ~= "markdown" then
---     vim.notify("Only Markdown is supported")
---     return
---   end
---   local root = get_root(bufnr)
---   for id, node in markdown_query:iter_captures(root, bufnr, 0, -1) do
---     local name = markdown_query.captures[id]
---     if name == "content" then
---       local range = { node:range() }
---       local code_block = vim.treesitter.get_node_text(node, bufnr)
---       local result = run_code_block(code_block)
---       table.insert(result, 1, "```text")
---       table.insert(result, 1, "")
---       table.insert(result, #result + 1, "```")
---       vim.api.nvim_buf_set_lines(bufnr, range[3] + 1, range[3] + 1, false, result)
---     end
---   end
--- end
---
--- return M
 
-local gemivim = require('gemivim')
+-- :'<,'>w !bash
+
+-- local M = {}
+
+vim.keymap.set("n", "<leader>cr", function()
+    local markdown_code_block = [[
+      (
+        fenced_code_block
+        (info_string (language) @language) (#eq? @language "python")
+        (code_fence_content) @content
+        (fenced_code_block_delimiter) @delimiter
+      )
+    ]]
+
+    local markdown_query = vim.treesitter.parse_query("markdown", markdown_code_block)
+
+    local run_code_block = function(text)
+        local split = vim.split(text, "\n")
+        local code_block = table.concat(vim.list_slice(split, 1, #split), "\n")
+        local job = require("plenary.job"):new({
+            command = "python",
+            args = { "-c", code_block },
+        })
+        return job:sync()
+    end
+
+    local get_root = function(bufnr)
+        local parser = vim.treesitter.get_parser(bufnr, "markdown", {})
+        local tree = parser:parse()[1]
+        return tree:root()
+    end
+
+    bufnr = bufnr or vim.api.nvim_get_current_buf()
+    if vim.bo[bufnr].filetype ~= "markdown" then
+        vim.notify("Only Markdown is supported")
+        return
+    end
+    local root = get_root(bufnr)
+    for id, node in markdown_query:iter_captures(root, bufnr, 0, -1) do
+        local name = markdown_query.captures[id]
+        if name == "content" then
+            local range = { node:range() }
+            local code_block = vim.treesitter.get_node_text(node, bufnr)
+            local result = run_code_block(code_block)
+            table.insert(result, 1, "```text")
+            table.insert(result, 1, "")
+            table.insert(result, #result + 1, "```")
+            vim.api.nvim_buf_set_lines(bufnr, range[3] + 1, range[3] + 1, false, result)
+        end
+    end
+end, { desc = "Run Code Block" })
+
+local gemivim = require("gemivim")
 gemivim.setup({})
 
--- vim.keymap.set("n", "<leader>g", gemivim.open, { desc = "Open Gemini URL" })
--- vim.api.nvim_create_autocmd("BufRead", {
---     pattern = "gemtext",
---     callback = function()
---         vim.keymap.set("n", "gx", gemivim.gx, { desc = "goto link in gemtext", buffer = true})
---     end,
--- })
-
-vim.notify = function(msg)
+local defnotify = vim.notify
+local glbnotify = function(msg)
     vim.system({ "notify-send", msg })
     return true
 end
+
+local usingglobal = false
+vim.api.nvim_create_user_command("Notify", function(args)
+    if usingglobal then
+        vim.notify = defnotify
+        usingglobal = false
+    else
+        vim.notify = glbnotify
+        usingglobal = true
+    end
+    return true
+end, {})
 
 -- See `:help modeline`
 -- vim: ts=4 sts=4 sw=4 et
