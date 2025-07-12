@@ -9,14 +9,11 @@
     WLR_EVDI_RENDER_DEVICE = "/dev/dri/card1";
   };
 
-  nixpkgs.config = {
-    # permittedInsecurePackages = ["electron-25.9.0"];
-    allowUnfree = true;
-  };
+  nixpkgs.config = {allowUnfree = true;};
 
-  services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  # services.xserver.enable = true;
+  # services.xserver.displayManager.gdm.enable = true;
+  # services.xserver.desktopManager.gnome.enable = true;
 
   hardware.logitech.wireless.enable = true;
   hardware.logitech.wireless.enableGraphical = true;

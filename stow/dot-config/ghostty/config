@@ -2,7 +2,7 @@
 
 # command = fish
 background-opacity = 0.9
-# gtk-titlebar = false
+gtk-titlebar = false
 
 font-family=Hack Nerd Font
 font-size=15

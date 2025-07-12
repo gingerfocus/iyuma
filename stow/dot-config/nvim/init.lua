@@ -70,7 +70,7 @@ require("lazy").setup({
     { "folke/lazy.nvim", tag = "stable" },
     { "actionshrimp/direnv.nvim", opts = {}, lazy = false },
     { "mbbill/undotree", cmd = "UndotreeToggle" },
-    { "echasnovski/mini.pairs", event = "BufRead", opts = {} },
+    -- { "echasnovski/mini.pairs", event = "BufRead", opts = {} },
     -- { "echasnovski/mini.ai",       event = "BufRead",     opts = { n_lines = 500 } },
     { "echasnovski/mini.surround", event = "BufRead", opts = {} },
     { "folke/flash.nvim", opts = {} }, -- a mouse alternative
@@ -202,7 +202,7 @@ require("lazy").setup({
         "neovim/nvim-lspconfig",
         event = { "BufReadPre", "BufNewFile" },
         dependencies = {
-            -- { "simrat39/rust-tools.nvim", opts = {} },
+            { "simrat39/rust-tools.nvim", opts = {} },
         },
         config = function()
             local servers = {
@@ -310,37 +310,37 @@ require("lazy").setup({
         end,
     },
 
-    -- {
-    --     "epwalsh/obsidian.nvim",
-    --     enabled = true,
-    --     ft = "markdown",
-    --     dependencies = {
-    --         "nvim-lua/plenary.nvim",
-    --         "nvim-telescope/telescope.nvim",
-    --         "hrsh7th/nvim-cmp",
-    --     },
-    --     opts = {
-    --         ui = { enable = false },
-    --         workspaces = { { name = "main", path = "~/dox" } },
-    --         notes_subdir = "05 - Fleeting",
-    --         completion = { min_chars = 0 },
-    --         mappings = {
-    --             ["gf"] = {
-    --                 action = function()
-    --                     return require("obsidian").util.gf_passthrough()
-    --                 end,
-    --                 opts = { noremap = false, expr = true, buffer = true },
-    --             },
-    --             -- vim.keymap.set("n", "gl", "<cmd>ObsidianFollowLink<CR>", { desc = "Obsidian: Follow [L]ink" })
-    --         },
-    --         preferred_link_style = "wiki",
-    --         disable_frontmatter = false,
-    --         follow_url_func = function(url)
-    --             vim.fn.jobstart({ "xdg-open", url })
-    --         end,
-    --         picker = { name = "telescope.nvim" },
-    --     },
-    -- },
+    {
+        "epwalsh/obsidian.nvim",
+        enabled = true,
+        ft = "markdown",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-telescope/telescope.nvim",
+            "hrsh7th/nvim-cmp",
+        },
+        opts = {
+            ui = { enable = false },
+            workspaces = { { name = "main", path = "~/dox" } },
+            notes_subdir = "05 - Fleeting",
+            completion = { min_chars = 0 },
+            mappings = {
+                ["gf"] = {
+                    action = function()
+                        return require("obsidian").util.gf_passthrough()
+                    end,
+                    opts = { noremap = false, expr = true, buffer = true },
+                },
+                -- vim.keymap.set("n", "gl", "<cmd>ObsidianFollowLink<CR>", { desc = "Obsidian: Follow [L]ink" })
+            },
+            preferred_link_style = "wiki",
+            disable_frontmatter = false,
+            follow_url_func = function(url)
+                vim.fn.jobstart({ "xdg-open", url })
+            end,
+            picker = { name = "telescope.nvim" },
+        },
+    },
 
     -- see :help lsp-completion to replace this
     {
@@ -467,6 +467,7 @@ require("lazy").setup({
                     name = "Launch",
                     type = "gdb",
                     request = "launch",
+                    -- @type string | function(): string
                     program = function()
                         return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
                     end,
@@ -482,6 +483,18 @@ require("lazy").setup({
             dap.configurations.zig = dap.configurations.c
             dap.configurations.zig[1].program = "${workspaceFolder}/zig-out/bin/${workspaceFolderBasename}"
         end,
+    },
+
+    {
+        "MeanderingProgrammer/render-markdown.nvim",
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter",
+            "echasnovski/mini.icons",
+        },
+        ---@module 'render-markdown'
+        ---@type render.md.UserConfig
+        opts = {},
+        ft = "markdown",
     },
 }, {
     defaults = { lazy = true },
@@ -646,7 +659,7 @@ vim.keymap.set("n", "<leader>js", function()
     -- stylua: ignore
     if cmd == "" then return end
 
-    local cmd = vim.split(cmd, " ", { plain = true, trimempty = true })
+    cmd = vim.split(cmd, " ", { plain = true, trimempty = true })
     local obj = vim.system(cmd, { text = true }):wait()
 
     vim.cmd("split")
@@ -748,7 +761,7 @@ vim.keymap.set("n", "<leader>cr", function()
         return tree:root()
     end
 
-    bufnr = bufnr or vim.api.nvim_get_current_buf()
+    local bufnr = vim.api.nvim_get_current_buf()
     if vim.bo[bufnr].filetype ~= "markdown" then
         vim.notify("Only Markdown is supported")
         return
@@ -778,7 +791,7 @@ local glbnotify = function(msg)
 end
 
 local usingglobal = false
-vim.api.nvim_create_user_command("Notify", function(args)
+vim.api.nvim_create_user_command("Notify", function()
     if usingglobal then
         vim.notify = defnotify
         usingglobal = false
@@ -788,6 +801,8 @@ vim.api.nvim_create_user_command("Notify", function(args)
     end
     return true
 end, {})
+
+-- require("oboil").setup({})
 
 -- See `:help modeline`
 -- vim: ts=4 sts=4 sw=4 et

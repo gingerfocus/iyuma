@@ -116,37 +116,37 @@
     defaultPackages = [];
     systemPackages =
       (with pkgs; [vim git busybox rsync])
-      ++ (with pkgs-unstable; [neovim]);
+      ++ (with pkgs-unstable; [neovim-unwrapped]);
 
     variables = rec {
       XKB_DEFAULT_OPTIONS = "caps:swapescape"; # used by river
-      #   XDG_CONFIG_HOME = "$HOME/.config";
-      #   XDG_DATA_HOME = "$HOME/.local/share";
-      #   XDG_CACHE_HOME = "$HOME/.cache";
-      #   XDG_DOCUMENTS_DIR = "$HOME/dox";
-      #   XDG_DOWNLOAD_DIR = "$HOME/dl";
-      #   XDG_MUSIC_DIR = "$HOME/aud";
-      #   XDG_PICTURES_DIR = "$HOME/pix";
-      #   XDG_PUBLICSHARE_DIR = "$HOME";
-      #
-      #   RUSTUP_HOME = "${XDG_DATA_HOME}/rustup";
-      #   CARGO_HOME = "${XDG_DATA_HOME}/cargo";
-      #   GNUPGHOME = "${XDG_DATA_HOME}/gnupg";
-      #   PASSWORD_STORE_DIR = "${XDG_DATA_HOME}/pass";
-      #
-      #   VISUAL = "nvim";
-      #   EDITOR = "nvim";
-      #   READER = "zathura";
-      #   TERMINAL = "foot";
-      #   BROWSER = "firefox";
-      #   VIDEO = "mpv";
-      #   IMAGE = "imv";
-      #   OPENER = "xdg-open";
-      #   PAGER = "less";
-      #   MANPAGER = "less";
-      #
-      #   HISTORY_IGNORE = "(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..|clear)";
-      #   LESSHISTFILE = "-";
+      XDG_CONFIG_HOME = "$HOME/.config";
+      XDG_DATA_HOME = "$HOME/.local/share";
+      XDG_CACHE_HOME = "$HOME/.cache";
+      XDG_DOCUMENTS_DIR = "$HOME/dox";
+      XDG_DOWNLOAD_DIR = "$HOME/dl";
+      XDG_MUSIC_DIR = "$HOME/aud";
+      XDG_PICTURES_DIR = "$HOME/pix";
+      XDG_PUBLICSHARE_DIR = "$HOME";
+
+      RUSTUP_HOME = "${XDG_DATA_HOME}/rustup";
+      CARGO_HOME = "${XDG_DATA_HOME}/cargo";
+      GNUPGHOME = "${XDG_DATA_HOME}/gnupg";
+      PASSWORD_STORE_DIR = "${XDG_DATA_HOME}/pass";
+
+      VISUAL = "nvim";
+      EDITOR = "nvim";
+      READER = "zathura";
+      TERMINAL = "foot";
+      BROWSER = "firefox";
+      VIDEO = "mpv";
+      IMAGE = "imv";
+      OPENER = "xdg-open";
+      PAGER = "less";
+      MANPAGER = "less";
+
+      HISTORY_IGNORE = "(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..|clear)";
+      LESSHISTFILE = "-";
     };
   };
 

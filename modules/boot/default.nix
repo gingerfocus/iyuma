@@ -4,7 +4,7 @@
   lib,
   ...
 }: let
-  usegrub = false;
+  usegrub = true;
 in {
   boot.loader.systemd-boot.enable = !usegrub;
 
