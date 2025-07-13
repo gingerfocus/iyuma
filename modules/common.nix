@@ -21,6 +21,8 @@
     nixpkgs-unstable.flake = inputs.nixpkgs-unstable;
   };
 
+  programs.river.enable = true;
+
   nixpkgs.config = {
     # permittedInsecurePackages = ["electron-25.9.0"];
     # allowUnfree = true;
@@ -76,7 +78,8 @@
   # ------------- Fonts --------------- #
   fonts = {
     packages = with pkgs; [
-      (nerdfonts.override {fonts = ["Hack" "Mononoki"];})
+      nerd-fonts.hack
+      nerd-fonts.mononoki
       noto-fonts-emoji
       dejavu_fonts
       ipafont
@@ -116,10 +119,11 @@
     defaultPackages = [];
     systemPackages =
       (with pkgs; [vim git busybox rsync])
-      ++ (with pkgs-unstable; [neovim-unwrapped]);
+      ++ (with pkgs-unstable; [neovim-unwrapped zig]);
 
     variables = rec {
       XKB_DEFAULT_OPTIONS = "caps:swapescape"; # used by river
+
       XDG_CONFIG_HOME = "$HOME/.config";
       XDG_DATA_HOME = "$HOME/.local/share";
       XDG_CACHE_HOME = "$HOME/.cache";

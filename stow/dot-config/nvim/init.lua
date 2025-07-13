@@ -1,4 +1,3 @@
-local vim = _G.vim
 vim.loader.enable()
 
 -- [[ bootstrap lazy ]] --
@@ -21,7 +20,6 @@ vim.g.mapleader = " "
 -- vim.g.netrw_altv = true   -- Open new pane in netrw on the right
 
 -- disable some default providers
--- already done by nixos
 vim.g["loaded_node_provider"] = 0
 vim.g["loaded_perl_provider"] = 0
 vim.g["loaded_python3_provider"] = 0
@@ -31,7 +29,6 @@ vim.g["loaded_ruby_provider"] = 0
 -- o.clipboard = "unnamedplus" -- for what ever reason this breaks everything
 -- See `:help 'clipboard'`
 vim.opt.scrolloff = 8 -- Lines of context
-vim.opt.showmode = true -- Dont show mode since we have a statusline
 vim.opt.spelllang = { "en" }
 vim.opt.colorcolumn = "80" -- show a black bar in the 80 collum. this thing -------->
 vim.opt.confirm = true -- Confirm to save changes before exiting modified buffer
@@ -47,7 +44,7 @@ vim.opt.ignorecase = true -- Ignore case
 vim.opt.smartcase = true -- Don't ignore case with capitals
 
 vim.opt.list = true -- Show some invisible characters (tabs...
-vim.opt.mouse = "a" -- Enable mouse mode
+-- vim.opt.mouse = "a" -- Enable mouse mode
 vim.opt.shiftwidth = 4 -- Size of an indent
 vim.opt.tabstop = 4 -- Number of spaces tabs count for
 
@@ -68,7 +65,7 @@ vim.opt.whichwrap:append("<>[]hl")
 -- [[ load plugins ]] --
 require("lazy").setup({
     { "folke/lazy.nvim", tag = "stable" },
-    { "actionshrimp/direnv.nvim", opts = {}, lazy = false },
+    -- { "actionshrimp/direnv.nvim", opts = {}, lazy = false },
     { "mbbill/undotree", cmd = "UndotreeToggle" },
     -- { "echasnovski/mini.pairs", event = "BufRead", opts = {} },
     -- { "echasnovski/mini.ai",       event = "BufRead",     opts = { n_lines = 500 } },
@@ -122,7 +119,7 @@ require("lazy").setup({
         -- branch = "main",
         build = ":TSUpdate",
         event = { "BufReadPost", "BufNewFile" },
-        dependencies = { "nvim-treesitter/nvim-treesitter-context", opts = {} },
+        -- dependencies = { "nvim-treesitter/nvim-treesitter-context", opts = {} },
         main = "nvim-treesitter.configs",
         opts = {
             auto_install = false,
@@ -191,6 +188,12 @@ require("lazy").setup({
 
     {
         "supermaven-inc/supermaven-nvim",
+        enabled = function()
+            if vim.env.FANCYDESKTOP then
+                return true
+            end
+            return false
+        end,
         event = "InsertEnter",
         opts = {
             keymaps = { accept_suggestion = "<Tab>" },
@@ -205,15 +208,16 @@ require("lazy").setup({
             { "simrat39/rust-tools.nvim", opts = {} },
         },
         config = function()
+            -- TODO: find a way to dynamically add these
             local servers = {
                 "zls",
-                "pyright",
-                "clangd",
-                "hls",
-                "ocamllsp",
-                "lua_ls",
-                "gopls",
-                "ts_ls",
+                -- "pyright",
+                -- "clangd",
+                -- "hls",
+                -- "ocamllsp",
+                -- "lua_ls",
+                -- "gopls",
+                -- "ts_ls",
             }
 
             local lspconf = require("lspconfig")
@@ -484,18 +488,17 @@ require("lazy").setup({
             dap.configurations.zig[1].program = "${workspaceFolder}/zig-out/bin/${workspaceFolderBasename}"
         end,
     },
-
-    {
-        "MeanderingProgrammer/render-markdown.nvim",
-        dependencies = {
-            "nvim-treesitter/nvim-treesitter",
-            "echasnovski/mini.icons",
-        },
-        ---@module 'render-markdown'
-        ---@type render.md.UserConfig
-        opts = {},
-        ft = "markdown",
-    },
+    -- {
+    --     "MeanderingProgrammer/render-markdown.nvim",
+    --     dependencies = {
+    --         -- "nvim-treesitter/nvim-treesitter",
+    --         "echasnovski/mini.icons",
+    --     },
+    --     ---@module 'render-markdown'
+    --     ---@type render.md.UserConfig
+    --     opts = {},
+    --     ft = "markdown",
+    -- },
 }, {
     defaults = { lazy = true },
     rocks = { enabled = false },

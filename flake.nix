@@ -2,7 +2,7 @@
   description = "nixos config";
 
   inputs = {
-    nixpkgs.url = github:nixos/nixpkgs/24.11;
+    nixpkgs.url = github:nixos/nixpkgs/25.05;
     nixpkgs-unstable.url = github:nixos/nixpkgs/nixpkgs-unstable;
 
     hardware.url = github:NixOS/nixos-hardware/master;
@@ -59,9 +59,9 @@
 
     # Shared functions
     iyuma = {
-      mkSystem = modules:
+      mkSystem = modules: args:
         nixpkgs.lib.nixosSystem {
-          specialArgs = {inherit inputs system pkgs-unstable;};
+          specialArgs = args // {inherit inputs system pkgs-unstable; };
           inherit system;
           modules = modules;
         };
@@ -90,14 +90,19 @@
       ./modules/games.nix
 
       inputs.hardware.nixosModules.framework-13th-gen-intel
-    ];
+    ] {
+      usegrub = true;
+    };
 
     nixosConfigurations.hazed = iyuma.mkSystem [
-      ./host/hazed
-
+      ./hosts/hazed
       ./modules/common.nix
+      ./modules/boot/default.nix
+
       inputs.hardware.nixosModules.apple-macbook-pro-12-1
-    ];
+    ] {
+      usegrub = false;
+    };
 
     devShells."${system}".default = pkgs.mkShell {
       buildInputs = with pkgs; [

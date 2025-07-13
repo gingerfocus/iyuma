@@ -30,10 +30,16 @@
   };
   # gsettings set org.gnome.desktop.input-sources xkb-options "['caps:swapescape']"
 
-  environment.etc."xdg/xdg-desktop-portal-gtk/config".text = ''
-    [OpenURI]
-    cmd=/run/current-system/sw/bin/xdg-open
-  '';
+  environment = {
+    variables = rec {
+      FANCYDESKTOP = "1"; # Enable features in my vim config
+    };
+
+    etc."xdg/xdg-desktop-portal-gtk/config".text = ''
+      [OpenURI]
+      cmd=/run/current-system/sw/bin/xdg-open
+    '';
+  };
 
   # ------------- Input --------------- #
   # i18n.inputMethod = {
@@ -54,8 +60,7 @@
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
 
-  programs.river.enable = true;
-  programs.hyprland.enable = true;
+  # programs.hyprland.enable = true;
 
   security.pam.services.swaylock = {};
 

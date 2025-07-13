@@ -2,11 +2,11 @@
   config,
   pkgs,
   lib,
+  usegrub,
   ...
-}: let
-  usegrub = true;
-in {
+}: {
   boot.loader.systemd-boot.enable = !usegrub;
+  boot.loader.efi.canTouchEfiVariables = true;
 
   # Grub Bootloader.
   boot.loader.grub = {
