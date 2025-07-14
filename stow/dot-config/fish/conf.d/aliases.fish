@@ -18,13 +18,13 @@ alias ka killall
 # alias it img2sixel
 
 # file viewing
-alias ls eza
-alias la 'eza -a'
-alias ll 'eza -l'
-alias lla 'eza -la'
-alias lt 'eza --tree --level=4'
-alias lss="eza --group-directories-first --icons"
-alias l.='eza -a | command grep -E "^\."'
+# alias ls eza
+# alias la 'eza -a'
+# alias ll 'eza -l'
+# alias lla 'eza -la'
+# alias lt 'eza --tree --level=4'
+# alias lss="eza --group-directories-first --icons"
+# alias l.='eza -a | command grep -E "^\."'
 
 ### core utils
 alias cp="cp -ivr"

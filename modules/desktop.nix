@@ -115,7 +115,7 @@
       ncspot # spotify
 
       weechat
-      # discord
+      discord
       # discordo
       newsboat
 
