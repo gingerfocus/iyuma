@@ -6,9 +6,9 @@
   inputs,
   ...
 }: {
-  imports = [];
-  boot.loader.timeout = 3;
-  boot.loader.efi.canTouchEfiVariables = true;
+  imports = [
+    ./boot/default.nix
+  ];
 
   # Pinning the registry on NixOS makes it so `nix shell nixpkgs#ITEM` does not
   # download a tarball for only a lookup. Also enables being able to use
@@ -22,6 +22,11 @@
   };
 
   programs.river.enable = true;
+  programs.river.extraPackages = [
+    # swaylock
+    # foot
+    # dmenu
+  ];
 
   nixpkgs.config = {
     # permittedInsecurePackages = ["electron-25.9.0"];

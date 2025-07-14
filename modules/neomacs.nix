@@ -4,11 +4,9 @@
   inputs,
   system,
   ...
-}: let
-  neomacs = inputs.neomacs.packages.${system}.default;
-in {
+}: {
   environment.systemPackages = [
-    neomacs
-    emacs29-pgtk
+    inputs.neomacs.packages.${system}.default
+    pkgs.emacs-pgtk
   ];
 }

@@ -6,9 +6,8 @@
   ...
 }: {
   imports = [
-    # ./pkgs/neomacs.nix
-    ./pkgs/saka.nix
-    # ./doom
+    # ./pkgs/saka.nix
+    # ./neomacs.nix
   ];
 
   xdg.portal = {

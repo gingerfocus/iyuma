@@ -57,7 +57,7 @@
     iyuma = {
       mkSystem = modules: args:
         nixpkgs.lib.nixosSystem {
-          specialArgs = args // {inherit inputs system pkgs-unstable; };
+          specialArgs = args // {inherit inputs system pkgs-unstable;};
           inherit system;
           modules = modules;
         };
@@ -75,30 +75,32 @@
     formatter."${system}" = pkgs.alejandra;
 
     # run with `sudo nixos-rebuild switch --flake .#steamfunk`
-    nixosConfigurations.steamfunk = iyuma.mkSystem [
-      ./hosts/steamfunk
-      ./modules/common.nix
-      ./modules/desktop.nix
-      ./modules/boot/default.nix
+    nixosConfigurations.steamfunk =
+      iyuma.mkSystem [
+        ./hosts/steamfunk
+        ./modules/common.nix
+        ./modules/desktop.nix
+        ./modules/boot/default.nix
 
-      # only for some times
-      ./modules/work.nix
-      ./modules/games.nix
+        # only for some times
+        ./modules/work.nix
+        ./modules/games.nix
 
-      inputs.hardware.nixosModules.framework-13th-gen-intel
-    ] {
-      usegrub = true;
-    };
+        inputs.hardware.nixosModules.framework-13th-gen-intel
+      ] {
+        usegrub = true;
+      };
 
-    nixosConfigurations.hazed = iyuma.mkSystem [
-      ./hosts/hazed
-      ./modules/common.nix
-      ./modules/boot/default.nix
+    nixosConfigurations.hazed =
+      iyuma.mkSystem [
+        ./hosts/hazed
+        ./modules/common.nix
+        ./modules/boot/default.nix
 
-      inputs.hardware.nixosModules.apple-macbook-pro-12-1
-    ] {
-      usegrub = false;
-    };
+        inputs.hardware.nixosModules.apple-macbook-pro-12-1
+      ] {
+        usegrub = false;
+      };
 
     devShells."${system}".default = pkgs.mkShell {
       buildInputs = with pkgs; [

@@ -5,8 +5,10 @@
   usegrub,
   ...
 }: {
-  boot.loader.systemd-boot.enable = !usegrub;
+  boot.loader.timeout = 3;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  boot.loader.systemd-boot.enable = !usegrub;
 
   # Grub Bootloader.
   boot.loader.grub = {
