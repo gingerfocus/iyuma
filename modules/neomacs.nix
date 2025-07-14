@@ -9,5 +9,6 @@
 in {
   environment.systemPackages = [
     neomacs
+    emacs29-pgtk
   ];
 }

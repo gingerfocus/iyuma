@@ -243,6 +243,8 @@
       wiki-tui
       man-pages
       man-pages-posix
+
+      # emacs29-pgtk
     ]
     ++ (with pkgs-unstable; [
       ghostty

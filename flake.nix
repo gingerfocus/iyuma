@@ -28,11 +28,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       # inputs.home-manager.follows = null;
     };
-
-    # nix-doom-emacs = {
-    #   url = github:nix-community/nix-doom-emacs;
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
   };
 
   # This request each of the arguments from the flake registry. It is how you

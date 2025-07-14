@@ -4,7 +4,7 @@ https://www.kernel.org/feeds/kdist.xml "~kernel releases" "code"
 # https://nvd.nist.gov/feeds/xml/cve/misc/nvd-rss-analyzed.xml "~nvd analysed" "security"
 
 tech
-https://suckless.org/atom.xml
+https://suckless.org/atom.xml "~tech"
 https://landchad.net/rss.xml
 https://ziglang.org/news/index.xml
 https://zig.day/usa/san-francisco/rss.xml
@@ -42,8 +42,8 @@ https://www.strongtowns.org/journal?format=rss "~strong towns" "newsletters"
 # https://soylentnews.org/index.rss "~soylent news" "news headlines"
 # https://www.phoronix.com/rss.php "~phoronix" "news tech"
 
-podcasts
-https://notrelated.xyz/rss
+# podcasts
+# https://notrelated.xyz/rss
 # http://www.2600.com/oth-broadband.xml "~off the hook" "podcasts"
 # http://feeds.feedburner.com/doctorow_podcast "~cory doctorow" "podcasts"
 # http://feeds.soundcloud.com/users/soundcloud:users:261098918/sounds.rss "~priv, sec, osint" "podcasts"
@@ -56,37 +56,33 @@ https://notrelated.xyz/rss
 
 videos
 ## Dunkey
-https://www.youtube.com/feeds/videos.xml?channel_id=UCsvn_Po0SmunchJYOWpOxMg "youtube"
+# https://www.youtube.com/feeds/videos.xml?channel_id=UCsvn_Po0SmunchJYOWpOxMg "youtube"
 ## Acerola (@Acerola_t)
-https://www.youtube.com/feeds/videos.xml?channel_id=UCQG40havu4kNpB4pxUDQhYQ "vidoes"
+# https://www.youtube.com/feeds/videos.xml?channel_id=UCQG40havu4kNpB4pxUDQhYQ "vidoes"
 ## Hakita (@Hakita)
-https://www.youtube.com/feeds/videos.xml?channel_id=UCD1lODYlzMJ3YlZ30x2CwUg "videos"
+# https://www.youtube.com/feeds/videos.xml?channel_id=UCD1lODYlzMJ3YlZ30x2CwUg "videos"
 ## Junferno (@Junferno)
-https://www.youtube.com/feeds/videos.xml?channel_id=UCRb6Mw3fJ6OFzp-cB9X29aA "videos"
+# https://www.youtube.com/feeds/videos.xml?channel_id=UCRb6Mw3fJ6OFzp-cB9X29aA "videos"
 ## Anna Maria Luisa (@AnnaMariaLuisa.)
-https://www.youtube.com/feeds/videos.xml?channel_id=UC7c-OOdWcTse66xbRFbOIBQ "videos"
+# https://www.youtube.com/feeds/videos.xml?channel_id=UC7c-OOdWcTse66xbRFbOIBQ "videos"
 ## Good Work (@GoodWorkMB)
-https://www.youtube.com/feeds/videos.xml?channel_id=UC_-hYjoNe4PJNFa9iZ4lraA "videos"
+# https://www.youtube.com/feeds/videos.xml?channel_id=UC_-hYjoNe4PJNFa9iZ4lraA "videos"
 ## LEMMiNO (@LEMMiNO)
-https://www.youtube.com/feeds/videos.xml?channel_id=UCRcgy6GzDeccI7dkbbBna3Q "videos"
+# https://www.youtube.com/feeds/videos.xml?channel_id=UCRcgy6GzDeccI7dkbbBna3Q "videos"
 ## Folding Ideas (@FoldingIdeas)
-https://www.youtube.com/feeds/videos.xml?channel_id=UCyNtlmLB73-7gtlBz00XOQQ "videos"
+# https://www.youtube.com/feeds/videos.xml?channel_id=UCyNtlmLB73-7gtlBz00XOQQ "videos"
 ## exurb1a (@Exurb1a)
-https://www.youtube.com/feeds/videos.xml?channel_id=UCimiUgDLbi6P17BdaCZpVbg "videos"
-
+# https://www.youtube.com/feeds/videos.xml?channel_id=UCimiUgDLbi6P17BdaCZpVbg "videos"
 ## Louis Rossman
 # https://www.youtube.com/feeds/videos.xml?channel_id=UCl2mFZoRqjw_ELax4Yisf6w "videos"
 ## Channel 5 (@Channel5YouTube)
 # https://www.youtube.com/feeds/videos.xml?channel_id=UC-AQKm7HUNMmxjdS371MSwg "videos"
-
 ## Luke Smith
 # https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA "vidoes"
 ## JV Scholz
 # https://www.youtube.com/feeds/videos.xml?channel_id=UCcaTUtGzOiS4cqrgtcsHYWg "videos"
 ## Bardic Broadcasts
 # https://www.youtube.com/feeds/videos.xml?channel_id=UCnv3-4xjza4xO9y6_rqKNQA "videos"
-## Mental Outlaw
-# https://www.youtube.com/feeds/videos.xml?channel_id=UC7YOGHUfC1Tb6E4pudI9STA "videos"
 
 # music
 # https://media.defcon.org/DEF%20CON%20rss/defcon-18-music.rss "~defcon" "music"
