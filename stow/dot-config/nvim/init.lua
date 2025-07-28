@@ -1,3 +1,5 @@
+_G.vim = vim
+
 vim.loader.enable()
 
 -- [[ bootstrap lazy ]] --
@@ -44,7 +46,7 @@ vim.opt.ignorecase = true -- Ignore case
 vim.opt.smartcase = true -- Don't ignore case with capitals
 
 vim.opt.list = true -- Show some invisible characters (tabs...
--- vim.opt.mouse = "a" -- Enable mouse mode
+vim.opt.mouse = "" -- Disable mouse mode
 vim.opt.shiftwidth = 4 -- Size of an indent
 vim.opt.tabstop = 4 -- Number of spaces tabs count for
 
@@ -67,16 +69,51 @@ require("lazy").setup({
     { "folke/lazy.nvim", tag = "stable" },
     -- { "actionshrimp/direnv.nvim", opts = {}, lazy = false },
     { "mbbill/undotree", cmd = "UndotreeToggle" },
-    -- { "echasnovski/mini.pairs", event = "BufRead", opts = {} },
-    -- { "echasnovski/mini.ai",       event = "BufRead",     opts = { n_lines = 500 } },
-    { "echasnovski/mini.surround", event = "BufRead", opts = {} },
     { "folke/flash.nvim", opts = {} }, -- a mouse alternative
     { "folke/which-key.nvim", event = "VeryLazy", opts = {} },
     { "j-hui/fidget.nvim", event = "LspAttach", opts = {} },
 
     -- use gx to open with system opener
     -- see :help Oil
-    { "stevearc/oil.nvim", opts = {}, lazy = false },
+    -- { "stevearc/oil.nvim", opts = {}, lazy = false },
+    {
+        "echasnovski/mini.nvim",
+        version = "*",
+        lazy = false,
+        -- event = "BufRead",
+        config = function()
+            -- require("mini.ai").setup({ n_lines = 500 })
+            -- require("mini.pairs").setup({})
+            -- require("mini.pick").setup({})
+
+            require("mini.surround").setup({})
+
+            -- for Git commit
+            require("mini.git").setup({
+                command = {
+                    split = "horizontal",
+                }
+            })
+
+            require("mini.icons").setup({})
+            package.preload["nvim-web-devicons"] = function()
+                require("mini.icons").mock_nvim_web_devicons()
+                return package.loaded["nvim-web-devicons"]
+            end
+
+            require("mini.tabline").setup({})
+
+            require("mini.files").setup({
+                mappings = {
+                    go_out = "-",
+                    go_in = "<CR>",
+                },
+            })
+            vim.keymap.set("n", "-", function()
+                require("mini.files").open()
+            end, { desc = "Find Files" })
+        end,
+    },
 
     -- better vim.ui
     -- { "stevearc/dressing.nvim", opts = {}, lazy = false },
@@ -99,17 +136,6 @@ require("lazy").setup({
         event = { "BufReadPost", "BufNewFile" },
         opts = {},
         main = "ibl",
-    },
-
-    {
-        "echasnovski/mini.icons",
-        opts = {},
-        init = function()
-            package.preload["nvim-web-devicons"] = function()
-                require("mini.icons").mock_nvim_web_devicons()
-                return package.loaded["nvim-web-devicons"]
-            end
-        end,
     },
 
     -- Treesitter
@@ -147,13 +173,18 @@ require("lazy").setup({
         "nvim-telescope/telescope.nvim",
         cmd = "Telescope",
         dependencies = { "nvim-lua/plenary.nvim" },
-        opts = {
-            defaults = {
-                prompt_prefix = "   ",
-                selection_caret = " ",
-                file_ignore_patterns = { "node_modules", "target", "build", ".zig-cache" },
-            },
-        },
+        opts = function()
+            return {
+                defaults = require("telescope.themes").get_ivy(),
+            }
+        end,
+        -- {
+        --     defaults = {
+        --         prompt_prefix = "   ",
+        --         selection_caret = " ",
+        --         file_ignore_patterns = { "node_modules", "target", "build", ".zig-cache" },
+        --     },
+        -- },
     },
 
     {
@@ -187,21 +218,6 @@ require("lazy").setup({
     },
 
     {
-        "supermaven-inc/supermaven-nvim",
-        enabled = function()
-            if vim.env.FANCYDESKTOP then
-                return true
-            end
-            return false
-        end,
-        event = "InsertEnter",
-        opts = {
-            keymaps = { accept_suggestion = "<Tab>" },
-            ignore_filetypes = { "bigfile", "" },
-        },
-    },
-
-    {
         "neovim/nvim-lspconfig",
         event = { "BufReadPre", "BufNewFile" },
         dependencies = {
@@ -211,13 +227,13 @@ require("lazy").setup({
             -- TODO: find a way to dynamically add these
             local servers = {
                 "zls",
-                -- "pyright",
-                -- "clangd",
+                "pyright",
+                "clangd",
                 -- "hls",
                 -- "ocamllsp",
-                -- "lua_ls",
-                -- "gopls",
-                -- "ts_ls",
+                "lua_ls",
+                "gopls",
+                "ts_ls",
             }
 
             local lspconf = require("lspconfig")
@@ -316,7 +332,7 @@ require("lazy").setup({
 
     {
         "epwalsh/obsidian.nvim",
-        enabled = true,
+        enabled = false,
         ft = "markdown",
         dependencies = {
             "nvim-lua/plenary.nvim",
@@ -386,43 +402,43 @@ require("lazy").setup({
         end,
     },
 
-    {
-        "folke/trouble.nvim",
-        opts = {}, -- for default options, refer to the configuration section for custom setup.
-        cmd = "Trouble",
-        keys = {
-            {
-                "<leader>cx",
-                "<cmd>Trouble diagnostics toggle<cr>",
-                desc = "Diagnostics (Trouble)",
-            },
-            {
-                "<leader>cX",
-                "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
-                desc = "Buffer Diagnostics (Trouble)",
-            },
-            {
-                "<leader>cs",
-                "<cmd>Trouble symbols toggle focus=false<cr>",
-                desc = "Symbols (Trouble)",
-            },
-            {
-                "<leader>cl",
-                "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
-                desc = "LSP Definitions / references / ... (Trouble)",
-            },
-            {
-                "<leader>cL",
-                "<cmd>Trouble loclist toggle<cr>",
-                desc = "Location List (Trouble)",
-            },
-            {
-                "<leader>cQ",
-                "<cmd>Trouble qflist toggle<cr>",
-                desc = "Quickfix List (Trouble)",
-            },
-        },
-    },
+    -- {
+    --     "folke/trouble.nvim",
+    --     opts = {}, -- for default options, refer to the configuration section for custom setup.
+    --     cmd = "Trouble",
+    --     keys = {
+    --         {
+    --             "<leader>cx",
+    --             "<cmd>Trouble diagnostics toggle<cr>",
+    --             desc = "Diagnostics (Trouble)",
+    --         },
+    --         {
+    --             "<leader>cX",
+    --             "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+    --             desc = "Buffer Diagnostics (Trouble)",
+    --         },
+    --         {
+    --             "<leader>cs",
+    --             "<cmd>Trouble symbols toggle focus=false<cr>",
+    --             desc = "Symbols (Trouble)",
+    --         },
+    --         {
+    --             "<leader>cl",
+    --             "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+    --             desc = "LSP Definitions / references / ... (Trouble)",
+    --         },
+    --         {
+    --             "<leader>cL",
+    --             "<cmd>Trouble loclist toggle<cr>",
+    --             desc = "Location List (Trouble)",
+    --         },
+    --         {
+    --             "<leader>cQ",
+    --             "<cmd>Trouble qflist toggle<cr>",
+    --             desc = "Quickfix List (Trouble)",
+    --         },
+    --     },
+    -- },
 
     -- -i | sed -e 's/0x//g' | sed -e 's/\([0-9a-f]\{2\}\)/\\x\1/g' | tr -d '\n' | pbcopy
 
@@ -488,17 +504,6 @@ require("lazy").setup({
             dap.configurations.zig[1].program = "${workspaceFolder}/zig-out/bin/${workspaceFolderBasename}"
         end,
     },
-    -- {
-    --     "MeanderingProgrammer/render-markdown.nvim",
-    --     dependencies = {
-    --         -- "nvim-treesitter/nvim-treesitter",
-    --         "echasnovski/mini.icons",
-    --     },
-    --     ---@module 'render-markdown'
-    --     ---@type render.md.UserConfig
-    --     opts = {},
-    --     ft = "markdown",
-    -- },
 }, {
     defaults = { lazy = true },
     rocks = { enabled = false },
@@ -573,21 +578,17 @@ vim.keymap.set({ "i", "v", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Sav
 -- map("n", "<leader>xl", "<cmd>lopen<cr>", { desc = "Location List" })
 -- map("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix List" })
 
-vim.keymap.set("n", "-", "<cmd> Oil <CR>", { desc = "Edit Parent Dir" })
+-- vim.keymap.set("n", "-", "<cmd> Oil <CR>", { desc = "Edit Parent Dir" })
 
 -- # Telelscope
-vim.keymap.set("n", "<leader><space>", function()
-    require("telescope.builtin").git_files()
-end, { desc = "Find [ ] Files" })
-
-vim.keymap.set("n", "<leader>fb", function()
-    require("telescope.builtin").buffers()
-end, { desc = "Find Buffers" })
-
 -- usually overkill
-vim.keymap.set("n", "<leader>ff", function()
+vim.keymap.set("n", "<leader><space>", function()
     require("telescope.builtin").find_files()
 end, { desc = "Find Files" })
+
+vim.keymap.set("n", "<leader>ff", function()
+    require("telescope.builtin").buffers()
+end, { desc = "Find Buffers" })
 
 vim.keymap.set("n", "<leader>fw", function()
     require("telescope.builtin").live_grep()
@@ -684,8 +685,13 @@ vim.keymap.set("n", "<leader>jm", function()
     vim.cmd("term ncspot")
 end, { desc = "Open NCSpot" })
 
+local termnum = 0
 vim.keymap.set("n", "<leader>t", function()
+    termnum = termnum + 1
+
     vim.cmd("term")
+    vim.cmd("file terminal-" .. tostring(termnum))
+
     --  TODO: save buffer number and allow backgrounding it and opening it again
 end, { desc = "Open Terminal" })
 
@@ -734,61 +740,59 @@ vim.api.nvim_create_autocmd("TermOpen", {
 
 -- :'<,'>w !bash
 
--- local M = {}
-
-vim.keymap.set("n", "<leader>cr", function()
-    local markdown_code_block = [[
-      (
-        fenced_code_block
-        (info_string (language) @language) (#eq? @language "python")
-        (code_fence_content) @content
-        (fenced_code_block_delimiter) @delimiter
-      )
-    ]]
-
-    local markdown_query = vim.treesitter.parse_query("markdown", markdown_code_block)
-
-    local run_code_block = function(text)
-        local split = vim.split(text, "\n")
-        local code_block = table.concat(vim.list_slice(split, 1, #split), "\n")
-        local job = require("plenary.job"):new({
-            command = "python",
-            args = { "-c", code_block },
-        })
-        return job:sync()
-    end
-
-    local get_root = function(bufnr)
-        local parser = vim.treesitter.get_parser(bufnr, "markdown", {})
-        local tree = parser:parse()[1]
-        return tree:root()
-    end
-
-    local bufnr = vim.api.nvim_get_current_buf()
-    if vim.bo[bufnr].filetype ~= "markdown" then
-        vim.notify("Only Markdown is supported")
-        return
-    end
-    local root = get_root(bufnr)
-    for id, node in markdown_query:iter_captures(root, bufnr, 0, -1) do
-        local name = markdown_query.captures[id]
-        if name == "content" then
-            local range = { node:range() }
-            local code_block = vim.treesitter.get_node_text(node, bufnr)
-            local result = run_code_block(code_block)
-            table.insert(result, 1, "```text")
-            table.insert(result, 1, "")
-            table.insert(result, #result + 1, "```")
-            vim.api.nvim_buf_set_lines(bufnr, range[3] + 1, range[3] + 1, false, result)
-        end
-    end
-end, { desc = "Run Code Block" })
+-- vim.keymap.set("n", "<leader>cr", function()
+--     local markdown_code_block = [[
+--       (
+--         fenced_code_block
+--         (info_string (language) @language) (#eq? @language "python")
+--         (code_fence_content) @content
+--         (fenced_code_block_delimiter) @delimiter
+--       )
+--     ]]
+--
+--     local markdown_query = vim.treesitter.parse_query("markdown", markdown_code_block)
+--
+--     local run_code_block = function(text)
+--         local split = vim.split(text, "\n")
+--         local code_block = table.concat(vim.list_slice(split, 1, #split), "\n")
+--         local job = require("plenary.job"):new({
+--             command = "python",
+--             args = { "-c", code_block },
+--         })
+--         return job:sync()
+--     end
+--
+--     local get_root = function(bufnr)
+--         local parser = vim.treesitter.get_parser(bufnr, "markdown", {})
+--         local tree = parser:parse()[1]
+--         return tree:root()
+--     end
+--
+--     local bufnr = vim.api.nvim_get_current_buf()
+--     if vim.bo[bufnr].filetype ~= "markdown" then
+--         vim.notify("Only Markdown is supported")
+--         return
+--     end
+--     local root = get_root(bufnr)
+--     for id, node in markdown_query:iter_captures(root, bufnr, 0, -1) do
+--         local name = markdown_query.captures[id]
+--         if name == "content" then
+--             local range = { node:range() }
+--             local code_block = vim.treesitter.get_node_text(node, bufnr)
+--             local result = run_code_block(code_block)
+--             table.insert(result, 1, "```text")
+--             table.insert(result, 1, "")
+--             table.insert(result, #result + 1, "```")
+--             vim.api.nvim_buf_set_lines(bufnr, range[3] + 1, range[3] + 1, false, result)
+--         end
+--     end
+-- end, { desc = "Run Code Block" })
 
 local gemivim = require("gemivim")
 gemivim.setup({})
 
-local defnotify = vim.notify
-local glbnotify = function(msg)
+local default_notify = vim.notify
+local global_notify = function(msg)
     vim.system({ "notify-send", msg })
     return true
 end
@@ -796,10 +800,10 @@ end
 local usingglobal = false
 vim.api.nvim_create_user_command("Notify", function()
     if usingglobal then
-        vim.notify = defnotify
+        vim.notify = default_notify
         usingglobal = false
     else
-        vim.notify = glbnotify
+        vim.notify = global_notify
         usingglobal = true
     end
     return true

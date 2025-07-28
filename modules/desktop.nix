@@ -7,9 +7,11 @@
 }: {
   imports = [
     # ./pkgs/saka.nix
-    # ./neomacs.nix
+    ./neomacs.nix
+    ./ai.nix
   ];
 
+  nixpkgs.config = {allowUnfree = true;};
   xdg.portal = {
     enable = true;
 
@@ -50,7 +52,7 @@
 
   programs.gnupg.agent = {
     enable = true;
-    # pinentryPackage = pkgs.pinentry-bemenu;
+    pinentryPackage = pkgs.pinentry-bemenu;
     # pinentryPackage = pkgs.pinentry-gnome3;
     enableSSHSupport = true;
   };
@@ -59,8 +61,6 @@
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
 
-  # programs.hyprland.enable = true;
-
   security.pam.services.swaylock = {};
 
   programs.direnv.enable = true;
@@ -68,43 +68,29 @@
 
   environment.systemPackages = with pkgs;
     [
-      imv
-      foot
-      swww
-      bemenu
-      sandbar
-      swaylock
-      wl-clipboard
-      wlr-randr
-
-      # eza
+      zathura
       bat
       fzf
-      # starship
-      tmux
 
-      # cava
-      git
+      cava
+      broot
       bottom
       newsboat
-      broot
 
       alsa-utils
 
       rustup
-      # cargo rustc rust-analyzer
 
       ### Tools
       gdb
       gnumake
       gcc
-      # gpatch
+      patch
 
-      # just
-      # clang-tools
       # ghidra
+      # qemu
 
-      groff
+      # groff
       pandoc
 
       ### Music
@@ -125,11 +111,9 @@
       # pdftk
       # imagemagick
       # obs-studio
-      # sent
       libreoffice-fresh
+      # sent
 
-      zathura
-      mako
       libnotify
       brightnessctl
 
@@ -143,7 +127,6 @@
       # mediainfo
       rsync # provided by system
       jq
-      killall
       tty-clock
       file
       ffmpeg
@@ -153,13 +136,12 @@
       du-dust
       xdg-utils
       # playerctl
-      # mprocs
       # fd
 
       grim
       slurp
 
-      nodejs
+      # nodejs
 
       ## Security
       # nmap
@@ -168,59 +150,23 @@
 
       # qastools
       # net-tools
-      # ecryptfs-utils
-      # gwenview
-      # haveged-openrc
-      # inxi
-      # spectacle
-      # tumbler
-      # imgclr
-      # xdotool
       # simplescreenrecorder
-      # pamixer
       # brillo
       # ndctl
       # xfsprogs
       # archey
-      # dmraid
-      # libva-vdpau-driver
-      # libvdpau-va-gl
-      # lsb-release
-      # lvm2-openrc
-      # micro
-      # opam
-      # open-mpi
-      # openblas
-      # peco
-      # orbstack
-      # swimat
 
       # neo-cowsay
       # glow gum
       # slides charm
       # skate vhs
 
-      # acpi
       # deluge
-      # inxi
-      # nbd
-      # nfs-utils-openrc
-      # openrc-settingsd
-      # powertop
-      # scrot
-      # sweeper
-      # sysfsutils
-      # vkd3d
-      # re2
-      # catch2
-      # loupe
-      # snapshot
-      # stb
 
       ### Japanese
       # memento
-      # komikku
       # ani-cli
+      komikku
 
       # ion
       fish
@@ -228,7 +174,6 @@
       inputs.zen-browser.packages."${system}".default
       firefox
       # qutebrowser
-      lynx
       # obsidian
       # nautilus
 
@@ -242,8 +187,6 @@
       wiki-tui
       man-pages
       man-pages-posix
-
-      # emacs29-pgtk
     ]
     ++ (with pkgs-unstable; [
       ghostty

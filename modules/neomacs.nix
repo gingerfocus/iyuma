@@ -6,7 +6,7 @@
   ...
 }: {
   environment.systemPackages = [
-    inputs.neomacs.packages.${system}.default
+    # inputs.neomacs.packages.${system}.default
     pkgs.emacs-pgtk
   ];
 }

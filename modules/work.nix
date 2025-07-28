@@ -5,28 +5,32 @@
   system,
   ...
 }: {
-  environment.variables = {
-    WLR_EVDI_RENDER_DEVICE = "/dev/dri/card1";
-  };
+  # environment.variables = {
+  #   WLR_EVDI_RENDER_DEVICE = "/dev/dri/card1";
+  # };
 
-  nixpkgs.config = {allowUnfree = true;};
+  # nixpkgs.config = {allowUnfree = true;};
 
   # services.xserver.enable = true;
   # services.xserver.displayManager.gdm.enable = true;
   # services.xserver.desktopManager.gnome.enable = true;
 
-  hardware.logitech.wireless.enable = true;
-  hardware.logitech.wireless.enableGraphical = true;
-
-  boot.extraModulePackages = with config.boot.kernelPackages; [
-    evdi
-  ];
-
-  services.xserver.videoDrivers = ["displaylink" "modesetting"];
-  systemd.services.dlm.wantedBy = ["multi-user.target"];
+  # hardware.logitech.wireless.enable = true;
+  # hardware.logitech.wireless.enableGraphical = true;
+  #
+  # boot.extraModulePackages = with config.boot.kernelPackages; [
+  #   evdi
+  # ];
+  #
+  # services.xserver.videoDrivers = ["displaylink" "modesetting"];
+  # systemd.services.dlm.wantedBy = ["multi-user.target"];
 
   environment.systemPackages = with pkgs; [
-    displaylink
+    # displaylink
     chromium
+
+    networkmanager-openconnect
   ];
+
+  networking.networkmanager.plugins = [];
 }

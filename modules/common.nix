@@ -22,10 +22,23 @@
   };
 
   programs.river.enable = true;
-  programs.river.extraPackages = [
-    # swaylock
-    # foot
+  programs.river.extraPackages = with pkgs; [
+    swaylock
+    foot
     # dmenu
+      imv
+      foot
+      swww
+      bemenu
+      sandbar
+      swaylock
+      wl-clipboard
+      wlr-randr
+      mako
+      tmux
+      git
+
+      lynx
   ];
 
   nixpkgs.config = {
@@ -33,6 +46,11 @@
     # allowUnfree = true;
     trustedUsers = "@wheel";
   };
+  # nixpkgs.hostPlatform = {
+  #   system = "x86_64-linux";
+  #   config = "x86_64-unknown-linux-musl";
+  # };
+
 
   ## Enable the OpenSSH daemon.
   # services.openssh.enable = true;
@@ -54,6 +72,7 @@
 
   ## Network Manager
   networking.networkmanager.enable = true;
+
   ## Wpa Supplicant
   # networking.wireless.enable = true;
 

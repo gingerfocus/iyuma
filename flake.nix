@@ -3,7 +3,6 @@
 
   inputs = {
     nixpkgs.url = github:nixos/nixpkgs/25.05;
-    # nixpkgs.url = github:nixos/nixpkgs/24.11;
     nixpkgs-unstable.url = github:nixos/nixpkgs/nixpkgs-unstable;
 
     hardware.url = github:NixOS/nixos-hardware/master;
@@ -80,11 +79,10 @@
         ./hosts/steamfunk
         ./modules/common.nix
         ./modules/desktop.nix
-        ./modules/boot/default.nix
 
-        # only for some times
+        ## only for some times
         ./modules/work.nix
-        ./modules/games.nix
+        #./modules/games.nix
 
         inputs.hardware.nixosModules.framework-13th-gen-intel
       ] {
@@ -95,7 +93,6 @@
       iyuma.mkSystem [
         ./hosts/hazed
         ./modules/common.nix
-        ./modules/boot/default.nix
 
         inputs.hardware.nixosModules.apple-macbook-pro-12-1
       ] {

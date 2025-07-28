@@ -4,7 +4,7 @@
 ### 1 Key Aliases
 # alias e "$EDITOR" # nvim
 # alias o "$OPENER"
-alias o "handlr open"
+# alias o "handlr open"
 # alias m "$VIDEO"
 alias m "mpv"
 # alias i "$IMAGE"
@@ -48,7 +48,6 @@ alias sdn 'shutdown -h now'
 alias grep="grep --color=auto"
 alias diff="diff --color=auto"
 alias ip="ip -color=auto"
-
 
 alias nmutt='neomutt'
 # alias land 'cat $HOME/.config/george.txt | cowsay -W 70'
@@ -117,8 +116,6 @@ alias pscpu='ps auxf | sort -nr -k 3'
 # # root privileges
 # alias doas="doas --"
 # #alias sudo='doas'
-
-
 
 # alias free='free -m'
 # alias lynx='lynx -vikeys'
