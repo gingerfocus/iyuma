@@ -26,19 +26,19 @@
     swaylock
     foot
     # dmenu
-      imv
-      foot
-      swww
-      bemenu
-      sandbar
-      swaylock
-      wl-clipboard
-      wlr-randr
-      mako
-      tmux
-      git
+    imv
+    foot
+    swww
+    bemenu
+    sandbar
+    swaylock
+    wl-clipboard
+    wlr-randr
+    mako
+    tmux
+    git
 
-      lynx
+    lynx
   ];
 
   nixpkgs.config = {
@@ -50,7 +50,6 @@
   #   system = "x86_64-linux";
   #   config = "x86_64-unknown-linux-musl";
   # };
-
 
   ## Enable the OpenSSH daemon.
   # services.openssh.enable = true;
@@ -143,11 +142,12 @@
     defaultPackages = [];
     systemPackages =
       (with pkgs; [vim git busybox rsync])
-      ++ (with pkgs-unstable; [neovim-unwrapped zig]);
+      ++ (with pkgs-unstable; [
+        neovim-unwrapped
+        zig
+      ]);
 
     variables = rec {
-      XKB_DEFAULT_OPTIONS = "caps:swapescape"; # used by river
-
       XDG_CONFIG_HOME = "$HOME/.config";
       XDG_DATA_HOME = "$HOME/.local/share";
       XDG_CACHE_HOME = "$HOME/.cache";

@@ -15,11 +15,11 @@
   xdg.portal = {
     enable = true;
 
-    # extraPortals = [
-    #   pkgs.xdg-desktop-portal-wlr
-    #   pkgs.xdg-desktop-portal-gtk
-    #   pkgs.xdg-desktop-portal-gnome
-    # ];
+    extraPortals = [
+      pkgs.xdg-desktop-portal-wlr
+      pkgs.xdg-desktop-portal-gtk
+      # pkgs.xdg-desktop-portal-gnome
+    ];
 
     config = {
       # gnome = {
@@ -29,13 +29,12 @@
       # };
     };
   };
-  # gsettings set org.gnome.desktop.input-sources xkb-options "['caps:swapescape']"
 
   environment = {
-    variables = rec {
-      FANCYDESKTOP = "1"; # Enable features in my vim config
+    variables = {
+      # gsettings set org.gnome.desktop.input-sources xkb-options "['caps:swapescape']"
+      XKB_DEFAULT_OPTIONS = "caps:swapescape"; # used by river
     };
-
     etc."xdg/xdg-desktop-portal-gtk/config".text = ''
       [OpenURI]
       cmd=/run/current-system/sw/bin/xdg-open
@@ -75,7 +74,6 @@
       cava
       broot
       bottom
-      newsboat
 
       alsa-utils
 
@@ -100,8 +98,7 @@
       ncspot # spotify
 
       weechat
-      discord
-      # discordo
+      # discordo discord
       newsboat
 
       mpv
@@ -121,7 +118,7 @@
       btar
       libarchive
 
-      wget
+      # wget
       ripgrep
       yt-dlp
       # mediainfo
@@ -133,7 +130,7 @@
       pfetch
       porsmo
       bluetuith
-      du-dust
+      # du-dust
       xdg-utils
       # playerctl
       # fd
@@ -166,19 +163,18 @@
       ### Japanese
       # memento
       # ani-cli
-      komikku
+      # komikku
 
       # ion
       fish
 
-      inputs.zen-browser.packages."${system}".default
-      firefox
+      # inputs.zen-browser.packages."${system}".default
       # qutebrowser
       # obsidian
       # nautilus
 
       typst
-      parallel
+      # parallel
       alejandra
 
       pavucontrol
@@ -186,7 +182,7 @@
       tealdeer
       wiki-tui
       man-pages
-      man-pages-posix
+      # man-pages-posix
     ]
     ++ (with pkgs-unstable; [
       ghostty
@@ -203,7 +199,7 @@
         "${inputs.scripts}/bin"));
 
   # allow ptrace debugging
-  boot.kernel.sysctl."kernel.yama.ptrace_scope" = pkgs.lib.mkOverride 10 0;
+  # boot.kernel.sysctl."kernel.yama.ptrace_scope" = pkgs.lib.mkOverride 10 0;
 
   documentation.enable = true;
   documentation.man.enable = true;

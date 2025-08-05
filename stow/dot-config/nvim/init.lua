@@ -34,10 +34,12 @@ vim.opt.scrolloff = 8 -- Lines of context
 vim.opt.spelllang = { "en" }
 vim.opt.colorcolumn = "80" -- show a black bar in the 80 collum. this thing -------->
 vim.opt.confirm = true -- Confirm to save changes before exiting modified buffer
-vim.opt.conceallevel = 2 -- Hide * markup for bold and italic
+vim.opt.conceallevel = 0 -- Hide * markup for bold and italic
 vim.opt.cursorline = true -- Enable highlighting of the current line
 vim.opt.expandtab = true -- Use spaces instead of tabs
 vim.opt.number = true -- show line numbers
+
+vim.opt.swapfile = false
 
 vim.opt.completeopt = "menu,menuone,noselect"
 
@@ -92,7 +94,7 @@ require("lazy").setup({
             require("mini.git").setup({
                 command = {
                     split = "horizontal",
-                }
+                },
             })
 
             require("mini.icons").setup({})
@@ -100,6 +102,10 @@ require("lazy").setup({
                 require("mini.icons").mock_nvim_web_devicons()
                 return package.loaded["nvim-web-devicons"]
             end
+
+            require("mini.snippets").setup()
+            -- see :help lsp-completion to replace this
+            require("mini.completion").setup()
 
             require("mini.tabline").setup({})
 
@@ -207,15 +213,15 @@ require("lazy").setup({
         },
     },
 
-    {
-        "olimorris/codecompanion.nvim",
-        cmd = { "CodeCompanion", "CodeCompanionChat" },
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "nvim-treesitter/nvim-treesitter",
-        },
-        opts = {},
-    },
+    -- {
+    --     "olimorris/codecompanion.nvim",
+    --     cmd = { "CodeCompanion", "CodeCompanionChat" },
+    --     dependencies = {
+    --         "nvim-lua/plenary.nvim",
+    --         "nvim-treesitter/nvim-treesitter",
+    --     },
+    --     opts = {},
+    -- },
 
     {
         "neovim/nvim-lspconfig",
@@ -224,6 +230,10 @@ require("lazy").setup({
             { "simrat39/rust-tools.nvim", opts = {} },
         },
         config = function()
+            -- :checkhealth vim.lsp
+
+            -- vim.lsp.enable()
+
             -- TODO: find a way to dynamically add these
             local servers = {
                 "zls",
@@ -330,116 +340,6 @@ require("lazy").setup({
         end,
     },
 
-    {
-        "epwalsh/obsidian.nvim",
-        enabled = false,
-        ft = "markdown",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "nvim-telescope/telescope.nvim",
-            "hrsh7th/nvim-cmp",
-        },
-        opts = {
-            ui = { enable = false },
-            workspaces = { { name = "main", path = "~/dox" } },
-            notes_subdir = "05 - Fleeting",
-            completion = { min_chars = 0 },
-            mappings = {
-                ["gf"] = {
-                    action = function()
-                        return require("obsidian").util.gf_passthrough()
-                    end,
-                    opts = { noremap = false, expr = true, buffer = true },
-                },
-                -- vim.keymap.set("n", "gl", "<cmd>ObsidianFollowLink<CR>", { desc = "Obsidian: Follow [L]ink" })
-            },
-            preferred_link_style = "wiki",
-            disable_frontmatter = false,
-            follow_url_func = function(url)
-                vim.fn.jobstart({ "xdg-open", url })
-            end,
-            picker = { name = "telescope.nvim" },
-        },
-    },
-
-    -- see :help lsp-completion to replace this
-    {
-        "hrsh7th/nvim-cmp",
-        event = "InsertEnter",
-        dependencies = {
-            "hrsh7th/cmp-nvim-lsp",
-            "hrsh7th/cmp-buffer",
-            "hrsh7th/cmp-path",
-        },
-        config = function()
-            local cmp = require("cmp")
-            -- local luasnip = require("luasnip")
-
-            local opts = {
-                completion = { completeopt = "menu,menuone,noinsert" },
-                formatting = {},
-                window = {
-                    completion = {},
-                    documentation = {},
-                },
-                mapping = {
-                    ["<C-p>"] = cmp.mapping.select_prev_item(),
-                    ["<C-n>"] = cmp.mapping.select_next_item(),
-                    ["<C-y>"] = cmp.mapping.confirm({
-                        behavior = cmp.ConfirmBehavior.Replace,
-                        select = false,
-                    }),
-                },
-                sources = {
-                    -- { name = "supermaven" },
-                    { name = "nvim_lsp" },
-                    -- { name = "nvim_lua" },
-                    { name = "buffer" },
-                    { name = "path" },
-                },
-            }
-            cmp.setup(opts)
-        end,
-    },
-
-    -- {
-    --     "folke/trouble.nvim",
-    --     opts = {}, -- for default options, refer to the configuration section for custom setup.
-    --     cmd = "Trouble",
-    --     keys = {
-    --         {
-    --             "<leader>cx",
-    --             "<cmd>Trouble diagnostics toggle<cr>",
-    --             desc = "Diagnostics (Trouble)",
-    --         },
-    --         {
-    --             "<leader>cX",
-    --             "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
-    --             desc = "Buffer Diagnostics (Trouble)",
-    --         },
-    --         {
-    --             "<leader>cs",
-    --             "<cmd>Trouble symbols toggle focus=false<cr>",
-    --             desc = "Symbols (Trouble)",
-    --         },
-    --         {
-    --             "<leader>cl",
-    --             "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
-    --             desc = "LSP Definitions / references / ... (Trouble)",
-    --         },
-    --         {
-    --             "<leader>cL",
-    --             "<cmd>Trouble loclist toggle<cr>",
-    --             desc = "Location List (Trouble)",
-    --         },
-    --         {
-    --             "<leader>cQ",
-    --             "<cmd>Trouble qflist toggle<cr>",
-    --             desc = "Quickfix List (Trouble)",
-    --         },
-    --     },
-    -- },
-
     -- -i | sed -e 's/0x//g' | sed -e 's/\([0-9a-f]\{2\}\)/\\x\1/g' | tr -d '\n' | pbcopy
 
     -- help :TOhtml
@@ -483,6 +383,7 @@ require("lazy").setup({
             -- print(("You entered: %s"):format(value))
 
             dap.configurations.c = {
+                --- @feild program function|string
                 {
                     name = "Launch",
                     type = "gdb",
@@ -581,7 +482,6 @@ vim.keymap.set({ "i", "v", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Sav
 -- vim.keymap.set("n", "-", "<cmd> Oil <CR>", { desc = "Edit Parent Dir" })
 
 -- # Telelscope
--- usually overkill
 vim.keymap.set("n", "<leader><space>", function()
     require("telescope.builtin").find_files()
 end, { desc = "Find Files" })
@@ -594,9 +494,9 @@ vim.keymap.set("n", "<leader>fw", function()
     require("telescope.builtin").live_grep()
 end, { desc = "[F]ind [W]ord" })
 
-vim.keymap.set("n", "<leader>fc", function()
-    require("telescope.builtin").git_commits()
-end, { desc = "[F]ind Git [C]ommits" })
+-- vim.keymap.set("n", "<leader>fc", function()
+--     require("telescope.builtin").git_commits()
+-- end, { desc = "[F]ind Git [C]ommits" })
 
 vim.keymap.set("n", "<leader>fd", function()
     require("telescope.builtin").diagnostics()
@@ -611,15 +511,8 @@ vim.keymap.set("n", "<leader>p", function()
 end, { desc = "Paste Register" })
 
 vim.keymap.set("n", "<leader>/", function()
-    local simpletheme = require("telescope.themes").get_dropdown({
-        previewer = false,
-        winblend = 10,
-    })
-    require("telescope.builtin").current_buffer_fuzzy_find(simpletheme)
+    require("telescope.builtin").current_buffer_fuzzy_find()
 end, { desc = "Search Buffer" })
-
--- ["<leader>fa"] = { "<cmd> Telescope find_files follow=true no_ignore=true hidden=true <CR>", "[F]ind [A]ll" },
--- vim.keymap.set("n", "<leader>fg", "<cmd> Telescope grep_string <CR>", { desc = "[F]ind [G]rep" }) -- looks for the work under your cursor + selection
 
 -- ## ------------------------------------------------------------------- ## --
 
@@ -656,7 +549,6 @@ end, { desc = "Open PDF" })
 
 -- TODO: job server for nvim
 -- run commands and allow switching
-
 vim.keymap.set("n", "<leader>js", function()
     local cmd = vim.fn.input("Command: ", "", "shellcmdline")
 
@@ -693,7 +585,9 @@ vim.keymap.set("n", "<leader>t", function()
     vim.cmd("file terminal-" .. tostring(termnum))
 
     --  TODO: save buffer number and allow backgrounding it and opening it again
-end, { desc = "Open Terminal" })
+end, { desc = "Open New Terminal" })
+
+-- TODO: <leader>to list open terminals are allow opeining one
 
 -- local commandactive = false
 -- local group = vim.api.nvim_create_augroup("PdfMode", { clear = true })
@@ -712,8 +606,6 @@ end, { desc = "Open Terminal" })
 --     end
 -- end, { desc = "Toggle Making Pdfs with Pandoc" })
 
--- vim.keymap.set("n", "<leader>tn", ":tabnext<cr>", {}) -- gt
--- vim.keymap.set("n", "<leader>tp", ":tabprev<cr>", {}) -- gT
 vim.keymap.set("t", "<esc>", "<c-\\><c-n>", {})
 
 vim.api.nvim_create_autocmd("TermOpen", {
@@ -808,6 +700,41 @@ vim.api.nvim_create_user_command("Notify", function()
     end
     return true
 end, {})
+
+-- vim.api.nvim_create_autocmd("LspAttach", {
+--     group = vim.api.nvim_create_augroup("my.lsp", {}),
+--     callback = function(args)
+--         local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+--
+--         if client:supports_method("textDocument/implementation") then
+--             -- Create a keymap for vim.lsp.buf.implementation ...
+--         end
+--
+--         -- Enable auto-completion. Note: Use CTRL-Y to select an item. |complete_CTRL-Y|
+--         if client:supports_method("textDocument/completion") then
+--             -- Optional: trigger autocompletion on EVERY keypress. May be slow!
+--             -- local chars = {}; for i = 32, 126 do table.insert(chars, string.char(i)) end
+--             -- client.server_capabilities.completionProvider.triggerCharacters = chars
+--
+--             vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
+--         end
+--
+--         -- Auto-format ("lint") on save.
+--         -- Usually not needed if server supports "textDocument/willSaveWaitUntil".
+--         -- if
+--         --     not client:supports_method("textDocument/willSaveWaitUntil")
+--         --     and client:supports_method("textDocument/formatting")
+--         -- then
+--         --     vim.api.nvim_create_autocmd("BufWritePre", {
+--         --         group = vim.api.nvim_create_augroup("my.lsp", { clear = false }),
+--         --         buffer = args.buf,
+--         --         callback = function()
+--         --             vim.lsp.buf.format({ bufnr = args.buf, id = client.id, timeout_ms = 1000 })
+--         --         end,
+--         --     })
+--         -- end
+--     end,
+-- })
 
 -- require("oboil").setup({})
 

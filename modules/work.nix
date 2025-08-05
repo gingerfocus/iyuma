@@ -26,10 +26,14 @@
   # systemd.services.dlm.wantedBy = ["multi-user.target"];
 
   environment.systemPackages = with pkgs; [
+    ## ADC Job
     # displaylink
-    chromium
+    # chromium
 
+    ## SCU Job
+    firefox
     networkmanager-openconnect
+    openconnect_openssl
   ];
 
   networking.networkmanager.plugins = [];
