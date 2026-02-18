@@ -28,7 +28,7 @@ vim.g["loaded_python3_provider"] = 0
 vim.g["loaded_ruby_provider"] = 0
 
 --------------------------------- options -------------------------------------
--- o.clipboard = "unnamedplus" -- for what ever reason this breaks everything
+vim.opt.clipboard = "unnamedplus" -- for what ever reason this breaks everything
 -- See `:help 'clipboard'`
 vim.opt.scrolloff = 8 -- Lines of context
 vim.opt.spelllang = { "en" }
@@ -75,9 +75,24 @@ require("lazy").setup({
     { "folke/which-key.nvim", event = "VeryLazy", opts = {} },
     { "j-hui/fidget.nvim", event = "LspAttach", opts = {} },
 
+    {
+        "nvim-orgmode/orgmode",
+        event = "VeryLazy",
+        ft = { "org" },
+        config = function()
+            -- Setup orgmode
+            require("orgmode").setup({
+                org_agenda_files = "~/org/**/*",
+                org_default_notes_file = "~/org/unsorted.org",
+            })
+
+            -- Experimental LSP support
+            vim.lsp.enable("org")
+        end,
+    },
+
     -- use gx to open with system opener
     -- see :help Oil
-    -- { "stevearc/oil.nvim", opts = {}, lazy = false },
     {
         "echasnovski/mini.nvim",
         version = "*",
@@ -90,12 +105,9 @@ require("lazy").setup({
 
             require("mini.surround").setup({})
 
-            -- for Git commit
-            require("mini.git").setup({
-                command = {
-                    split = "horizontal",
-                },
-            })
+            -- require("mini.git").setup({
+            --     command = { split = "horizontal" },
+            -- })
 
             require("mini.icons").setup({})
             package.preload["nvim-web-devicons"] = function()
@@ -104,6 +116,7 @@ require("lazy").setup({
             end
 
             require("mini.snippets").setup()
+
             -- see :help lsp-completion to replace this
             require("mini.completion").setup()
 
@@ -115,6 +128,7 @@ require("lazy").setup({
                     go_in = "<CR>",
                 },
             })
+
             vim.keymap.set("n", "-", function()
                 require("mini.files").open()
             end, { desc = "Find Files" })
@@ -184,13 +198,6 @@ require("lazy").setup({
                 defaults = require("telescope.themes").get_ivy(),
             }
         end,
-        -- {
-        --     defaults = {
-        --         prompt_prefix = "   ",
-        --         selection_caret = " ",
-        --         file_ignore_patterns = { "node_modules", "target", "build", ".zig-cache" },
-        --     },
-        -- },
     },
 
     {
@@ -205,6 +212,10 @@ require("lazy").setup({
                 typst = { "prettypst" },
                 nix = { "nixfmt", "alejandra" },
                 c = { "uncrustify" },
+                markdown = { "markdownlint-cli2" },
+                -- cbfmt : codeblocks in markdown
+                -- deon_fmt : markdown and js
+                -- doctoc : toc for markdown
                 python = { "black" },
             },
             formatters = {
@@ -213,141 +224,6 @@ require("lazy").setup({
         },
     },
 
-    -- {
-    --     "olimorris/codecompanion.nvim",
-    --     cmd = { "CodeCompanion", "CodeCompanionChat" },
-    --     dependencies = {
-    --         "nvim-lua/plenary.nvim",
-    --         "nvim-treesitter/nvim-treesitter",
-    --     },
-    --     opts = {},
-    -- },
-
-    {
-        "neovim/nvim-lspconfig",
-        event = { "BufReadPre", "BufNewFile" },
-        dependencies = {
-            { "simrat39/rust-tools.nvim", opts = {} },
-        },
-        config = function()
-            -- :checkhealth vim.lsp
-
-            -- vim.lsp.enable()
-
-            -- TODO: find a way to dynamically add these
-            local servers = {
-                "zls",
-                "pyright",
-                "clangd",
-                -- "hls",
-                -- "ocamllsp",
-                "lua_ls",
-                "gopls",
-                "ts_ls",
-            }
-
-            local lspconf = require("lspconfig")
-            -- local capabilities = require("blink.cmp").get_lsp_capabilities()
-            for _, server in pairs(servers) do
-                -- lspconf[server].setup({ capabilities = capabilities })
-                lspconf[server].setup({})
-            end
-
-            -- vim.lsp.enable(servers)
-
-            -- see :help lsp-lint for reimpl
-            vim.api.nvim_create_autocmd("LspAttach", {
-                group = vim.api.nvim_create_augroup("UserLspConfig", {}),
-                callback = function(ev)
-                    local map = function(mode, key, action, desc)
-                        vim.keymap.set(mode, key, action, {
-                            buffer = ev.buf,
-                            desc = desc,
-                        })
-                    end
-
-                    -- if vim.lps.inlay_hint_enable then
-                    --     vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
-                    -- end
-
-                    map("n", "gd", function()
-                        -- vim.cmd("tab split")
-                        vim.lsp.buf.definition({
-                            -- reuse_win = true,
-                            loclist = true,
-                        })
-                    end, "[G]oto [D]efinition")
-
-                    -- map("n", "gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-                    map("n", "gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-                    map("n", "gi", vim.lsp.buf.implementation, "[G]o [I]mplementation")
-
-                    -- see :help grr
-                    -- map("n", "gr", vim.lsp.buf.references, "[G]oto [R]eferences")
-
-                    map("n", "<leader>cn", vim.lsp.buf.rename, "[C]ode Re[N]ame")
-                    map("n", "<leader>ca", vim.lsp.buf.code_action, "LSP code action")
-
-                    -- map("n", "<leader>ws", vim.lsp.buf.workspace_symbol, "[W]orkspace [S]ymbol")
-                    -- map("n", "<leader>ls", vim.lsp.buf.signature_help, "LSP signature help")
-                    map("n", "grd", vim.lsp.buf.type_definition, "LSP definition type")
-
-                    -- vim.api.nvim_create_autocmd('DiagnosticChanged', {
-                    --   callback = function(args)
-                    --     local diagnostics = args.data.diagnostics
-                    --     vim.print(diagnostics)
-                    --   end,
-                    -- })
-
-                    -- vim.diagnostic.config({
-                    --     loclist = {
-                    --         open = true,
-                    --         severity = { min = vim.diagnostic.severity.WARN },
-                    --     }
-                    -- })
-
-                    -- vim.diagnostic.handlers.loclist = {
-                    --     show = function(_, _, _, opts)
-                    --         -- Generally don't want it to open on every update
-                    --         opts.loclist.open = opts.loclist.open or false
-                    --         local winid = vim.api.nvim_get_current_win()
-                    --         vim.diagnostic.setloclist(opts.loclist)
-                    --         vim.api.nvim_set_current_win(winid)
-                    --     end
-                    -- }
-
-                    -- map("n", "<leader>cd", function()
-                    --     vim.diagnostic.setloclist({
-                    --         open = true,
-                    --     })
-                    --     vim.cmd.lopen()
-                    --     vim.diagnostic.open_float()
-                    -- end, "[C]ode [D]iagnostics")
-
-                    map("n", "[d", vim.diagnostic.goto_prev, "Previous [D]iagnostic")
-                    map("n", "]d", vim.diagnostic.goto_next, "Next [D]iagnostic")
-
-                    -- local clients = vim.lsp.get_clients({ bufnr = ev.buf })
-                    -- if #clients == 0 then return end
-                    -- vim.lsp.completion.enable(
-                    --     true,
-                    --     clients[0].id,
-                    --     ev.buf, {
-                    --         autotrigger = true,
-                    --     })
-                end,
-            })
-        end,
-    },
-
-    -- -i | sed -e 's/0x//g' | sed -e 's/\([0-9a-f]\{2\}\)/\\x\1/g' | tr -d '\n' | pbcopy
-
-    -- help :TOhtml
-    -- :%!xxd
-    -- :%!xxd -r
-
-    -- :put w
-    -- :reg
 
     {
         "mfussenegger/nvim-dap",
@@ -405,6 +281,17 @@ require("lazy").setup({
             dap.configurations.zig[1].program = "${workspaceFolder}/zig-out/bin/${workspaceFolderBasename}"
         end,
     },
+
+
+    -- -i | sed -e 's/0x//g' | sed -e 's/\([0-9a-f]\{2\}\)/\\x\1/g' | tr -d '\n' | pbcopy
+
+    -- help :TOhtml
+    -- :%!xxd
+    -- :%!xxd -r
+
+    -- :put w
+    -- :reg
+
 }, {
     defaults = { lazy = true },
     rocks = { enabled = false },
@@ -457,7 +344,7 @@ end, { desc = "Code Format" })
 -- vim.keymap.set("n", "<leader>n", "<cmd> cnext <CR> zz", { desc = "See the next error" })
 -- ]q
 
-vim.keymap.set("v", "Y", '"+y', { desc = "[Y]ank to clipboard" })
+-- vim.keymap.set("v", "Y", '"+y', { desc = "[Y]ank to clipboard" })
 
 vim.keymap.set("n", "n", "nzz") -- searching for terms keeps cursor/highlight in the middle
 vim.keymap.set("n", "N", "Nzz")
@@ -516,7 +403,7 @@ end, { desc = "Search Buffer" })
 
 -- ## ------------------------------------------------------------------- ## --
 
-vim.keymap.set("n", "<leader>o", function()
+vim.keymap.set("n", "<leader>fo", function()
     local pickers = require("telescope.pickers")
     local finders = require("telescope.finders")
     local actions = require("telescope.actions")
@@ -547,65 +434,7 @@ vim.keymap.set("n", "<leader>o", function()
         :find()
 end, { desc = "Open PDF" })
 
--- TODO: job server for nvim
--- run commands and allow switching
-vim.keymap.set("n", "<leader>js", function()
-    local cmd = vim.fn.input("Command: ", "", "shellcmdline")
-
-    -- stylua: ignore
-    if cmd == "" then return end
-
-    cmd = vim.split(cmd, " ", { plain = true, trimempty = true })
-    local obj = vim.system(cmd, { text = true }):wait()
-
-    vim.cmd("split")
-    local win = vim.api.nvim_get_current_win()
-    local buf = vim.api.nvim_create_buf(false, true)
-    vim.api.nvim_buf_set_name(buf, "[cmd (" .. cmd[1] .. ")]")
-
-    local lines = vim.split(obj.stdout, "\n")
-    -- write to buffer
-    vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-
-    vim.api.nvim_win_set_buf(win, buf)
-
-    -- see :help uv.spawn
-    -- for async command output
-end, { desc = "Jobs Start" })
-
-vim.keymap.set("n", "<leader>jm", function()
-    vim.cmd("term ncspot")
-end, { desc = "Open NCSpot" })
-
-local termnum = 0
-vim.keymap.set("n", "<leader>t", function()
-    termnum = termnum + 1
-
-    vim.cmd("term")
-    vim.cmd("file terminal-" .. tostring(termnum))
-
-    --  TODO: save buffer number and allow backgrounding it and opening it again
-end, { desc = "Open New Terminal" })
-
--- TODO: <leader>to list open terminals are allow opeining one
-
--- local commandactive = false
--- local group = vim.api.nvim_create_augroup("PdfMode", { clear = true })
--- vim.api.nvim_create_user_command("PdfMode", function()
---     if commandactive then
---         vim.api.nvim_clear_autocmds({ group = group })
---         commandactive = false
---     else
---         local newfile = vim.fn.expand("%:r") .. ".pdf"
---         vim.api.nvim_create_autocmd("BufWritePost", {
---             group = group,
---             buffer = vim.api.nvim_get_current_buf(),
---             command = "silent ! pandoc <afile> -o " .. newfile,
---         })
---         commandactive = true
---     end
--- end, { desc = "Toggle Making Pdfs with Pandoc" })
-
+-- exit terminal mode easily
 vim.keymap.set("t", "<esc>", "<c-\\><c-n>", {})
 
 vim.api.nvim_create_autocmd("TermOpen", {
@@ -701,42 +530,57 @@ vim.api.nvim_create_user_command("Notify", function()
     return true
 end, {})
 
--- vim.api.nvim_create_autocmd("LspAttach", {
---     group = vim.api.nvim_create_augroup("my.lsp", {}),
---     callback = function(args)
---         local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
---
---         if client:supports_method("textDocument/implementation") then
---             -- Create a keymap for vim.lsp.buf.implementation ...
---         end
---
---         -- Enable auto-completion. Note: Use CTRL-Y to select an item. |complete_CTRL-Y|
---         if client:supports_method("textDocument/completion") then
---             -- Optional: trigger autocompletion on EVERY keypress. May be slow!
---             -- local chars = {}; for i = 32, 126 do table.insert(chars, string.char(i)) end
---             -- client.server_capabilities.completionProvider.triggerCharacters = chars
---
---             vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
---         end
---
---         -- Auto-format ("lint") on save.
---         -- Usually not needed if server supports "textDocument/willSaveWaitUntil".
---         -- if
---         --     not client:supports_method("textDocument/willSaveWaitUntil")
---         --     and client:supports_method("textDocument/formatting")
---         -- then
---         --     vim.api.nvim_create_autocmd("BufWritePre", {
---         --         group = vim.api.nvim_create_augroup("my.lsp", { clear = false }),
---         --         buffer = args.buf,
---         --         callback = function()
---         --             vim.lsp.buf.format({ bufnr = args.buf, id = client.id, timeout_ms = 1000 })
---         --         end,
---         --     })
---         -- end
---     end,
--- })
+vim.lsp.config['zls'] = {
+  cmd = { 'zls' },
+  filetypes = { 'zig' },
+  root_markers = { 'build.zig', '.git' },
+  settings = {}
+}
+vim.lsp.config['rust-analyzer'] = {
+  cmd = { 'rust-analyzer' },
+  filetypes = { 'rust' },
+  root_markers = { 'Cargo.toml', '.git' },
+  settings = {}
+}
 
--- require("oboil").setup({})
+vim.lsp.enable({
+    "zls",
+    "pyright",
+    "clangd",
+    "lua_ls",
+    "gopls",
+    "ts_ls",
+    "rust-analyzer", -- https://github.com/mrcjkb/rustaceanvim
+})
+
+-- see :help lsp-lint for reimpl
+vim.api.nvim_create_autocmd("LspAttach", {
+    group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+    callback = function(ev)
+        local map = function(mode, key, action, desc)
+            vim.keymap.set(mode, key, action, {
+                buffer = ev.buf,
+                desc = desc,
+            })
+        end
+
+        map("n", "gd", function()
+            -- vim.cmd("tab split")
+            vim.lsp.buf.definition({
+                -- reuse_win = true,
+                -- loclist = true,
+            })
+        end, "[G]oto [D]efinition")
+
+        map("n", "gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+        map("n", "gi", vim.lsp.buf.implementation, "[G]o [I]mplementation")
+        map("n", "<leader>cn", vim.lsp.buf.rename, "[C]ode Re[N]ame")
+        map("n", "<leader>ca", vim.lsp.buf.code_action, "LSP code action")
+        map("n", "grd", vim.lsp.buf.type_definition, "LSP definition type")
+        map("n", "[d", vim.diagnostic.goto_prev, "Previous [D]iagnostic")
+        map("n", "]d", vim.diagnostic.goto_next, "Next [D]iagnostic")
+    end,
+})
 
 -- See `:help modeline`
 -- vim: ts=4 sts=4 sw=4 et

@@ -1,40 +1,32 @@
 {
   config,
   pkgs,
+  pkgs-unstable,
+  lib,
   inputs,
-  system,
   ...
 }: {
-  # environment.variables = {
-  #   WLR_EVDI_RENDER_DEVICE = "/dev/dri/card1";
-  # };
-
-  # nixpkgs.config = {allowUnfree = true;};
-
-  # services.xserver.enable = true;
-  # services.xserver.displayManager.gdm.enable = true;
-  # services.xserver.desktopManager.gnome.enable = true;
-
-  # hardware.logitech.wireless.enable = true;
-  # hardware.logitech.wireless.enableGraphical = true;
-  #
-  # boot.extraModulePackages = with config.boot.kernelPackages; [
-  #   evdi
-  # ];
-  #
-  # services.xserver.videoDrivers = ["displaylink" "modesetting"];
-  # systemd.services.dlm.wantedBy = ["multi-user.target"];
+  services.xserver.windowManager.i3.enable = true;
+  services.xserver.enable = true;
 
   environment.systemPackages = with pkgs; [
-    ## ADC Job
-    # displaylink
-    # chromium
-
-    ## SCU Job
-    firefox
-    networkmanager-openconnect
-    openconnect_openssl
+    omnissa-horizon-client
   ];
 
-  networking.networkmanager.plugins = [];
+  fonts = {
+    packages = with pkgs; [
+      dejavu_fonts
+    ];
+  };
+
+  networking.networkmanager.plugins = with pkgs; [
+    # networkmanager-fortisslvpn
+    # networkmanager-iodine
+    # networkmanager-l2tp
+    networkmanager-openconnect
+    # networkmanager-openvpn
+    # networkmanager-sstp
+    # networkmanager-strongswan
+    # networkmanager-vpnc
+  ];
 }

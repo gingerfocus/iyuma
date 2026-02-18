@@ -151,7 +151,6 @@ riverctl set-repeat 50 300
 # Make all views with an app-id that starts with "float" and title "foo" start floating.
 # riverctl rule-add -app-id 'float*' -title 'foo' float
 
-
 if [ $(hostname) = "hazed" ]; then
     # on the brickbook i dont want to have the screen on as it is always closed
     # the sleep is so that the WM is fully set up when the thing runs
@@ -162,6 +161,8 @@ else
     riverctl input pointer-2362-628-PIXA3854:00_093A:0274_Touchpad disable-while-typing disabled
     riverctl input pointer-2362-628-PIXA3854:00_093A:0274_Touchpad tap enabled
     riverctl input pointer-2362-628-PIXA3854:00_093A:0274_Touchpad tap-button-map left-right-middle
+
+    wlr-randr --output eDP-1 --scale 1.5
 fi
 
 # riverctl map-switch normal lid close spwan "systemctl suspend"
@@ -217,3 +218,4 @@ riverctl spawn swww-daemon
 systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river
 systemctl --user restart xdg-desktop-portal
+

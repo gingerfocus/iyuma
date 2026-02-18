@@ -21,8 +21,9 @@
     nixpkgs-unstable.flake = inputs.nixpkgs-unstable;
   };
 
-  programs.river.enable = true;
-  programs.river.extraPackages = with pkgs; [
+  programs.river-classic.enable = true;
+  # things "needed" for the river startup script
+  programs.river-classic.extraPackages = with pkgs; [
     swaylock
     foot
     # dmenu
@@ -37,7 +38,6 @@
     mako
     tmux
     git
-
     lynx
   ];
 
@@ -103,7 +103,7 @@
     packages = with pkgs; [
       nerd-fonts.hack
       nerd-fonts.mononoki
-      noto-fonts-emoji
+      noto-fonts-color-emoji
       dejavu_fonts
       ipafont
       kochi-substitute
@@ -125,7 +125,7 @@
     isNormalUser = true;
     description = "Evan Stokdyk";
     shell = pkgs.bash;
-    extraGroups = ["wheel" "networkmanager" "audio" "video" "libvirtd"];
+    extraGroups = ["wheel" "networkmanager" "audio" "video" "libvirtd" "wireshark"];
   };
   # ----------------------------------- #
 

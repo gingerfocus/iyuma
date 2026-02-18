@@ -1,4 +1,4 @@
-set sandbox none
+# set sandbox none
 set statusbar-h-padding 0
 set statusbar-v-padding 0
 set page-padding 1
@@ -60,5 +60,5 @@ map g goto top
 # set recolor-keephue             true      # keep original color
 
 set database sqlite
-
+set selection-clipboard clipboard
 # map <C-i> recolor

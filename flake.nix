@@ -2,13 +2,13 @@
   description = "nixos config";
 
   inputs = {
-    nixpkgs.url = github:nixos/nixpkgs/25.05;
+    nixpkgs.url = github:nixos/nixpkgs/25.11;
     nixpkgs-unstable.url = github:nixos/nixpkgs/nixpkgs-unstable;
 
     hardware.url = github:NixOS/nixos-hardware/master;
 
     neomacs = {
-      url = github:gingerfocus/neomacs;
+      url = "github:gingerfocus/neomacs?dir=nix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
@@ -39,6 +39,7 @@
     self,
     nixpkgs,
     nixpkgs-unstable,
+    # nixpkgs-stable,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -52,11 +53,17 @@
       inherit system;
     };
 
+    # pkgs-stable = import nixpkgs-stable {
+    #   inherit system;
+    # };
+
     # Shared functions
     iyuma = {
       mkSystem = modules: args:
         nixpkgs.lib.nixosSystem {
-          specialArgs = args // {inherit inputs system pkgs-unstable;};
+          specialArgs = args // {inherit inputs system pkgs-unstable ;
+          # pkgs-stable;
+          };
           inherit system;
           modules = modules;
         };
@@ -81,8 +88,7 @@
         ./modules/desktop.nix
 
         ## only for some times
-        ./modules/work.nix
-        #./modules/games.nix
+        ./modules/games.nix
 
         inputs.hardware.nixosModules.framework-13th-gen-intel
       ] {

@@ -1,6 +1,7 @@
 {
   pkgs,
   pkgs-unstable,
+  # pkgs-stable,
   inputs,
   system,
   ...
@@ -8,8 +9,11 @@
   imports = [
     # ./pkgs/saka.nix
     ./neomacs.nix
-    ./ai.nix
+    ./work.nix
   ];
+
+ 
+  programs.kdeconnect.enable = true;
 
   nixpkgs.config = {allowUnfree = true;};
   xdg.portal = {
@@ -79,9 +83,13 @@
 
       rustup
 
+      go
+      gopls
+
       ### Tools
       gdb
       gnumake
+      cmake
       gcc
       patch
 
@@ -95,33 +103,35 @@
       # mpd
       # mpc-cli
       # mpdevil # clerk ncmpcpp
-      ncspot # spotify
+      # ncspot 
+      spotify
 
       weechat
-      # discordo discord
+      # discordo #
+      discord
       newsboat
 
       mpv
       pass
 
-      # fdupes
-      # pdftk
-      # imagemagick
+      fdupes
+      pdftk
+      imagemagick
       # obs-studio
-      libreoffice-fresh
       # sent
 
       libnotify
       brightnessctl
 
       unzip
+      zip
       btar
       libarchive
 
       # wget
       ripgrep
       yt-dlp
-      # mediainfo
+      mediainfo
       rsync # provided by system
       jq
       tty-clock
@@ -130,15 +140,16 @@
       pfetch
       porsmo
       bluetuith
-      # du-dust
+      dust
       xdg-utils
       # playerctl
-      # fd
+      fd
 
       grim
       slurp
 
-      # nodejs
+      nodejs
+      prettier
 
       ## Security
       # nmap
@@ -162,18 +173,18 @@
 
       ### Japanese
       # memento
-      # ani-cli
+      ani-cli
       # komikku
 
       # ion
       fish
 
-      # inputs.zen-browser.packages."${system}".default
-      # qutebrowser
-      # obsidian
+      inputs.zen-browser.packages."${system}".default
+      qutebrowser
+
+      obsidian
       # nautilus
 
-      typst
       # parallel
       alejandra
 
@@ -183,9 +194,19 @@
       wiki-tui
       man-pages
       # man-pages-posix
+
+      networkmanager-openconnect
+      openconnect_openssl
+      # protonvpn-gui
+
+      # anki-bin
+
+      # libreoffice-fresh
+      python3
+      rclone
     ]
     ++ (with pkgs-unstable; [
-      ghostty
+      #ghostty
       zig
       zls
       wikiman
@@ -204,4 +225,11 @@
   documentation.enable = true;
   documentation.man.enable = true;
   documentation.dev.enable = true;
+
+  # programs.wireshark.enable = true;
+  # programs.wireshark.package = pkgs.wireshark;
+
+  # services.ollama = {
+  #   enable = true;
+  # };
 }
