@@ -1,0 +1,11 @@
+#!/bin/sh
+
+swaylock &
+lockid=$!
+
+systemctl suspend
+
+wait $lockid
+echo "Resuming bluetooth... (i dont know why this is needed)"
+# systemctl restart bluetooth-rfkill-resume.service
+rfkill unblock bluetooth

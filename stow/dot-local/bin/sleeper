@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# todo, set up something where you change the brightness and restore it after
+# sleep
+# TODO: record when I go to sleep each night
+#
+# TODO: setup something to check if batter hits a certain threash hold and then sleep before that
+sleep 3600 && sh ~/dev/scripts/bin/lock

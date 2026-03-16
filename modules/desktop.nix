@@ -12,9 +12,6 @@
     ./work.nix
   ];
 
- 
-  programs.kdeconnect.enable = true;
-
   nixpkgs.config = {allowUnfree = true;};
   xdg.portal = {
     enable = true;
@@ -130,7 +127,6 @@
 
       # wget
       ripgrep
-      yt-dlp
       mediainfo
       rsync # provided by system
       jq
@@ -149,12 +145,13 @@
       slurp
 
       nodejs
+      bun
       prettier
 
       ## Security
       # nmap
 
-      # vorbis-tools
+      vorbis-tools
 
       # qastools
       # net-tools
@@ -182,7 +179,7 @@
       inputs.zen-browser.packages."${system}".default
       qutebrowser
 
-      obsidian
+      # obsidian
       # nautilus
 
       # parallel
@@ -199,25 +196,32 @@
       openconnect_openssl
       # protonvpn-gui
 
-      # anki-bin
-
       # libreoffice-fresh
       python3
       rclone
+
+      miktex
+      rocq-core
+      julia
+      pcalc
+
+      just
+
+      ## audio listening
+      blanket
     ]
     ++ (with pkgs-unstable; [
       #ghostty
       zig
       zls
       wikiman
-    ])
-    ++ (map
-      (name:
-        pkgs.writeScriptBin
-        (builtins.baseNameOf name)
-        (builtins.readFile name))
-      (pkgs.lib.filesystem.listFilesRecursive
-        "${inputs.scripts}/bin"));
+      yt-dlp
+
+      opencode
+    ]);
+
+  # virtualisation.docker.enable = true;
+  # users.users."focus".extraGroups = [ "docker" ];
 
   # allow ptrace debugging
   # boot.kernel.sysctl."kernel.yama.ptrace_scope" = pkgs.lib.mkOverride 10 0;
@@ -229,7 +233,12 @@
   # programs.wireshark.enable = true;
   # programs.wireshark.package = pkgs.wireshark;
 
-  # services.ollama = {
-  #   enable = true;
-  # };
+  # programs.kdeconnect.enable = true;
+
+  services.ollama = {
+    enable = true;
+    package = pkgs-unstable.ollama;
+  };
+
+  services.printing.enable = true;
 }

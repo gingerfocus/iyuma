@@ -6,12 +6,12 @@
   inputs,
   ...
 }: {
-  services.xserver.windowManager.i3.enable = true;
-  services.xserver.enable = true;
-
-  environment.systemPackages = with pkgs; [
-    omnissa-horizon-client
-  ];
+  # services.xserver.windowManager.i3.enable = true;
+  # services.xserver.enable = true;
+  #
+  # environment.systemPackages = with pkgs; [
+  #   omnissa-horizon-client
+  # ];
 
   fonts = {
     packages = with pkgs; [

@@ -107,6 +107,7 @@
       dejavu_fonts
       ipafont
       kochi-substitute
+      newcomputermodern
       # rounded-mgenplus
       ## Too Fancy
       # hanazono

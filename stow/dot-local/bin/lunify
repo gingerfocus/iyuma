@@ -1,0 +1,9 @@
+#!/bin/sh
+
+## script to help me manage my bookmarks
+
+url="$(wl-paste)"
+file="$HOME/dox/03 - Literature/Audio/ASMR List.org"
+
+echo $url >> $file
+emacsclient -r -n +99999999 "${file}"

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+BEMENU_BACKEND=curses bemenu-run --fork -l 20 --fn Hack Nerd Font Mono 16 --margin 400

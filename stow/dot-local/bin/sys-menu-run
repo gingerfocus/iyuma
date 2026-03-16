@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec bemenu-run --fn "Hack Nerd Font 19" -i --vim-esc-exits --binding vim -T

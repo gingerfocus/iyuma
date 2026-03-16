@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# selection=$(cliphist list | rofi -dmenu | cliphist decode)
+selection="$(wl-paste)"
+temp="$(mktemp)"
+trap 'rm -f $temp' HUP INT QUIT TERM EXIT
+
+notify-send "Opening qrcode for: \"$selection\""
+qrencode -t PNG -s 8 -o "$temp" "$selection"
+
+$IMAGE "$temp"

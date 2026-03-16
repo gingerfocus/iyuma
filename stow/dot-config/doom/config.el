@@ -7,6 +7,7 @@
 
 ;; Remove the top bar
 (setq default-frame-alist '((undecorated . t)))
+(scroll-bar-mode -1)
 
 ;; User info for some programs
 (setq user-full-name "Evan Stokdyk"
@@ -60,51 +61,112 @@
 ;; they are implemented.
 
 ;; Bind "escape" in normal mode to save (for evil-mode users)
-;; (define-key evil-normal-state-map (kbd "<escape>") (lambda () (interactive) (save-some-buffers t)))
-
-;;   (after! PACKAGE
-;;     (setq x y))
-
-;; (require 'typst-preview)
-;; (setq typst-preview-browser "qutebrowser")
+(define-key evil-normal-state-map
+            (kbd "<escape>")
+            (lambda () (interactive)
+              (save-some-buffers t)
+              (evil-ex-nohighlight)
+              ))
 
 (use-package! websocket
   :after org-roam)
 
 (use-package! org-roam-ui
-  :after org-roam ;; or :after org
-  ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-  ;;         a hookable mode anymore, you're advised to pick something yourself
-  ;;         if you don't care about startup time, use
-  ;;  :hook (after-init . org-roam-ui-mode)
+  :after org-roam
+  ;; :hook (after-init . org-roam-ui-mode)
   :config
   (setq org-roam-ui-sync-theme t
         org-roam-ui-follow t
         org-roam-ui-update-on-save t
         org-roam-ui-open-on-start t))
 
-(use-package! md-roam
-  :after org-roam
-  :config
-  (md-roam-mode 1) ; md-roam-mode must be active before org-roam-db-sync
-  (setq md-roam-file-extension "md") ; default "md". Specify an extension such as "markdown"
-  (org-roam-db-autosync-mode 1) ; autosync-mode triggers db-sync. md-roam-mode must be already active
-  )
-
 (setq org-directory "~/dox")
-
-;; enable Org-roam for a markdown extension
-(setq org-roam-file-extensions '("org" "md"))
 (setq org-roam-directory (file-truename "~/dox"))
+
 
 (setq org-roam-mode-sections
       (list #'org-roam-backlinks-section
             ;; #'org-roam-reflinks-section
-            #'org-roam-unlinked-references-section
-            ))
+            #'org-roam-unlinked-references-section))
+
+;; Set all files as agenda files
+(setq org-agenda-files 
+      '("~/dox/" "~/dox/01 - Projects/"))
 
 ;;;; Org-roam
 ;; (define-key global-map (kbd "C-c n f") #'org-roam-node-find)
 ;; (define-key global-map (kbd "C-c n c") #'org-roam-capture)
 ;; (define-key global-map (kbd "C-c n i") #'org-roam-node-insert)
 ;; (define-key global-map (kbd "C-c n l") #'org-roam-buffer-toggle)
+
+(setq emms-browser-tree-node-map
+      '((info-albumartist . info-title)
+        (info-artist      . info-title)
+        (info-composer    . info-title)
+        (info-performer   . info-title)
+        (info-album       . info-title)
+        (info-genre       . info-title)
+        (info-year        . info-title)))
+
+;; Org-roam
+;; (define-key global-map (kbd "C-c n f") #'org-roam-node-find)
+;; (define-key global-map (kbd "C-c n c") #'org-roam-capture)
+;; (define-key global-map (kbd "C-c n i") #'org-roam-node-insert)
+;; (define-key global-map (kbd "C-c n l") #'org-roam-buffer-toggle)
+
+(setq org-cite-global-bibliography
+      '(
+        "~/dox/07 - Assets/Citations/popular.bib"  ; youtube, blogs
+        "~/dox/07 - Assets/Citations/industry.bib" ; private labs
+        "~/dox/07 - Assets/Citations/academic.bib" ; public labs
+        ;; "~/dox/07 - Assets/Citations/asmr.bib"     ; amsr youtube
+        ))
+
+;; (plist-put org-format-latex-options :scale 0.75)
+
+;; https://pastebin.com/raw/5k4R7NPr
+(defun org-typst-preview ()
+  (interactive)
+  (let (checkdir-flag)
+    (org-element-map
+	(org-element-parse-buffer)
+	'(src-block)
+      (lambda (bl)
+	(when (string= (org-element-property :language bl) "typst")
+	  (let* ((start (org-element-property :begin bl))
+		 (value (org-element-property :value bl))
+		 (end (+ start
+			 (length
+			  (string-to-list
+			   (concat "#+begin_src typst" value "#+end_src\n")))))
+		 (fg (plist-get org-format-latex-options :foreground))
+		 (hash (sha1 (prin1-to-string (list value fg))))
+		 (imagetype "svg")
+		 (prefix (concat "typstimg/" "org-typst"))
+		 (absprefix (expand-file-name prefix))
+		 (linkfile (format "%s_%s.%s" prefix hash imagetype))
+		 (movefile (format "%s_%s.%s" absprefix hash imagetype))
+		 (sep "\n\n")
+		 (link (concat sep "[[file:" linkfile "]]" sep)))
+	    (unless checkdir-flag ; Ensure the directory exists.
+	      (setq checkdir-flag t)
+	      (let ((todir (file-name-directory absprefix)))
+		(unless (file-directory-p todir)
+		  (make-directory todir t))))
+	    (unless (file-exists-p movefile)
+	      (with-temp-buffer
+		(insert "#set text(size: 30pt, fill: rgb(\"#ebdbb2\"))\n#set page(width: auto, height: auto, margin: 10pt)\n")
+		(insert value)
+		(let* ((temp-file (make-temp-file ""))
+		       (command (format
+				 "typst compile %s %s" temp-file movefile)))
+		  (write-file temp-file)
+		  (shell-command command))))
+	    (progn
+	      (dolist (o (overlays-in start end))
+		(when (eq (overlay-get o 'org-overlay-type)
+			  'org-latex-overlay)
+		  (delete-overlay o)))
+	      (org--make-preview-overlay start end movefile imagetype)
+	      (goto-char end))))))))
+

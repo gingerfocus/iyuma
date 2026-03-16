@@ -133,7 +133,6 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "saka": "saka",
-        "scripts": "scripts",
         "zen-browser": "zen-browser"
       }
     },
@@ -154,22 +153,6 @@
       "original": {
         "owner": "gingerfocus",
         "repo": "saka",
-        "type": "github"
-      }
-    },
-    "scripts": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1747192731,
-        "narHash": "sha256-gkZ4ktrB1PEyuzoiAAn5LoWSJ1737dsrwAjwAlffw74=",
-        "owner": "gingerfocus",
-        "repo": "scripts",
-        "rev": "83e0343602f953d6dd3821ef3066490aea922b29",
-        "type": "github"
-      },
-      "original": {
-        "owner": "gingerfocus",
-        "repo": "scripts",
         "type": "github"
       }
     },

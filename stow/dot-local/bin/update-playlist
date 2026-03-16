@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# set as cronjob with: @daily
+playlist_dir=$(echo "$HOME/.config/mpd/playlists")
+
+for f in `find $playlist_dir | tail +2`; do
+    rm "$f"
+done
+
+for f in $(find $XDG_MUSIC_DIR -name "*.ogg"); do
+    tags=$(vorbiscomment -l "$f" | grep "tags=" | cut -d'=' -f2)
+    echo "$f" >> "$playlist_dir/all.m3u"
+    for tag in $tags; do
+        echo "$f" >> "$playlist_dir/$tag.m3u"
+    done
+done
+
+# for album in $(exa --only-dirs -1 -a --color never $XDG_MUSIC_DIR); do
+#     for f in $(find "$XDG_MUSIC_DIR/$album" -name "*.ogg"); do
+#         echo "$f" >> "$playlist_dir/$album.m3u"
+#     done
+# done
+
+mpc update
+notify-send -t 5000 "Playlists updated!"

@@ -17,11 +17,6 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
-    scripts = {
-      url = github:gingerfocus/scripts;
-      flake = false;
-    };
-
     zen-browser = {
       url = github:0xc000022070/zen-browser-flake;
       inputs.nixpkgs.follows = "nixpkgs";

@@ -4,6 +4,8 @@
 # --------------me---------------------
 # https://gingerfocus.dev/feed "me"
 # https://kamio.ink/feed "me"
+#
+https://terrytao.wordpress.com/feed/
 
 # https://mitchellh.com/writing
 # https://carlosbecker.com/posts/
@@ -27,7 +29,7 @@
 # -----------------tech------------------
 # https://suckless.org/atom.xml "~suckless"
 # https://landchad.net/rss.xml "~landchad"
-# https://ziglang.org/news/index.xml
+https://ziglang.org/news/index.xml
 # https://zig.day/usa/san-francisco/rss.xml
 # https://zig.day/usa/los-angeles/rss.xml
 # https://netflixtechblog.com/feed
