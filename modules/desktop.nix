@@ -200,18 +200,23 @@
       python3
       rclone
 
+      ## Yeah Im a math major
       miktex
       rocq-core
       julia
-      pcalc
 
+      pcalc
       just
 
-      ## audio listening
+      ## Our minds are thinking
       blanket
+      anki
+
+      neovide
+
     ]
     ++ (with pkgs-unstable; [
-      #ghostty
+      # ghostty
       zig
       zls
       wikiman

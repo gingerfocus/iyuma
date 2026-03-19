@@ -170,3 +170,31 @@
 	      (org--make-preview-overlay start end movefile imagetype)
 	      (goto-char end))))))))
 
+
+;; (setq browse-url-browser-function 'browse-url-generic
+;;       browse-url-generic-program "qutebrowser")
+
+;; (setq browse-url-handlers
+;;       '(("^https://.*youtube.*" . browse-url-generic)
+;;         ("." . browse-url-xdg-open))) ; Default to Firefox for others
+
+;; (defun g-browse-url-profile (profile)
+;;   "Returns a handler that opens the URI in a specific Firefox profile."
+;;   (lambda (uri &rest args)
+;;     (let* ((process-name (concat "zen-beta" uri))
+;;            (process-args `("--new-tab" ,uri ,@(if profile (list "-P" profile)))))
+;;       (apply #'start-process process-name nil "zen-beta" process-args))))
+
+;; (setq browse-url-handlers
+;;       '(("^https://.*youtube.*" . ,(g-browse-url-profile "priv"))
+;;         ("." . ,(g-browse-url-profile "work"))))
+
+(defun g-browse-url-with-profile (uri profile)
+  "Opens the URI in Zen Browser with a specific profile."
+  (let* ((process-name (concat "zen-beta-" uri))
+         (process-args (append '("--new-tab") (list uri) (if profile (list "-P" profile)))))
+    (apply #'start-process process-name nil "zen-beta" process-args)))
+
+(setq browse-url-handlers
+      '(("^https://.*youtube.*" . (lambda (uri &rest ignore) (g-browse-url-with-profile uri "priv")))
+        ("." . (lambda (uri &rest ignore) (g-browse-url-with-profile uri "work")))))

@@ -90,6 +90,27 @@ require("lazy").setup({
             vim.lsp.enable("org")
         end,
     },
+    {
+        "chipsenkbeil/org-roam.nvim",
+        lazy = false,
+        tag = "0.2.0",
+        dependencies = {
+            {
+                "nvim-orgmode/orgmode",
+                tag = "0.7.0",
+            },
+        },
+        config = function()
+            require("org-roam").setup({
+                directory = "~/dox",
+            })
+        end,
+    },
+    {
+        "michaelb/sniprun",
+        lazy = false,
+        build = "sh install.sh true" -- manually build
+    },
 
     -- use gx to open with system opener
     -- see :help Oil
@@ -103,7 +124,8 @@ require("lazy").setup({
             -- require("mini.pairs").setup({})
             -- require("mini.pick").setup({})
 
-            require("mini.surround").setup({})
+            -- messes up flash
+            -- require("mini.surround").setup({})
 
             -- require("mini.git").setup({
             --     command = { split = "horizontal" },
@@ -119,6 +141,8 @@ require("lazy").setup({
 
             -- see :help lsp-completion to replace this
             require("mini.completion").setup()
+
+            -- vim.ui.open
 
             require("mini.tabline").setup({})
 
@@ -224,7 +248,6 @@ require("lazy").setup({
         },
     },
 
-
     {
         "mfussenegger/nvim-dap",
         dependencies = {
@@ -282,7 +305,6 @@ require("lazy").setup({
         end,
     },
 
-
     -- -i | sed -e 's/0x//g' | sed -e 's/\([0-9a-f]\{2\}\)/\\x\1/g' | tr -d '\n' | pbcopy
 
     -- help :TOhtml
@@ -291,7 +313,6 @@ require("lazy").setup({
 
     -- :put w
     -- :reg
-
 }, {
     defaults = { lazy = true },
     rocks = { enabled = false },
@@ -530,17 +551,18 @@ vim.api.nvim_create_user_command("Notify", function()
     return true
 end, {})
 
-vim.lsp.config['zls'] = {
-  cmd = { 'zls' },
-  filetypes = { 'zig' },
-  root_markers = { 'build.zig', '.git' },
-  settings = {}
+vim.lsp.config["zls"] = {
+    cmd = { "zls" },
+    filetypes = { "zig" },
+    root_markers = { "build.zig", ".git" },
+    settings = {},
 }
-vim.lsp.config['rust-analyzer'] = {
-  cmd = { 'rust-analyzer' },
-  filetypes = { 'rust' },
-  root_markers = { 'Cargo.toml', '.git' },
-  settings = {}
+
+vim.lsp.config["rust-analyzer"] = {
+    cmd = { "rust-analyzer" },
+    filetypes = { "rust" },
+    root_markers = { "Cargo.toml", ".git" },
+    settings = {},
 }
 
 vim.lsp.enable({
@@ -550,7 +572,7 @@ vim.lsp.enable({
     "lua_ls",
     "gopls",
     "ts_ls",
-    "rust-analyzer", -- https://github.com/mrcjkb/rustaceanvim
+    "rust-analyzer",
 })
 
 -- see :help lsp-lint for reimpl
