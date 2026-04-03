@@ -1,0 +1,31 @@
+#!/bin/sh
+
+# no args? just start session
+[ -z "$1" ] && exec nvim
+
+SOCKET="$NVIM"
+
+# if no socket, find the first one
+if [ ! -S "$SOCKET" ]; then
+    SOCKET=$(find "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}" -maxdepth 1 -name 'nvim*' -type s 2>/dev/null | head -n 1)
+fi
+
+## --- prepare args ---
+for arg do
+    case "$arg" in
+        +*) ;; # ignore commands
+        *)  set -- "$@" "$(realpath "$arg")" ;;
+    esac
+    shift
+done
+# --------------------------
+
+# Check if the socket exists
+if [ -S "$SOCKET" ]; then
+    # solves dependency loop when called within nvim as this never returns
+    # until eventloop is polled and eventloop is never polled until this exits
+    eval "setsid -f nvim --server \"$SOCKET\" --remote \"$@\" 2>&1 > /dev/null"
+    # --remote-wait
+else
+    eval "foot -e nvim $@"
+fi

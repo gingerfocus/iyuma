@@ -8,7 +8,6 @@
 }: {
   imports = [
     # ./pkgs/saka.nix
-    ./neomacs.nix
     ./work.nix
   ];
 
@@ -71,6 +70,7 @@
       zathura
       bat
       fzf
+
 
       cava
       broot
@@ -176,8 +176,6 @@
       # ion
       fish
 
-      inputs.zen-browser.packages."${system}".default
-      qutebrowser
 
       # obsidian
       # nautilus
@@ -212,8 +210,30 @@
       blanket
       anki
 
-      neovide
+      typst
 
+      websocat
+
+
+      ## Lsp Editor
+      lua-language-server
+      tinymist
+      clangd
+      gopls
+
+      # stylua
+
+      prismlauncher
+
+      # inputs.neomacs.packages.${system}.default
+
+      kicad-small
+
+      # web browser
+      chawan
+
+      inputs.zen-browser.packages."${system}".default
+      qutebrowser
     ]
     ++ (with pkgs-unstable; [
       # ghostty
@@ -223,10 +243,11 @@
       yt-dlp
 
       opencode
+      neovide
     ]);
 
   # virtualisation.docker.enable = true;
-  # users.users."focus".extraGroups = [ "docker" ];
+  users.users."focus".extraGroups = [ "docker" "tty" ];
 
   # allow ptrace debugging
   # boot.kernel.sysctl."kernel.yama.ptrace_scope" = pkgs.lib.mkOverride 10 0;

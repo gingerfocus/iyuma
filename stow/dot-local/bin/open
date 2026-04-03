@@ -1,0 +1,19 @@
+#!/bin/sh
+
+die(){
+    echo "$@"
+    exit 1
+}
+
+[ "$1" ] || die "missing arg 1"
+
+filetype=$(xdg-mime query filetype "$1" 2>/dev/null)
+
+case "$filetype" in
+    application/x-shellscript) ;&
+    text/*) nv "$1" ;;
+    application/pdf) zathura "$1" ;;
+    *)
+        die "unhanded file type: " $filetype
+        ;;
+esac

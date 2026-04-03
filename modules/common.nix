@@ -137,7 +137,6 @@
   environment = {
     shellAliases = {
       vim = "nvim";
-      nixbld = "sudo nixos-rebuild switch --flake $HOME/dev/iyuma";
     };
 
     defaultPackages = [];

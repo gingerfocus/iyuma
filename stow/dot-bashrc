@@ -2,21 +2,21 @@
 
 export PS1="$(tput setaf 1)\u$(tput setaf 2)@$(tput setaf 4)\H $(tput setaf 5)\w $(tput sgr0)\n\$ "
 
-
 export PATH="$HOME/.local/bin:$HOME/.local/share/node/bin:$PATH"
+export EDITOR="nv"
 
-alias search='find . | fzf | xargs'
+# alias search='find . | fzf | xargs'
 # alias searchf='find . -type f | fzf | xargs'
-alias searchdir='find . -type d | fzf | xargs'
-alias lr='br -sdp'
+# alias searchdir='find . -type d | fzf | xargs'
+# alias lr='br -sdp'
 
 alias ..='cd ..'
-alias h='history'
-alias c='clear'
+# alias h='history'
+# alias c='clear'
 alias o='xdg-open'
-alias m='mpv'
-alias i='imv'
-alias e='nvim'
+# alias m='mpv'
+# alias i='imv'
+alias e="$EDITOR"
 alias z='zathura'
 alias n='newsboat'
 
@@ -37,35 +37,12 @@ alias vdiff='nvim -d'
 alias sdn='shutdown -h now'
 alias grep='grep --color=auto'
 alias diff='diff --color=auto'
-alias ip='ip -color=auto'
 alias nmutt='neomutt'
 alias ttc='tty-clock -c -C 7 -r -f "%A, %B %d"'
-
-alias free='free -m'
 alias lynx='lynx -vikeys'
 
 # alias doom1='chocolate-doom -iwad $HOME/dox/games/DOOM1.wad'
 # alias doom2='chocolate-doom -iwad $HOME/dox/games/DOOM2.wad'
-
-## Functions
-backup() {
-    cp "$1" "$1.bak"
-}
-
-mcd() {
-    mkdir -p "$1"
-    cd "$1"
-}
-
-lfcd() {
-    tmp=$(mktemp -u)
-    if lf -last-dir-path="$tmp" "$@"; then
-        if [ -f "$tmp" ]; then
-            dir=$(cat "$tmp")
-            [ -d "$dir" ] && [ "$dir" != "$(pwd)" ] && cd "$dir"
-        fi
-    fi
-}
 
 # cd and ls after
 cd() {
@@ -74,28 +51,9 @@ cd() {
 }
 
 if command -v fzf-share >/dev/null; then
-  source "$(fzf-share)/key-bindings.bash"
-  # source "$(fzf-share)/completion.bash"
+    source "$(fzf-share)/key-bindings.bash"
+    # source "$(fzf-share)/completion.bash"
 fi
-
-## Iterator ##
-col() {
-    while read -r input; do
-        echo "$input" | awk -v index="$1" '{print $index}'
-    done
-}
-
-rown() {
-    sed -n "$1 p"
-}
-
-skip() {
-    tail -n +"$(($1 + 1))"
-}
-
-take() {
-    head -n "$1"
-}
 
 function br {
     local cmd cmd_file code
@@ -110,4 +68,3 @@ function br {
         return "$code"
     fi
 }
- 

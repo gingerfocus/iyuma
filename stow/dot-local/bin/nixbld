@@ -1,5 +1,8 @@
 #!/bin/sh
 
+sudo nixos-rebuild switch --flake $HOME/dev/iyuma
+exit
+
 die() {
     echo "$@"
     exit 1
@@ -11,8 +14,9 @@ NIX_DIR="/home/focus/dev/iyuma"
 
 cd "$NIX_DIR" || die "Couldn't find source directory. ($NIX_DIR)'"
 
-alejandra . 2>&1 | grep 'Formatted:'
+# alejandra . 2>&1 | grep 'Formatted:'
 # git diff -U0 ./*.nix
+
 echo "NixOS Rebuilding..."
 
 (sudo nixos-rebuild switch --flake '.' 2>&1 | tee nixos-switch.log > /dev/null) \
@@ -22,3 +26,4 @@ echo "NixOS Rebuilding..."
 # git commit -am "$gen"
 
 unset NIX_DIR
+

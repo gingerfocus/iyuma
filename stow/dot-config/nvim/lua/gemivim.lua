@@ -55,7 +55,9 @@ function M.get(url, trust)
     -- vim.tohtml
     -- help :source
     --*vim.in_fast_event()*
-    local obj = vim.system(cmd, { text = true }):wait()
+
+    -- TODO: { term = true } great tech
+    local obj = vim.fn.jobstart(cmd, { text = true }):wait()
     local stdout, stderr = obj.stdout, obj.stderr
 
     if #stderr > 0 and ssl_error(stderr) == 62 then
@@ -70,6 +72,7 @@ function M.get(url, trust)
         end
         return
     end
+
     -- elseif #stderr > 0 then
     --     error_msg(stderr)
     --     return
@@ -220,5 +223,7 @@ function M.setup(opts)
     })
     default_trust = opts.trust
 end
+
+_G.GemiVim = M
 
 return M

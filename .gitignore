@@ -2,3 +2,4 @@
 /stow/dot-config/git/credentials
 /stow/dot-config/go/telemetry
 /.direnv
+.luarc.json

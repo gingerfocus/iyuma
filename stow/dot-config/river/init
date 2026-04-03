@@ -15,17 +15,9 @@ export XKB_DEFAULT_OPTIONS=caps:swapescape
 # start foot sever
 setsid -f foot -s
 
-if [ -e "$(which emacs 2>/dev/null)" ]; then
-    # this tasks does end but i just dont want to have to join it
-    setsid -f emacs --daemon
-
-    riverctl map normal Super+Shift Return spawn "emacsclient -c -n"
-else 
-    riverctl map normal Super+Shift Return spawn "footclient -N -e nvim"
-fi
 riverctl map normal Super Return spawn footclient
-riverctl map normal Alt Return spawn "footclient -N -e nvim +\"$ | lua vim.api.nvim_put({os.date('%Y-%m-%d %H:%M:%S')}, 'l', true, true)\" ~/dox/journal.org"
-
+riverctl map normal Super+Shift Return spawn neovide 
+riverctl map normal Alt Return spawn "neovide '/home/focus/dox/03 - Literature/Audio/ASMR List.org'"
 
 riverctl map normal Super Space spawn "bemenu-run -l 20 --fn 'Hack Nerd Font Mono 16' --margin 400"
 # riverctl map normal Super+Shift Space spawn bemenu-run
