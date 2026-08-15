@@ -24,8 +24,8 @@ done
 if [ -S "$SOCKET" ]; then
     # solves dependency loop when called within nvim as this never returns
     # until eventloop is polled and eventloop is never polled until this exits
-    eval "setsid -f nvim --server \"$SOCKET\" --remote \"$@\" 2>&1 > /dev/null"
+    setsid -f nvim --server "$SOCKET" --remote "$@" >/dev/null 2>&1
     # --remote-wait
 else
-    eval "foot -e nvim $@"
+    foot -e nvim "$@"
 fi

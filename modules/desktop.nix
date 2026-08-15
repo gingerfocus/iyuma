@@ -10,6 +10,16 @@
     # ./pkgs/saka.nix
     ./work.nix
   ];
+  # ~/.local/share/zed/external_agents/registry/opencode/v_1.14.40_5d952406c488fc43_efdccbece96c9a3c/opencode
+
+  programs.nix-ld = {
+    enable = true;
+    # Optionally set a library path if the binary needs more than just glibc:
+    # libraries = with pkgs; [
+    #   stdenv.cc.cc
+    #   openssl
+    # ];
+  };
 
   nixpkgs.config = {allowUnfree = true;};
   xdg.portal = {
@@ -20,14 +30,7 @@
       pkgs.xdg-desktop-portal-gtk
       # pkgs.xdg-desktop-portal-gnome
     ];
-
-    config = {
-      # gnome = {
-      #   default = ["gnome" "wlr" "gtk"];
-      #   "org.freedesktop.impl.portal.Secret" = ["gnome-keyring"];
-      #   "org.freedesktop.impl.portal.OpenURI" = ["xdg-open"];
-      # };
-    };
+    config = {};
   };
 
   environment = {
@@ -37,7 +40,7 @@
     };
     etc."xdg/xdg-desktop-portal-gtk/config".text = ''
       [OpenURI]
-      cmd=/run/current-system/sw/bin/xdg-open
+      cmd=/home/focus/.local/bin/open
     '';
   };
 
@@ -67,21 +70,16 @@
 
   environment.systemPackages = with pkgs;
     [
-      zathura
       bat
       fzf
-
 
       cava
       broot
       bottom
-
       alsa-utils
 
       rustup
-
       go
-      gopls
 
       ### Tools
       gdb
@@ -94,13 +92,12 @@
       # qemu
 
       # groff
-      pandoc
 
       ### Music
       # mpd
       # mpc-cli
       # mpdevil # clerk ncmpcpp
-      # ncspot 
+      # ncspot
       spotify
 
       weechat
@@ -109,8 +106,8 @@
       newsboat
 
       mpv
+      pandoc
       pass
-
       fdupes
       pdftk
       imagemagick
@@ -146,12 +143,12 @@
 
       nodejs
       bun
-      prettier
+      # prettier
 
       ## Security
       # nmap
 
-      vorbis-tools
+      # vorbis-tools
 
       # qastools
       # net-tools
@@ -173,25 +170,21 @@
       ani-cli
       # komikku
 
-      # ion
-      fish
-
-
-      # obsidian
       # nautilus
 
       # parallel
-      alejandra
+      # alejandra
 
-      pavucontrol
+      # pavucontrol
 
       tealdeer
       wiki-tui
+      wikiman
       man-pages
       # man-pages-posix
 
-      networkmanager-openconnect
-      openconnect_openssl
+      # networkmanager-openconnect
+      # openconnect_openssl
       # protonvpn-gui
 
       # libreoffice-fresh
@@ -200,50 +193,77 @@
 
       ## Yeah Im a math major
       miktex
-      rocq-core
+      # rocq-core
+      typst
       julia
 
       pcalc
       just
+      websocat
 
       ## Our minds are thinking
       blanket
-      anki
-
-      typst
-
-      websocat
-
+      # anki
 
       ## Lsp Editor
       lua-language-server
       tinymist
-      clangd
+      libclang # clangd
       gopls
-
+      typescript-go
       # stylua
+      tree-sitter
 
-      prismlauncher
-
+      # prismlauncher
       # inputs.neomacs.packages.${system}.default
+      # kicad-small
 
-      kicad-small
-
-      # web browser
+      ## web browser
       chawan
+      # qutebrowser
+
+      # lutris
+
+      # sioyek
+      zathura
+
+      yt-dlp
 
       inputs.zen-browser.packages."${system}".default
-      qutebrowser
+      # octaveFull
+      # aichat
+      bespokesynth
+      # reaper
+      dwarf-fortress
+
+      godot
+      pavucontrol
+
+      # nomachine-client
     ]
     ++ (with pkgs-unstable; [
       # ghostty
       zig
       zls
-      wikiman
-      yt-dlp
 
-      opencode
+      # docling
       neovide
+      opencode
+      # zed-editor
+
+      # claude-code
+      # antigravity-cli
+      # antigravity-fhs
+      # t3code
+
+      runpodctl
+
+      #claude-code
+      #inputs.claude-desktop.packages."${system}".default
+
+      # mathematica
+
+      t3code
     ]);
 
   # virtualisation.docker.enable = true;

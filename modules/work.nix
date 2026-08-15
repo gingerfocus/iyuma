@@ -8,11 +8,11 @@
 }: {
   # services.xserver.windowManager.i3.enable = true;
   # services.xserver.enable = true;
-  #
-  # environment.systemPackages = with pkgs; [
-  #   omnissa-horizon-client
-  # ];
 
+  environment.systemPackages = with pkgs; [
+    omnissa-horizon-client
+    dejavu_fonts
+  ];
   fonts = {
     packages = with pkgs; [
       dejavu_fonts

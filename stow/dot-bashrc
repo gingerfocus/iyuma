@@ -68,3 +68,5 @@ function br {
         return "$code"
     fi
 }
+
+. "$HOME/.local/share/../bin/env"

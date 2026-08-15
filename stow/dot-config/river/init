@@ -36,7 +36,7 @@ riverctl map normal Super Y spawn blanket
 # riverctl map normal Super P
 
 # riverctl map normal Super A
-# riverctl map normal Super S
+riverctl map normal Super S spawn "slurp -b '#00000000' -s '#ff00ff11'" # | wl-copy
 # riverctl map normal Super D
 # riverctl map normal Super F
 ## bump the focused to the top of layout stack

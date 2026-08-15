@@ -7,6 +7,7 @@
 
     hardware.url = github:NixOS/nixos-hardware/master;
 
+
     neomacs = {
       url = "github:gingerfocus/neomacs?dir=nix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -21,6 +22,12 @@
       url = github:0xc000022070/zen-browser-flake;
       inputs.nixpkgs.follows = "nixpkgs";
       # inputs.home-manager.follows = null;
+    };
+
+    claude-desktop = {
+      # url = "github:k3d3/claude-desktop-linux-flake";
+      url = "github:patrickjaja/claude-desktop-extra";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
